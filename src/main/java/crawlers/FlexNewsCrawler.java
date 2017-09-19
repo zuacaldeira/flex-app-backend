@@ -75,9 +75,7 @@ public abstract class FlexNewsCrawler {
     }
 
     private NewsSource getSource() {
-        NewsSource source = getMySource();
-        NewsSource dbSource = sourcesService.findSourceWithSourceId(source.getSourceId());
-        return (dbSource != null) ? dbSource : source;
+        return getMySource();
     }
 
     private void crawlUrl(Document document, final NewsSource source, Set<String> visitedUrls) {
@@ -149,28 +147,30 @@ public abstract class FlexNewsCrawler {
     }
     
     private void saveArticle(String articleUrl, String title, String imageUrl, String description, Date date, Set<NewsAuthor> authors, NewsSource source) {
-        NewsArticle newsArticle = new NewsArticle();
-        newsArticle.setSourceId(source.getSourceId());
-        newsArticle.setLanguage(source.getLanguage());
-        newsArticle.setCountry(source.getCountry());
-        newsArticle.getCategories().add(source.getCategory());
+        if(title != null) {
+            NewsArticle newsArticle = new NewsArticle();
+            newsArticle.setSourceId(source.getSourceId());
+            newsArticle.setLanguage(source.getLanguage());
+            newsArticle.setCountry(source.getCountry());
+            newsArticle.getCategories().add(source.getCategory());
 
-        newsArticle.setTitle(title);
-        newsArticle.setUrl(articleUrl);
+            newsArticle.setTitle(title);
+            newsArticle.setUrl(articleUrl);
 
-        newsArticle.setImageUrl(imageUrl);
-        newsArticle.setPublishedAt(date);
-        newsArticle.setDescription(description);
+            newsArticle.setImageUrl(imageUrl);
+            newsArticle.setPublishedAt(date);
+            newsArticle.setDescription(description);
 
-        newsArticle.setAuthors(authors);
-        source.setCorrespondents(authors);
-        
-        NewsArticle dbArticle = articlesService.save(newsArticle);
-        if(dbArticle.getId() != null) {
-            logger.log("\tStored new article: %s", newsArticle.getTitle());
-        } 
-        else {
-            logger.log("\tRepeated article: %s", newsArticle.getTitle());
+            newsArticle.setAuthors(authors);
+            source.setCorrespondents(authors);
+
+            NewsArticle dbArticle = articlesService.save(newsArticle);
+            if(dbArticle != null && dbArticle.getId() != null) {
+                logger.log("\tStored new article: %s", newsArticle.getTitle());
+            } 
+            else {
+                logger.log("\tRepeated article: %s", newsArticle.getTitle());
+            }
         }
     }
 
@@ -273,9 +273,7 @@ public abstract class FlexNewsCrawler {
     }
 
     private NewsAuthor findAuthor(String name) {
-        NewsAuthor author = new NewsAuthor(name);
-        NewsAuthor dbAuthor = authorsService.find(author);
-        return (dbAuthor != null)? dbAuthor : author;
+        return new NewsAuthor(name);
     }
     
     public Date getPublishedAt(Document document) {

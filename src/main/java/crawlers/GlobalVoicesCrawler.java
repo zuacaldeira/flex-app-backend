@@ -6,6 +6,7 @@
 package crawlers;
 
 import db.NewsSource;
+import db.NewsSourceLogos;
 import javax.ejb.Schedule;
 import javax.ejb.Singleton;
 
@@ -77,11 +78,10 @@ public class GlobalVoicesCrawler extends GlobalVoicesAbstractCrawler {
         String url = "https://globalvoices.org";
         String category = "geral";
         String language = "en";
-        String country = "uk";
-        String logoUrl = "https://s3.amazonaws.com/static.globalvoices/img/tmpl/gv-logo-oneline-smallicon-600.png";
+        String country = "gb";
 
         NewsSource source = new NewsSource(sourceId, name, description, url, category, language, country);
-        source.setLogoUrl(logoUrl);
+        source.setLogoUrl(NewsSourceLogos.getLogo("global-voices"));
         
         return source;
     }

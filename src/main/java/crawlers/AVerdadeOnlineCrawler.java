@@ -6,6 +6,7 @@
 package crawlers;
 
 import db.NewsSource;
+import db.NewsSourceLogos;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -55,10 +56,9 @@ public class AVerdadeOnlineCrawler extends FlexNewsCrawler {
         String category = "geral";
         String language = "pt";
         String country = "mz";
-        String logoUrl = "http://www.verdade.co.mz/images/favicon.ico";
 
         NewsSource source = new NewsSource(sourceId, name, description, url, category, language, country);
-        source.setLogoUrl(logoUrl);
+        source.setLogoUrl(NewsSourceLogos.getLogo(sourceId));
         
         return source;
     }

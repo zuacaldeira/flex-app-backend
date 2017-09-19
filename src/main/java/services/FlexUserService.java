@@ -56,10 +56,7 @@ public class FlexUserService extends AbstractDBService<FlexUser> implements Flex
 
     @Override
     public FlexUser register(FlexUser user) {
-        if(find(user).getId() == null) {
-            save(user);
-        }
-        return find(user);
+        return save(user);
     }
 
     

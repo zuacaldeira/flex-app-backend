@@ -161,28 +161,19 @@ public abstract class AbstractDBService<T extends GraphEntity> implements DBServ
     
     @Override
     public final T find(T object) {
-        try {
-            String classname = getClassType().getSimpleName();
-            String query = "MATCH (n:" + classname + ")";
-            query += " WHERE n." + object.getPropertyName() + "=" + DatabaseUtils.getInstance().wrapUp(object.getPropertyValue());
-            query += " RETURN n";
-            Session session = Neo4jSessionFactory.getInstance().getNeo4jSession();
-            return session.queryForObject(getClassType(), query, new HashMap<String, Object>());
-        } catch(Exception e) {
-            e.printStackTrace();
-            return object;
-        }
+        String classname = getClassType().getSimpleName();
+        String query = "MATCH (n:" + classname + ")";
+        query += " WHERE n." + object.getPropertyName() + "=" + DatabaseUtils.getInstance().wrapUp(object.getPropertyValue());
+        query += " RETURN n";
+        Session session = Neo4jSessionFactory.getInstance().getNeo4jSession();
+        return session.queryForObject(getClassType(), query, new HashMap<String, Object>());
     }
     
     @Override
     public final T save(T object) {
-        try {
-            Session session = Neo4jSessionFactory.getInstance().getNeo4jSession();
-            session.save(object);
-            return find(object);
-        } catch(Exception e) {
-            return object;
-        }
+        Session session = Neo4jSessionFactory.getInstance().getNeo4jSession();
+        session.save(object);
+        return find(object);
     }
     
     @Override
