@@ -6,7 +6,6 @@
 package crawlers;
 
 import db.NewsSource;
-import db.NewsSourceLogos;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
