@@ -38,6 +38,22 @@ public class NewsArticle extends GraphEntity implements Comparable<NewsArticle>{
         categories = new HashSet<>();
     }
 
+    public NewsArticle(String title, String description, String url, String imageUrl, Date publishedAt, String sourceId, String language, String country) {
+        this();
+        this.title = title;
+        this.description = description;
+        this.url = url;
+        this.imageUrl = imageUrl;
+        this.publishedAt = publishedAt;
+        this.sourceId = sourceId;
+        this.language = language;
+        this.country = country;
+        this.categories = categories;
+        this.authors = authors;
+    }
+    
+    
+
     public String getTitle() {
         return title;
     }

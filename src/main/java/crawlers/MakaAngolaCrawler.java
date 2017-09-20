@@ -51,10 +51,9 @@ public class MakaAngolaCrawler extends FlexNewsCrawler {
         String category = "política";
         String language = "pt";
         String country = "ao";
-        String logoUrl = "https://www.makaangola.org/wp-content/uploads/2016/05/logo.png";
 
         NewsSource source = new NewsSource(sourceId, name, description, url, category, language, country);
-        source.setLogoUrl(logoUrl);
+        source.setLogoUrl(NewsSourceLogos.getLogo("maka-angola"));
         
         return source;
     }

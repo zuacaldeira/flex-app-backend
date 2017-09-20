@@ -8,6 +8,7 @@ package utils;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -66,5 +67,47 @@ public class DateUtils {
             return null;
         }
     }
+    
+    public String normalizeTime(String dateString, String language) {
+        String result = normalizeTime("yyyy-MM-dd HH:mm:ss", dateString, language);
+        if (result == null) {
+            result = normalizeTime("yyyy-MM-dd HH:mm:ssZ", dateString, language);
+        }
+        if (result == null) {
+            result = normalizeTime("yyyy-MM-dd'T'HH:mm:ss", dateString, language);
+        }
+        if (result == null) {
+            result = normalizeTime("yyyy-MM-dd'T'HH:mm:ss'Z'", dateString, language);
+        }
+        if (result == null) {
+            result = normalizeTime("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", dateString, language);
+        }
+        if (result == null) {
+            result = normalizeTime("yyyy-MM-dd'T'HH:mm:ss.SSSXXX", dateString, language);
+        }
+        if (result == null) {
+            result = normalizeTime("yyyy-MM-dd'T'HH:mm:ss.SSSZ", dateString, language);
+        }
 
+        System.out.println("Converted " + dateString + " into " + result);
+        if (result != null) {
+            return result;
+        } else {
+            return null;
+        }
+    }
+    
+    public String normalizeTime(String formatPattern, String dateString, String language) {
+        try {
+            
+            SimpleDateFormat formatIn = new SimpleDateFormat(formatPattern, new Locale(language));
+            Date date = formatIn.parse(dateString);
+
+            SimpleDateFormat formatOut = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ", new Locale(language));
+            return formatOut.format(date);
+            
+        } catch (ParseException px) {
+            return null;
+        }
+    }
 }

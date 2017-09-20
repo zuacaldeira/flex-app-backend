@@ -53,10 +53,9 @@ public class JornalDeAngolaCrawler extends FlexNewsCrawler {
         String category = "geral";
         String language = "pt";
         String country = "ao";
-        String logoUrl = "http://imgs.sapo.pt/jornaldeangola/2016/img/jornal-de-angola-2017.png";
 
         NewsSource source = new NewsSource(sourceId, name, description, url, category, language, country);
-        source.setLogoUrl(logoUrl);
+        source.setLogoUrl(NewsSourceLogos.getLogo("jornal-de-angola"));
         
         return source;
     }
