@@ -80,7 +80,7 @@ public class SingleArticleResponse {
         String sourceId = source.getSourceId();
         String language = source.getLanguage();
         String country = source.getCountry();
-        String normalizedTimeString = normalizeTime(publishedAt, language);
+        String normalizedTimeString = DateUtils.getInstance().normalizeTime(publishedAt, language);
         Date date = DateUtils.getInstance().parseDate(normalizedTimeString, language);
         
         NewsArticle article = new NewsArticle(title, description, url, urlToImage, date, sourceId, language, country);
@@ -92,53 +92,4 @@ public class SingleArticleResponse {
         return article;
     }
 
-
-    public String normalizeTime(String dateString, String language) {
-        String result = normalizeTimeWithPattern("yyyy-MM-dd HH:mm:ss", dateString, language);
-        if (result == null) {
-            result = normalizeTimeWithPattern("yyyy-MM-dd HH:mm:ssZ", dateString, language);
-        }
-        if (result == null) {
-            result = normalizeTimeWithPattern("yyyy-MM-dd'T'HH:mm:ss", dateString, language);
-        }
-        if (result == null) {
-            result = normalizeTimeWithPattern("yyyy-MM-dd'T'HH:mm:ss'Z'", dateString, language);
-        }
-        if (result == null) {
-            result = normalizeTimeWithPattern("yyyy-MM-dd'T'HH:mm:ssZ", dateString, language);
-        }
-        if (result == null) {
-            result = normalizeTimeWithPattern("yyyy-MM-dd'T'HH:mm:ssSSSZ", dateString, language);
-        }
-        if (result == null) {
-            result = normalizeTimeWithPattern("yyyy-MM-dd'T'HH:mm:ss.SSSXXX", dateString, language);
-        }
-        if (result == null) {
-            result = normalizeTimeWithPattern("yyyy-MM-dd'T'HH:mm:ss.SSSZ", dateString, language);
-        }
-
-        //System.out.println("Converted " + dateString + " into " + result);
-        if (result != null) {
-            return result;
-        } else {
-            return null;
-        }
-    }
-    
-    private String normalizeTimeWithPattern(String datePattern, String dateString, String language) {
-        try {
-            if(dateString == null) {
-                return null;
-            }
-            
-            SimpleDateFormat formatIn = new SimpleDateFormat(datePattern, new Locale(language));
-            Date date = formatIn.parse(dateString);
-
-            SimpleDateFormat formatOut = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ", new Locale(language));
-            return formatOut.format(date);
-        } catch (ParseException px) {
-            throw new NewsServiceException(px);
-        }
-    }
-    
 }

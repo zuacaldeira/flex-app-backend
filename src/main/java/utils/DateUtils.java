@@ -69,45 +69,42 @@ public class DateUtils {
     }
     
     public String normalizeTime(String dateString, String language) {
-        String result = normalizeTime("yyyy-MM-dd HH:mm:ss", dateString, language);
-        if (result == null) {
-            result = normalizeTime("yyyy-MM-dd HH:mm:ssZ", dateString, language);
+        String[] formats = {
+            "yyyy-MM-dd HH:mm:ss",
+            "yyyy-MM-dd HH:mm:ssZ",
+            "yyyy-MM-dd'T'HH:mm:ss",
+            "yyyy-MM-dd'T'HH:mm:ss'Z'",
+            "yyyy-MM-dd'T'HH:mm:ssZ",
+            "yyyy-MM-dd'T'HH:mm:ssSSSZ",
+            "yyyy-MM-dd'T'HH:mm:ss.SSSXXX",
+            "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
+        };
+        
+        String result = null;
+        for(String format: formats) {
+            result = normalizeTimeWithPattern(format, dateString, language);
+            if (result != null) {
+                //System.out.println("Converted " + dateString + " into " + result);
+                return result;
+            }
         }
-        if (result == null) {
-            result = normalizeTime("yyyy-MM-dd'T'HH:mm:ss", dateString, language);
-        }
-        if (result == null) {
-            result = normalizeTime("yyyy-MM-dd'T'HH:mm:ss'Z'", dateString, language);
-        }
-        if (result == null) {
-            result = normalizeTime("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", dateString, language);
-        }
-        if (result == null) {
-            result = normalizeTime("yyyy-MM-dd'T'HH:mm:ss.SSSXXX", dateString, language);
-        }
-        if (result == null) {
-            result = normalizeTime("yyyy-MM-dd'T'HH:mm:ss.SSSZ", dateString, language);
-        }
-
-        System.out.println("Converted " + dateString + " into " + result);
-        if (result != null) {
-            return result;
-        } else {
-            return null;
-        }
+        
+        return null;
     }
     
-    public String normalizeTime(String formatPattern, String dateString, String language) {
+    private String normalizeTimeWithPattern(String datePattern, String dateString, String language) {
+        if(dateString == null) {
+            return null;
+        }
         try {
-            
-            SimpleDateFormat formatIn = new SimpleDateFormat(formatPattern, new Locale(language));
+            SimpleDateFormat formatIn = new SimpleDateFormat(datePattern);
             Date date = formatIn.parse(dateString);
 
             SimpleDateFormat formatOut = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ", new Locale(language));
             return formatOut.format(date);
-            
         } catch (ParseException px) {
             return null;
         }
     }
+   
 }

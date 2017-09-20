@@ -13,7 +13,7 @@ import java.util.Map;
  *
  * @author zua
  */
-public final class NewsSourceLogos {
+public final class Logos {
     private static Map<String, String> logos;
     
     static{

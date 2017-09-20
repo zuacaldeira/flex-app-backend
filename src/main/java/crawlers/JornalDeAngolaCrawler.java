@@ -55,7 +55,7 @@ public class JornalDeAngolaCrawler extends FlexNewsCrawler {
         String country = "ao";
 
         NewsSource source = new NewsSource(sourceId, name, description, url, category, language, country);
-        source.setLogoUrl(NewsSourceLogos.getLogo("jornal-de-angola"));
+        source.setLogoUrl(Logos.getLogo("jornal-de-angola"));
         
         return source;
     }

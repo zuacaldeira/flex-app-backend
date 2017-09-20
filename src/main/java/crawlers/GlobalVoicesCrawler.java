@@ -80,7 +80,7 @@ public class GlobalVoicesCrawler extends GlobalVoicesAbstractCrawler {
         String country = "gb";
 
         NewsSource source = new NewsSource(sourceId, name, description, url, category, language, country);
-        source.setLogoUrl(NewsSourceLogos.getLogo("global-voices"));
+        source.setLogoUrl(Logos.getLogo("global-voices"));
         
         return source;
     }
