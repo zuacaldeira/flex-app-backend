@@ -29,7 +29,7 @@ public class JornalDeAngolaCrawler extends FlexNewsCrawler {
     }
 
     
-    @Schedule(hour = "*", minute = "*/10", persistent = false)
+    @Schedule(hour = "*", minute = "4/10", persistent = false)
     public void crawl() {
         crawlWebsite(getUrl(), getMySource());
         crawlWebsite(getUrl() + "/cultura", getMySource());

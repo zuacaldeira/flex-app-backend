@@ -26,8 +26,6 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import services.NewsArticleServiceInterface;
-import services.NewsAuthorServiceInterface;
-import services.NewsSourceServiceInterface;
 import utils.FlexLogger;
 
 /**
@@ -37,8 +35,6 @@ import utils.FlexLogger;
 public abstract class FlexNewsCrawler {
 
     @EJB private NewsArticleServiceInterface articlesService;
-    @EJB private NewsAuthorServiceInterface authorsService;
-    @EJB private NewsSourceServiceInterface sourcesService;
 
     private FlexLogger logger;
     
@@ -135,12 +131,6 @@ public abstract class FlexNewsCrawler {
                 return;
             }
 
-            boolean inDb = !articlesService.findAll("title", title).isEmpty();
-            if(inDb) {
-                logger.log("\tIgnored old article: %s", title);
-                return;
-            }
-
             saveArticle(articleUrl, title, imageUrl, description, date, authors, source);
         }
 
@@ -164,13 +154,8 @@ public abstract class FlexNewsCrawler {
             newsArticle.setAuthors(authors);
             source.setCorrespondents(authors);
 
-            NewsArticle dbArticle = articlesService.save(newsArticle);
-            if(dbArticle != null && dbArticle.getId() != null) {
-                logger.log("\tStored new article: %s", newsArticle.getTitle());
-            } 
-            else {
-                logger.log("\tRepeated article: %s", newsArticle.getTitle());
-            }
+            articlesService.save(newsArticle);
+            logger.log("\tStored new article: %s", newsArticle.getTitle());
         }
     }
 

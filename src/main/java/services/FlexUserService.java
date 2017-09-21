@@ -17,28 +17,6 @@ import org.neo4j.ogm.cypher.query.SortOrder;
 public class FlexUserService extends AbstractDBService<FlexUser> implements FlexUserServiceInterface {
 
     @Override
-    public FlexUser update(FlexUser dbEntity, FlexUser newEntity) {
-        if(newEntity.getUsername().equals(dbEntity.getUsername())) {
-            if(newEntity.getPassword() != null) {
-                dbEntity.setPassword(newEntity.getPassword());
-            }
-            
-            if(!newEntity.getRead().isEmpty()) {
-                dbEntity.setRead(newEntity.getRead());
-            }
-            if(!newEntity.getFavorite().isEmpty()) {
-                dbEntity.setFavorite(newEntity.getFavorite());
-            }
-            if(!newEntity.getFake().isEmpty()) {
-                dbEntity.setFake(newEntity.getFake());
-            }
-
-        }
-        
-        return dbEntity;
-    }
-
-    @Override
     public Class<FlexUser> getClassType() {
         return FlexUser.class;
     }
@@ -56,7 +34,8 @@ public class FlexUserService extends AbstractDBService<FlexUser> implements Flex
 
     @Override
     public FlexUser register(FlexUser user) {
-        return save(user);
+        save(user);
+        return find(user);
     }
 
     

@@ -5,8 +5,11 @@
  */
 package crawlers;
 
+import json.MultipleSourcesResponse;
+import json.MultipleArticlesResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import db.NewsArticle;
+import db.NewsAuthor;
 import db.NewsSource;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -18,9 +21,11 @@ import java.nio.charset.Charset;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
+import javax.ejb.Schedule;
 import javax.ejb.Singleton;
 import services.NewsArticleServiceInterface;
 import services.NewsServiceException;
+import services.NewsSourceServiceInterface;
 
 /**
  *
@@ -36,6 +41,8 @@ public class FlexObjectMapper {
     private ObjectMapper objectMapper;
     @EJB
     private NewsArticleServiceInterface articlesService;
+    @EJB
+    private NewsSourceServiceInterface sourcesService;
     
     
     public FlexObjectMapper() {
@@ -106,6 +113,7 @@ public class FlexObjectMapper {
         }
     }
     
+    @Schedule(hour="*", minute="7/10")
     public void loadAllData() {
         try {
             String result = makeApiCall(getSourcesQuery(null, null, null));
@@ -116,11 +124,12 @@ public class FlexObjectMapper {
                 sourcesResponse.getSources().forEach(ssr -> {
                     NewsSource source = ssr.convert2NewsSource();
                     loadAllArticles(source);
+                    saveReturnSource(source);
                 });
             }
         } catch (IOException ex) {
             Logger.getLogger(FlexObjectMapper.class.getName()).log(Level.SEVERE, null, ex);
-            throw new NewsServiceException(ex);
+            //throw new NewsServiceException(ex);
         }
     }
 
@@ -132,8 +141,10 @@ public class FlexObjectMapper {
             MultipleArticlesResponse articlesResponse = objectMapper.readValue(result, MultipleArticlesResponse.class);
             if("ok".equals(articlesResponse.getStatus())) {
                articlesResponse.getArticles().forEach(sar -> {
-                   NewsArticle article = sar.convert2NewsArticle(source);
-                   saveArticle(article);
+                    NewsArticle article = sar.convert2NewsArticle(source);
+                    NewsAuthor author = sar.convert2NewsAuthor(source);
+                    author.addArticle(article);
+                    source.addCorrespondent(author);
                });
             }
         } catch (IOException ex) {
@@ -148,6 +159,15 @@ public class FlexObjectMapper {
         }
     }
 
+    protected NewsSource saveReturnSource(NewsSource source) {
+        if(sourcesService != null) {
+            sourcesService.save(source);
+            return sourcesService.findSourceWithSourceId(source.getSourceId());
+        }
+        else {
+            return source;
+        }
+    }
 
     private String readAllData(Reader rd) throws IOException {
         StringBuilder sb = new StringBuilder();
@@ -157,5 +177,6 @@ public class FlexObjectMapper {
         }
         return sb.toString();
     }
+
     
 }

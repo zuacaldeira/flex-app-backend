@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package crawlers;
+package json;
 
+import crawlers.Logos;
 import db.NewsSource;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -106,6 +107,7 @@ public class SingleSourceResponse {
 
     public NewsSource convert2NewsSource() {
         NewsSource result = new NewsSource(id, name, description, url, category, language, country);
+        result.setLogoUrl(Logos.getLogo(id));
         return result;
     }
 }

@@ -23,37 +23,7 @@ public class NewsSourceService extends AbstractDBService<NewsSource>  implements
     public Class<NewsSource> getClassType() {
         return NewsSource.class;
     }
-    
-    @Override
-    public NewsSource update(NewsSource dbEntity, NewsSource newEntity) {
-        if(newEntity.getCategory() != null) {
-            dbEntity.setCategory(newEntity.getCategory());
-        }
-        if(newEntity.getCorrespondents() != null) {
-            dbEntity.getCorrespondents().addAll(newEntity.getCorrespondents());
-        }
-        if(newEntity.getCountry() != null) {
-            dbEntity.setCountry(newEntity.getCountry());
-        }
-        if(newEntity.getDescription() != null) {
-            dbEntity.setDescription(newEntity.getDescription());
-        }
-        if(newEntity.getLanguage()!= null) {
-            dbEntity.setLanguage(newEntity.getLanguage());
-        }
-        if(newEntity.getSourceId() != null) {
-            dbEntity.setSourceId(newEntity.getSourceId());
-        }
-        if(newEntity.getUrl() != null) {
-            dbEntity.setUrl(newEntity.getUrl());
-        }
-        if(newEntity.getLogoUrl() != null) {
-            dbEntity.setLogoUrl(newEntity.getLogoUrl());
-        }
-        
-        return dbEntity;
-    }
-    
+      
     @Override
     public SortOrder getSortOrderAsc() {
         return new SortOrder().add(SortOrder.Direction.ASC, "name");
@@ -84,7 +54,7 @@ public class NewsSourceService extends AbstractDBService<NewsSource>  implements
 
     @Override
     public List<String> findCountries() {
-        String query = "MATCH (s:NewsSource) RETURN DISTINCT s.country ORDER BY s.country ASC";
+        String query = "MATCH (s:NewsSource) RETURN DISTINCT s.language+'_'+s.country";
         return executeQuery(String.class, query);
     }
     

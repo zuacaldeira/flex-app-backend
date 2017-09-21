@@ -21,23 +21,6 @@ public class NewsAuthorService extends AbstractDBService<NewsAuthor>  implements
         return NewsAuthor.class;
     }
     
-    @Override
-    public NewsAuthor update(NewsAuthor dbEntity, NewsAuthor newEntity) {
-        if(newEntity.getName() != null && !newEntity.getName().equals(dbEntity.getName())) {
-            dbEntity.setName(newEntity.getName());
-        }
-        
-        if(newEntity.getSource() != null && !newEntity.getSource().equals(dbEntity.getSource())) {
-            dbEntity.setSource(newEntity.getSource());
-        }
-        
-        if(newEntity.getArticles() != null) {
-            dbEntity.getArticles().addAll(newEntity.getArticles());
-        }
-        
-        return dbEntity;
-        
-    }
 
     @Override
     public SortOrder getSortOrderAsc() {

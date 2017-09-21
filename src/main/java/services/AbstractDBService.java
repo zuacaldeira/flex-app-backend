@@ -6,7 +6,7 @@
 package services;
 
 import com.google.common.collect.Lists;
-import utils.Neo4jSessionFactory;
+import db.Neo4jSessionFactory;
 import db.GraphEntity;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -170,10 +170,9 @@ public abstract class AbstractDBService<T extends GraphEntity> implements DBServ
     }
     
     @Override
-    public final T save(T object) {
+    public final void save(T object) {
         Session session = Neo4jSessionFactory.getInstance().getNeo4jSession();
         session.save(object);
-        return find(object);
     }
     
     @Override
@@ -186,11 +185,6 @@ public abstract class AbstractDBService<T extends GraphEntity> implements DBServ
     public final long count() {
         Session session = Neo4jSessionFactory.getInstance().getNeo4jSession();
         return session.countEntitiesOfType(getClassType());
-    }
-
-    @Override
-    public T update(T object) {
-        return save(update(find(object), object));
     }
 
     protected Session getSession() {

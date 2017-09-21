@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package utils;
+package db;
 
 import org.neo4j.ogm.config.Configuration;
 import org.neo4j.ogm.session.Session;

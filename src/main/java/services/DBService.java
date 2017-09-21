@@ -46,13 +46,8 @@ public interface DBService<T> {
     public T find(Long id);    
     public T find(T object);
 
-    public T save(T object);
-
-    public T update(T object);
-    public T update(T dbObject, T object);    
-
+    public void save(T object);
     public void delete(Long id);
-
     public long count();
     
     public Class<T> getClassType();

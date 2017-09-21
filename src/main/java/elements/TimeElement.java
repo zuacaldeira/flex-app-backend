@@ -5,8 +5,12 @@
  */
 package elements;
 
+import java.text.ParseException;
 import java.util.Date;
-import utils.DateUtils;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.apache.commons.lang3.time.DateUtils;
+import utils.MyDateUtils;
 
 /**
  *
@@ -23,7 +27,11 @@ public class TimeElement extends ArticleElement {
 
     public Date getDate() {
         if(getValue() != null) {
-            return DateUtils.getInstance().parseDate(getValue(), language);
+            try {
+                return DateUtils.parseDate(getValue(), MyDateUtils.getParsePatterns());
+            } catch (ParseException ex) {
+                Logger.getLogger(TimeElement.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
         return null;
     }

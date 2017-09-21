@@ -27,7 +27,7 @@ public class MakaAngolaCrawler extends FlexNewsCrawler {
         return "https://www.makaangola.org";
     }
     
-    @Schedule(hour = "*", minute = "*/10")
+    @Schedule(hour = "*", minute = "5/10")
     public void crawl() {
         crawlWebsite(getUrl(), getMySource());
     }

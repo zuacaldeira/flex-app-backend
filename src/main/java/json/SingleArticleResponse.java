@@ -3,30 +3,29 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package crawlers;
+package json;
 
 import db.NewsArticle;
 import db.NewsAuthor;
 import db.NewsSource;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Locale;
-import services.NewsServiceException;
-import utils.DateUtils;
+import org.apache.commons.lang3.time.DateUtils;
+import utils.MyDateUtils;
 
 /**
  *
  * @author zua
  */
 public class SingleArticleResponse {
-    
+
     private String author;
     private String title;
     private String description;
     private String url;
     private String urlToImage;
     private String publishedAt;
+    private String source;
 
     public String getAuthor() {
         return author;
@@ -76,20 +75,44 @@ public class SingleArticleResponse {
         this.publishedAt = publishedAt;
     }
 
+    public String getSource() {
+        return source;
+    }
+
+    public void setSource(String source) {
+        this.source = source;
+    }
+    
+    
+
     public NewsArticle convert2NewsArticle(NewsSource source) {
+        Date date = null;
+        if(publishedAt == null) {
+            date = new Date();
+        }
+        else {
+            try {
+                if(publishedAt != null) {
+                    date = DateUtils.parseDate(publishedAt, MyDateUtils.getParsePatterns());
+                }
+            } catch (ParseException ex) {
+                System.err.println(ex.getMessage());
+            }
+        }
         String sourceId = source.getSourceId();
         String language = source.getLanguage();
         String country = source.getCountry();
-        String normalizedTimeString = DateUtils.getInstance().normalizeTime(publishedAt, language);
-        Date date = DateUtils.getInstance().parseDate(normalizedTimeString, language);
-        
         NewsArticle article = new NewsArticle(title, description, url, urlToImage, date, sourceId, language, country);
-        NewsAuthor auth = new NewsAuthor(this.author);
-        
-        source.getCorrespondents().add(auth);
-        article.getAuthors().add(auth);
-        
         return article;
+    }
+
+    public NewsAuthor convert2NewsAuthor(NewsSource aSource) {
+        if(author != null) {
+            return new NewsAuthor(author);
+        }
+        else {
+            return new NewsAuthor(aSource.getName());
+        }
     }
 
 }

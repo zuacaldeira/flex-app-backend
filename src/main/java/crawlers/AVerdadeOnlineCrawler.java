@@ -178,7 +178,6 @@ public class AVerdadeOnlineCrawler extends FlexNewsCrawler {
     
     private String normalizeTime(String time) {
         try {
-            //System.out.println("###### Normalize " + time);
             SimpleDateFormat format = new SimpleDateFormat("dd MMMM yyyy", new Locale(getMySource().getLanguage()));
             Date d = format.parse(time);
             Date now = new Date();

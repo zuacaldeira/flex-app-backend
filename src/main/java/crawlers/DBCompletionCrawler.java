@@ -28,14 +28,15 @@ public class DBCompletionCrawler {
     // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")
     
-    @Schedule(hour = "*", minute="*/10")
+    @Schedule(hour = "*", minute="1/10")
     public void completeLogos() {
         List<NewsSource> sources = (List<NewsSource>) sourcesService.findAll("logoUrl", null);
         logger.info("FFFFFFFFFF Found %d sources without logo", sources.size());
         
         for(NewsSource s: sources) {
             if(s.getLogoUrl() == null || s.getLogoUrl().isEmpty()) {
-                logger.info("FFFFFFFFFF Found %s ", s);        
+                logger.info("FFFFFFFFFF Found %s ", s);
+                sourcesService.save(s);
             }
         }
     }
