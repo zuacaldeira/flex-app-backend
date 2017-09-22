@@ -154,8 +154,12 @@ public abstract class FlexNewsCrawler {
             newsArticle.setAuthors(authors);
             source.setCorrespondents(authors);
 
-            articlesService.save(newsArticle);
-            logger.log("\tStored new article: %s", newsArticle.getTitle());
+            if(articlesService != null) {
+                articlesService.save(newsArticle);
+                logger.log("\tStored new article: %s", newsArticle.getTitle());
+            } else {
+                logger.log("\tIgnored new article: %s", newsArticle.getTitle());
+            }
         }
     }
 
