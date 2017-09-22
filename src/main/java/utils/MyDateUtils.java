@@ -29,7 +29,14 @@ public class MyDateUtils {
     }
 
     public static Locale getLocale(String localeString) {
-        return new Locale(getLanguage(localeString), getCountry(localeString));
+        String language = getLanguage(localeString);
+        String country = getCountry(localeString);
+        for(Locale loc: Locale.getAvailableLocales()) {
+            if(loc.getLanguage().equalsIgnoreCase(language) && loc.getCountry().equalsIgnoreCase(country)) {
+                return loc;
+            }
+        }
+        return Locale.forLanguageTag(language);
     }
 
     public static String getLanguage(String localeString) {

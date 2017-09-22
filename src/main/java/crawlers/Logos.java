@@ -86,6 +86,13 @@ public final class Logos {
         logos.put("wired-de", "https://pbs.twimg.com/profile_images/615598832726970372/jsK-gBSt_400x400.png");
         logos.put("wirtschafts-woche", "https://pbs.twimg.com/profile_images/596378323128836096/23C3DVmy_400x400.jpg");
         logos.put("jornal-de-angola", "https://pbs.twimg.com/profile_images/894282213495382017/W7pj7SsU_400x400.jpg");
+        
+        logos.put("bild", "https://pbs.twimg.com/profile_images/872740902665674752/BrLl09Ut_400x400.jpg");
+        logos.put("usa-today", "https://pbs.twimg.com/profile_images/881124724776075264/HIaW0jIz_400x400.jpg");
+        logos.put("the-telegraph", "https://pbs.twimg.com/profile_images/704632088541134848/ypoRmbv__400x400.jpg");
+        logos.put("fox-sports", "https://pbs.twimg.com/profile_images/824007776489738241/pFk_8LLO_400x400.jpg");
+        logos.put("espn-cric-info", "https://pbs.twimg.com/profile_images/888015358958940165/SmaHw6Rj_400x400.jpg");
+        logos.put("new-scientist", "https://pbs.twimg.com/profile_images/843789564074496001/m34mTHmg_400x400.jpg");
        
     }
 

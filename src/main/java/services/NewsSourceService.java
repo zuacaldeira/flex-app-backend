@@ -7,7 +7,8 @@ package services;
 
 import db.NewsSource;
 import java.util.HashMap;
-import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 import javax.ejb.Stateless;
 import org.neo4j.ogm.cypher.query.SortOrder;
 import utils.DatabaseUtils;
@@ -35,27 +36,43 @@ public class NewsSourceService extends AbstractDBService<NewsSource>  implements
     }
 
     @Override
-    public List<String> findCategories() {
+    public Set<String> findCategories() {
         String query = "MATCH (s:NewsSource) RETURN DISTINCT s.category ORDER BY s.category ASC";
-        return executeQuery(String.class, query);
+        TreeSet<String> result = new TreeSet<>();
+        result.addAll(executeQuery(String.class, query));
+        return result;
     }
 
     @Override
-    public List<String> findNames() {
+    public Set<String> findNames() {
         String query = "MATCH (s:NewsSource) RETURN DISTINCT s.name ORDER BY s.name ASC";
-        return executeQuery(String.class, query);
+        TreeSet<String> result = new TreeSet<>();
+        result.addAll(executeQuery(String.class, query));
+        return result;
     }
 
     @Override
-    public List<String> findLanguages() {
+    public Set<String> findLanguages() {
         String query = "MATCH (s:NewsSource) RETURN DISTINCT s.language ORDER BY s.language ASC";
-        return executeQuery(String.class, query);
+        TreeSet<String> result = new TreeSet<>();
+        result.addAll(executeQuery(String.class, query));
+        return result;
     }
 
     @Override
-    public List<String> findCountries() {
+    public Set<String> findCountries() {
+        String query = "MATCH (s:NewsSource) RETURN DISTINCT s.country ORDER BY s.country ASC";
+        TreeSet<String> result = new TreeSet<>();
+        result.addAll(executeQuery(String.class, query));
+        return result;
+    }
+
+    @Override
+    public Set<String> findLocales() {
         String query = "MATCH (s:NewsSource) RETURN DISTINCT s.language+'_'+s.country";
-        return executeQuery(String.class, query);
+        TreeSet<String> result = new TreeSet<>();
+        result.addAll(executeQuery(String.class, query));
+        return result;
     }
     
     @Override
