@@ -5,6 +5,7 @@
  */
 package db;
 
+import org.neo4j.ogm.authentication.UsernamePasswordCredentials;
 import org.neo4j.ogm.config.Configuration;
 import org.neo4j.ogm.session.Session;
 import org.neo4j.ogm.session.SessionFactory;
@@ -23,8 +24,10 @@ public class Neo4jSessionFactory {
     
     private Neo4jSessionFactory() {
         Configuration configuration = new Configuration("ogm.properties");
+        UsernamePasswordCredentials userCredentials = (UsernamePasswordCredentials)configuration.driverConfiguration().getCredentials();
         System.out.println(configuration.driverConfiguration().getDriverClassName());
-        System.out.println(configuration.driverConfiguration().getCredentials());
+        System.out.println(userCredentials.getUsername());
+        System.out.println(userCredentials.getPassword());
         sessionFactory = new SessionFactory(configuration, "db");
     }
     

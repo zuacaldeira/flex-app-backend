@@ -227,7 +227,7 @@ public abstract class AbstractDBService<T extends GraphEntity> implements DBServ
     
     protected String getFindAllQuery(String username, String property, Object value, SortOrder order, int limit) {
         String query = "MATCH (n:" + getClassType().getSimpleName() + "), (u:FlexUser)  ";
-        if(username != null && property != null) {
+        if(username != null && property != null && value != null) {
             query += "WHERE u.username=" + DatabaseUtils.getInstance().wrapUp(username) + " ";
             if(value != null) {
                 query += "AND n." + property + "=" + DatabaseUtils.getInstance().wrapUp(value.toString()) + " ";
