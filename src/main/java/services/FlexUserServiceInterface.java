@@ -6,6 +6,7 @@
 package services;
 
 import db.FlexUser;
+import java.util.Collection;
 import javax.ejb.Remote;
 
 /**
@@ -13,7 +14,9 @@ import javax.ejb.Remote;
  * @author zua
  */
 @Remote
-public interface FlexUserServiceInterface extends DBService<FlexUser>{
-    public FlexUser login(FlexUser user);
-    public FlexUser register(FlexUser user);
+public interface FlexUserServiceInterface {
+    public Collection<FlexUser> findAllUsers();
+    public FlexUser findUserNamed(String username);
+    public FlexUser login(String username, String password);
+    public FlexUser register(String username, String password);
 }

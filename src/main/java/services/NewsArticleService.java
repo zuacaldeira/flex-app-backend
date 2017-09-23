@@ -102,12 +102,12 @@ public class NewsArticleService extends  AbstractDBService<NewsArticle> implemen
 
     @Override
     public List<NewsArticle> findLatest(int limit){
-        return findAllDesc(limit);
+        return findAllDescWithLimit(limit);
     }
     
     @Override
     public List<NewsArticle> findOldest(int limit) {
-        return findAllAsc(limit);
+        return findAllAscWithLimit(limit);
     }
 
     @Override

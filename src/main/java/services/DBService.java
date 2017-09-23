@@ -14,9 +14,9 @@ public interface DBService<T> {
     public Collection<T> findAllAsc();
     public Collection<T> findAllDesc();
 
-    public Collection<T> findAll(int limit);
-    public Collection<T> findAllAsc(int limit);
-    public Collection<T> findAllDesc(int limit);
+    public Collection<T> findAllWithLimit(int limit);
+    public Collection<T> findAllAscWithLimit(int limit);
+    public Collection<T> findAllDescWithLimit(int limit);
 
     public Collection<T> findAll(String property, Object value);
     public Collection<T> findAllAsc(String property, Object value);

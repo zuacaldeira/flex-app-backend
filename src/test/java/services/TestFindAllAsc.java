@@ -1,0 +1,43 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package services;
+
+import com.tngtech.java.junit.dataprovider.DataProvider;
+import com.tngtech.java.junit.dataprovider.DataProviderRunner;
+import com.tngtech.java.junit.dataprovider.UseDataProvider;
+import org.junit.Test;
+import static org.junit.Assert.*;
+import org.junit.runner.RunWith;
+
+/**
+ *
+ * @author zua
+ */
+@RunWith(DataProviderRunner.class)
+public class TestFindAllAsc extends Neo4jTest {
+    
+    public TestFindAllAsc() {
+    }
+
+    @DataProvider
+    public static Object[][] servicesData() {
+        return new Object[][]{
+            {new FlexUserService()},
+            {new NewsArticleService()},
+            {new NewsSourceService()},
+            {new NewsAuthorService()}
+        };
+    }
+    
+    // TODO add test methods here.
+    // The methods must be annotated with annotation @Test. For example:
+    //
+    @Test
+    @UseDataProvider("servicesData")
+    public <U> void testFindAllAsc(DBService<U> service) {
+        assertTrue(service.findAllAsc().isEmpty());    
+    }
+}

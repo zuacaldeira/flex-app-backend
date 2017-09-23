@@ -8,6 +8,7 @@ package services;
 import com.google.common.collect.Lists;
 import db.Neo4jSessionFactory;
 import db.GraphEntity;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -25,8 +26,8 @@ public abstract class AbstractDBService<T extends GraphEntity> implements DBServ
     public final int LIMIT = 50;
 
     @Override
-    public final List<T> findAll() {
-        return findAllDesc();
+    public final Collection<T> findAll() {
+        return getSession().loadAll(getClassType(), getSortOrderDesc(), LIMIT);
     }
     
     @Override
@@ -42,18 +43,18 @@ public abstract class AbstractDBService<T extends GraphEntity> implements DBServ
     }
 
     @Override
-    public final List<T> findAll(int limit) {
-        return findAllDesc(limit);
+    public final List<T> findAllWithLimit(int limit) {
+        return findAllDescWithLimit(limit);
     }
     
     @Override
-    public final List<T> findAllAsc(int limit) {
+    public final List<T> findAllAscWithLimit(int limit) {
         String query = getFindAllQuery(null, null, null, getSortOrderAsc(), limit);
         return executeQuery(query);
     }
 
     @Override
-    public final List<T> findAllDesc(int limit) {
+    public final List<T> findAllDescWithLimit(int limit) {
         String query = getFindAllQuery(null, null, null, getSortOrderDesc(), limit);
         return executeQuery(query);
     }

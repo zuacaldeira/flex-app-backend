@@ -6,6 +6,7 @@
 package services;
 
 import db.FlexUser;
+import java.util.Collection;
 import javax.ejb.Stateless;
 import org.neo4j.ogm.cypher.query.SortOrder;
 
@@ -22,20 +23,19 @@ public class FlexUserService extends AbstractDBService<FlexUser> implements Flex
     }
 
     @Override
-    public FlexUser login(FlexUser user) {
+    public FlexUser login(String username, String password) {
         System.out.println("INSIDE FLEX USER SERVICE ");
-        FlexUser u = find(user);
-        if(u != null && u.getPassword().equals(user.getPassword())) {
-            return u;
+        FlexUser user = findUserNamed(username);
+        if(user != null && user.getPassword().equals(password)) {
+            return user;
         }
-        
         return null;
     }
 
     @Override
-    public FlexUser register(FlexUser user) {
-        save(user);
-        return find(user);
+    public FlexUser register(String username, String password) {
+        getSession().save(new FlexUser(username, password));
+        return findUserNamed(username);
     }
 
     
@@ -47,6 +47,16 @@ public class FlexUserService extends AbstractDBService<FlexUser> implements Flex
     @Override
     public SortOrder getSortOrderDesc() {
         return new SortOrder().add(SortOrder.Direction.DESC, "username");
+    }
+
+    @Override
+    public Collection<FlexUser> findAllUsers() {
+        return getSession().loadAll(getClassType(), getSortOrderDesc(), 2);
+    }
+
+    @Override
+    public FlexUser findUserNamed(String username) {
+        return getSession().load(getClassType(), username, 2);
     }
     
 }
