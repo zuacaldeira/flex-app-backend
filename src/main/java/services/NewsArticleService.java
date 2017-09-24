@@ -10,6 +10,10 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import javax.ejb.Stateless;
+import org.neo4j.ogm.cypher.BooleanOperator;
+import org.neo4j.ogm.cypher.ComparisonOperator;
+import org.neo4j.ogm.cypher.Filter;
+import org.neo4j.ogm.cypher.Filters;
 import org.neo4j.ogm.cypher.query.SortOrder;
 import utils.DatabaseUtils;
 
@@ -21,6 +25,20 @@ import utils.DatabaseUtils;
 public class NewsArticleService extends  AbstractDBService<NewsArticle> implements NewsArticleServiceInterface {
     
     
+    @Override
+    public Collection<NewsArticle> findAllArticles() {
+        return getSession().loadAll(NewsArticle.class, 2);
+    }
+    
+    @Override
+    public Collection<NewsArticle> findArticlesWithText(String value) {
+        Filter fTitle = new Filter("title", ComparisonOperator.CONTAINING, value);
+        Filter fDescription = new Filter("description", ComparisonOperator.CONTAINING, value);
+        fDescription.setBooleanOperator(BooleanOperator.OR);
+        Filters filters = new Filters(fTitle, fDescription);
+        return getSession().loadAll(NewsArticle.class, filters, 2);
+    }
+
     @Override
     public Class<NewsArticle> getClassType() {
         return NewsArticle.class;
@@ -37,10 +55,22 @@ public class NewsArticleService extends  AbstractDBService<NewsArticle> implemen
     }
 
     @Override
+    public List<NewsArticle> findArticlesWithCategory(String category) {
+        String query = "MATCH (n:NewsArticle)--(a:NewsAuthor)--(s:NewsSource) ";
+        query += "WHERE (n.category = " + DatabaseUtils.getInstance().wrapUp(category) + " ";
+        query += "  OR  s.category = " + DatabaseUtils.getInstance().wrapUp(category) + ") ";
+        query += "  RETURN n ";
+        query += "  ORDER BY n.publishedAt DESC LIMIT " + LIMIT;
+        System.out.println(query);
+        return super.executeQuery(query);
+    }
+
+    @Override
     public List<NewsArticle> findArticlesWithCategory(String username, String category) {
         String query = "MATCH (u:FlexUser), (n:NewsArticle)--(a:NewsAuthor)--(s:NewsSource) ";
         query += "WHERE u.username=" + DatabaseUtils.getInstance().wrapUp(username) + " ";
-        query += "  AND s.category = " + DatabaseUtils.getInstance().wrapUp(category) + " ";
+        query += "  AND (n.category = " + DatabaseUtils.getInstance().wrapUp(category) + " ";
+        query += "  OR  s.category = " + DatabaseUtils.getInstance().wrapUp(category) + ") ";
         query += "  AND NOT ( (u)-[:READ|FAVORITE|FAKE]->(n)) ";
         query += "  RETURN n ";
         query += "  ORDER BY n.publishedAt DESC LIMIT " + LIMIT;
@@ -49,10 +79,21 @@ public class NewsArticleService extends  AbstractDBService<NewsArticle> implemen
     }
 
     @Override
-    public List<NewsArticle> findArticlesWithSource(String username, String publisherName) {
+    public List<NewsArticle> findArticlesWithSource(String sourceId) {
+        String query = "MATCH (n:NewsArticle) ";
+        query += "WHERE n.sourceId=" + DatabaseUtils.getInstance().wrapUp(sourceId) + " ";
+        query += "  RETURN n ";
+        query += "  ORDER BY n.publishedAt DESC LIMIT " + LIMIT;
+        System.out.println(query);
+        return super.executeQuery(query);
+    }
+
+    @Override
+    public List<NewsArticle> findArticlesWithSource(String username, String sourceId) {
         String query = "MATCH (u:FlexUser), (n:NewsArticle)--(a:NewsAuthor)--(s:NewsSource) ";
         query += "WHERE u.username=" + DatabaseUtils.getInstance().wrapUp(username) + " ";
-        query += "  AND s.name=" + DatabaseUtils.getInstance().wrapUp(publisherName) + " ";
+        query += "  AND (n.sourceId=" + DatabaseUtils.getInstance().wrapUp(sourceId) + " ";
+        query += "  OR s.sourceId=" + DatabaseUtils.getInstance().wrapUp(sourceId) + ") ";
         query += "  AND NOT ( (u)-[:READ|FAVORITE|FAKE]->(n)) ";
         query += "  RETURN n ";
         query += "  ORDER BY n.publishedAt DESC LIMIT " + LIMIT;
@@ -62,9 +103,10 @@ public class NewsArticleService extends  AbstractDBService<NewsArticle> implemen
 
     @Override
     public Collection<NewsArticle> findArticlesWithText(String username, String value) {
-        String query = "MATCH (n:NewsArticle) ";
-        query += "WHERE n.title CONTAINS " + DatabaseUtils.getInstance().wrapUp(value) + " ";
-        query += " OR n.description CONTAINS " + DatabaseUtils.getInstance().wrapUp(value) + " ";
+        String query = "MATCH (u:FlexUser)--(n:NewsArticle) ";
+        query += "WHERE u.username=" + DatabaseUtils.getInstance().wrapUp(username) + " ";
+        query += " AND (n.title CONTAINS " + DatabaseUtils.getInstance().wrapUp(value) + " ";
+        query += " OR n.description CONTAINS " + DatabaseUtils.getInstance().wrapUp(value) + ") ";
         query += " RETURN n ";
         query += " ORDER BY n.publishedAt DESC LIMIT " + LIMIT;
         System.out.println(query);
@@ -72,18 +114,39 @@ public class NewsArticleService extends  AbstractDBService<NewsArticle> implemen
     }
 
     @Override
-    public Collection<NewsArticle> findArticlesWithLanguage(String username, String value) {
-        String query = "MATCH (n:NewsArticle) ";
-        query += "WHERE n.language=" + DatabaseUtils.getInstance().wrapUp(value) + " ";
+    public Collection<NewsArticle> findArticlesWithLanguage(String username, String language) {
+        String query = "MATCH (n:NewsArticle)--(u:FlexUser) ";
+        query += "WHERE u.username=" + DatabaseUtils.getInstance().wrapUp(username) + " ";
+        query += "AND n.language=" + DatabaseUtils.getInstance().wrapUp(language) + " ";
         query += "  RETURN n ";
         query += "  ORDER BY n.publishedAt DESC LIMIT " + LIMIT;
         return super.executeQuery(query);
     }
 
     @Override
-    public Collection<NewsArticle> findArticlesWithCountry(String username, String value) {
+    public Collection<NewsArticle> findArticlesWithLanguage(String language) {
         String query = "MATCH (n:NewsArticle) ";
-        query += "WHERE n.country=" + DatabaseUtils.getInstance().wrapUp(value) + " ";
+        query += "WHERE n.language=" + DatabaseUtils.getInstance().wrapUp(language) + " ";
+        query += "  RETURN n ";
+        query += "  ORDER BY n.publishedAt DESC LIMIT " + LIMIT;
+        return super.executeQuery(query);
+    }
+
+    @Override
+    public Collection<NewsArticle> findArticlesWithCountry(String country) {
+        String query = "MATCH (n:NewsArticle) ";
+        query += "WHERE n.country=" + DatabaseUtils.getInstance().wrapUp(country) + " ";
+        query += "  RETURN n ";
+        query += "  ORDER BY n.publishedAt DESC LIMIT " + LIMIT;
+        System.out.println(query);
+        return super.executeQuery(query);
+    }
+
+    @Override
+    public Collection<NewsArticle> findArticlesWithCountry(String username, String country) {
+        String query = "MATCH (n:NewsArticle)--(u:FlexUser) ";
+        query += "WHERE u.username=" + DatabaseUtils.getInstance().wrapUp(username) + " ";
+        query += "AND n.country=" + DatabaseUtils.getInstance().wrapUp(country) + " ";
         query += "  RETURN n ";
         query += "  ORDER BY n.publishedAt DESC LIMIT " + LIMIT;
         System.out.println(query);
@@ -101,16 +164,6 @@ public class NewsArticleService extends  AbstractDBService<NewsArticle> implemen
     }
 
     @Override
-    public List<NewsArticle> findLatest(int limit){
-        return findAllDescWithLimit(limit);
-    }
-    
-    @Override
-    public List<NewsArticle> findOldest(int limit) {
-        return findAllAscWithLimit(limit);
-    }
-
-    @Override
     public List<NewsArticle> findLatest(String username) {
         return findAllDesc(username);
     }
@@ -120,16 +173,6 @@ public class NewsArticleService extends  AbstractDBService<NewsArticle> implemen
         return findAllAsc(username);
     }
     
-    @Override
-    public List<NewsArticle> findLatest(String username, int limit) {
-        return findAllDesc(username, limit);
-    }
-    
-    @Override
-    public List<NewsArticle> findOldest(String username, int limit) {
-        return findAllAsc(username, limit);
-    }
-
     @Override
     public List<NewsArticle> findAllRead(String username) {
         String query = getMatchStateQuery("READ", username, null, null, LIMIT);
@@ -149,25 +192,6 @@ public class NewsArticleService extends  AbstractDBService<NewsArticle> implemen
     }
     
     
-    @Override
-    public List<NewsArticle> findAllRead(String username, int limit) {
-        String query = getMatchStateQuery("READ", username, null, null, limit);
-        return executeQuery(query);
-    }
-
-    @Override
-    public List<NewsArticle> findAllFavorite(String username, int limit) {
-        String query = getMatchStateQuery("FAVORITE", username, null, null, limit);
-        return executeQuery(query);
-    }
-
-    @Override
-    public List<NewsArticle> findAllFake(String username, int limit) {
-        String query = getMatchStateQuery("FAKE", username, null, null, limit);
-        return executeQuery(query);
-    }
-    
-
     @Override
     public void markAsRead(String username, NewsArticle entity) {
         if(!isRead(username, entity)){
@@ -228,5 +252,6 @@ public class NewsArticleService extends  AbstractDBService<NewsArticle> implemen
         return getSession().queryForObject(getClassType(), getMatchStateQuery("FAKE", username, entity.getPropertyName(), entity.getPropertyValue(), -1), new HashMap<String, Object>()) 
                 != null;
     }
- 
+
+
 }

@@ -5,6 +5,8 @@
  */
 package services;
 
+import db.FlexUser;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
@@ -20,24 +22,31 @@ public class FlexUserServiceTest extends Neo4jTest {
     private String TEST_PASSWORD = "test:password";
 
     public FlexUserServiceTest() {
+        super(FlexUser.class);
     }
 
     @Test
     public void testFindAllUsers() {
+        System.out.println("\ttestFindAllUsers");
         FlexUserService service = new FlexUserService();
         assertTrue(service.findAllUsers().isEmpty());
+        service.register(TEST_USERNAME, TEST_PASSWORD);
+        assertFalse(service.findAllUsers().isEmpty());
     }
     
     @Test
     public void testFindUserNamed() {
         FlexUserService service = new FlexUserService();
         assertNull(service.findUserNamed(TEST_USERNAME));
+        service.register(TEST_USERNAME, TEST_PASSWORD);
+        assertNotNull(service.findUserNamed(TEST_USERNAME));
     }
     
     @Test
     public void testLogin() {
         FlexUserService service = new FlexUserService();
-        assertNull(service.login(TEST_USERNAME, TEST_PASSWORD));
+        service.register(TEST_USERNAME, TEST_PASSWORD);
+        assertNotNull(service.login(TEST_USERNAME, TEST_PASSWORD));
     }
     
     @Test

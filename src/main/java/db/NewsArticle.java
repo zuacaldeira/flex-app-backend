@@ -30,6 +30,8 @@ public class NewsArticle extends GraphEntity implements Comparable<NewsArticle>{
     private String country;
     private Set<String> categories;
     
+    
+    
     @Relationship(type = "AUTHORED", direction = Relationship.INCOMING)
     private Set<NewsAuthor> authors;
     
@@ -206,5 +208,9 @@ public class NewsArticle extends GraphEntity implements Comparable<NewsArticle>{
     @Override
     public boolean hasUrl() {
         return url != null;
+    }
+
+    public void addCategory(String category) {
+        categories.add(category);
     }
 }

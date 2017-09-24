@@ -6,7 +6,7 @@
 package services;
 
 import db.NewsSource;
-import java.util.Set;
+import java.util.Collection;
 import javax.ejb.Remote;
 
 /**
@@ -15,10 +15,16 @@ import javax.ejb.Remote;
  */
 @Remote
 public interface NewsSourceServiceInterface extends DBService<NewsSource> {
-    public Set<String> findCategories();
-    public Set<String> findNames();
-    public Set<String> findLanguages();
-    public Set<String> findCountries();
-    public Set<String> findLocales();
+    public Collection<NewsSource> findAllSources();
+    public Collection<NewsSource> findSourcesWithCategory(String category);
+    public Collection<NewsSource> findSourcesWithLanguage(String language);
+    public Collection<NewsSource> findSourcesWithCountry(String country);    
+    public Collection<String> findCategories();
+    public Collection<String> findNames();
+    public Collection<String> findLanguages();
+    public Collection<String> findCountries();
+    public Collection<String> findLocales();
     public NewsSource findSourceWithSourceId(String sourceId);
+    public NewsSource findSourceNamed(String value);
+
 }

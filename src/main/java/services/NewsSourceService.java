@@ -6,10 +6,13 @@
 package services;
 
 import db.NewsSource;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Set;
 import java.util.TreeSet;
 import javax.ejb.Stateless;
+import org.neo4j.ogm.cypher.ComparisonOperator;
+import org.neo4j.ogm.cypher.Filter;
 import org.neo4j.ogm.cypher.query.SortOrder;
 import utils.DatabaseUtils;
 
@@ -19,6 +22,30 @@ import utils.DatabaseUtils;
  */
 @Stateless
 public class NewsSourceService extends AbstractDBService<NewsSource>  implements NewsSourceServiceInterface {
+
+    @Override
+    public Collection<NewsSource> findAllSources() {
+        return getSession().loadAll(NewsSource.class, 2);
+    }
+    
+    @Override
+    public Collection<NewsSource> findSourcesWithCategory(String category) {
+        Filter fCategory = new Filter("category", ComparisonOperator.EQUALS, category);
+        return getSession().loadAll(NewsSource.class, fCategory, 2);
+    }
+
+    @Override
+    public Collection<NewsSource> findSourcesWithLanguage(String language) {
+        Filter fCategory = new Filter("language", ComparisonOperator.EQUALS, language);
+        return getSession().loadAll(NewsSource.class, fCategory, 2);
+    }
+
+    @Override
+    public Collection<NewsSource> findSourcesWithCountry(String country) {
+        Filter fCategory = new Filter("country", ComparisonOperator.EQUALS, country);
+        return getSession().loadAll(NewsSource.class, fCategory, 2);
+    }
+    
 
     @Override
     public Class<NewsSource> getClassType() {
@@ -82,5 +109,14 @@ public class NewsSourceService extends AbstractDBService<NewsSource>  implements
         query += "  RETURN n ";
         return getSession().queryForObject(getClassType(), query, new HashMap<String, Object>());
     }
+
+    @Override
+    public NewsSource findSourceNamed(String name) {
+        String query = "MATCH (n:NewsSource) ";
+        query += "WHERE n.name=" + DatabaseUtils.getInstance().wrapUp(name) + " ";
+        query += "  RETURN n ";
+        return getSession().queryForObject(getClassType(), query, new HashMap<String, Object>());
+    }
+
 
 }

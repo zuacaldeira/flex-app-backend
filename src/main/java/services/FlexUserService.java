@@ -59,4 +59,9 @@ public class FlexUserService extends AbstractDBService<FlexUser> implements Flex
         return getSession().load(getClassType(), username, 2);
     }
     
+    @Override
+    public void delete(FlexUser user) {
+        getSession().delete(user);
+    }
+    
 }

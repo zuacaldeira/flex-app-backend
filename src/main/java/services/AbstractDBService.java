@@ -227,47 +227,49 @@ public abstract class AbstractDBService<T extends GraphEntity> implements DBServ
     }
     
     protected String getFindAllQuery(String username, String property, Object value, SortOrder order, int limit) {
-        String query = "MATCH (n:" + getClassType().getSimpleName() + "), (u:FlexUser)  ";
-        if(username != null && property != null && value != null) {
-            query += "WHERE u.username=" + DatabaseUtils.getInstance().wrapUp(username) + " ";
-            if(value != null) {
-                query += "AND n." + property + "=" + DatabaseUtils.getInstance().wrapUp(value.toString()) + " ";
-            }
-            else {
-                query += "AND n." + property + " IS NULL ";
-            }
-            query += "AND NOT ( (u)-[:READ|FAVORITE|FAKE]->(n)) ";
-            query += "RETURN n ";
-        }
-        else if(username != null && property == null) {
-            query += "WHERE u.username=" + DatabaseUtils.getInstance().wrapUp(username) + " ";
-            query += "AND NOT ( (u)-[:READ|FAVORITE|FAKE]->(n)) ";
-            query += "RETURN n ";
-        } 
-        else if(username == null && property != null) {
-            if(value != null) {
-                query += "WHERE n." + property + "=" + DatabaseUtils.getInstance().wrapUp(value.toString()) + " ";
-            }
-            else {
-                query += "WHERE n." + property + " IS NULL ";
-            }
-            query += "AND NOT ( (u)-[:READ|FAVORITE|FAKE]->(n)) ";
-            query += "RETURN n ";
-        }
-        else if(username == null && property == null) {
-            query += "WHERE NOT ( (u)-[:READ|FAVORITE|FAKE]->(n)) ";
-            query += "RETURN n ";
+        StringBuffer buffer = new StringBuffer();
+        buffer.append("MATCH (n:");
+        buffer.append(getClassType().getSimpleName());
+        buffer.append(") ");
+        if(username != null) {
+            buffer.append(", (u:FlexUser) ");
+            buffer.append("WHERE u.username=");
+            buffer.append(DatabaseUtils.getInstance().wrapUp(username));
+            buffer.append(" ");
         }
         
+        if(property != null && value != null) {
+            if(username == null) {
+                buffer.append("AND ");
+            }
+            else {
+                buffer.append("WHERE ");
+            }
+            buffer.append("n.");
+            buffer.append(property);
+            buffer.append("=");
+            buffer.append(DatabaseUtils.getInstance().wrapUp(value.toString()));
+            buffer.append(" ");
+        }
+        
+        if(username != null) {
+            buffer.append("AND NOT ( (u)-[:READ|FAVORITE|FAKE]->(n)) ");
+        }
+        
+        buffer.append("RETURN n ");
+
         if(order != null) {
-            query += order.toString().replace("$", "n") + " ";
+            buffer.append(order.toString().replace("$", "n"));
+            buffer.append(" ");
         }
 
         if(limit > 0) {
-            query += "LIMIT " + limit;
+            buffer.append("LIMIT ");
+            buffer.append(limit);
         }
         
-        //System.out.println("Query = " + query);
+        String query = buffer.toString();
+        System.out.println("Query = " + query.toUpperCase());
         return query;
     }
 

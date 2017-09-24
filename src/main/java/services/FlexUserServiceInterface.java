@@ -19,4 +19,5 @@ public interface FlexUserServiceInterface {
     public FlexUser findUserNamed(String username);
     public FlexUser login(String username, String password);
     public FlexUser register(String username, String password);
+    public void delete(FlexUser user);    
 }

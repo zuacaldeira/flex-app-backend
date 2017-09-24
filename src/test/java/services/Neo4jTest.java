@@ -5,6 +5,8 @@
  */
 package services;
 
+import db.Neo4jSessionFactory;
+import javax.annotation.concurrent.NotThreadSafe;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -14,9 +16,16 @@ import org.neo4j.ogm.testutil.TestServer;
  *
  * @author zua
  */
+@NotThreadSafe
 public class Neo4jTest {
     
     private static TestServer testServer;
+    private final Class<?> entityType;
+
+    public Neo4jTest(Class<?> entityType) {
+        this.entityType = entityType;
+    }
+    
     
     @BeforeClass
     public static void startDB() {
@@ -30,7 +39,7 @@ public class Neo4jTest {
     @Before
     public void cleanUp() {
         System.out.println("-- CLEANUP --");
-        testServer.getGraphDatabaseService().execute("MATCH (n) DELETE n");
+        Neo4jSessionFactory.getInstance().getNeo4jSession().deleteAll(entityType);
     }
     
     @AfterClass
