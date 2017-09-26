@@ -5,6 +5,9 @@
  */
 package utils;
 
+import com.neovisionaries.i18n.CountryCode;
+import com.neovisionaries.i18n.LanguageCode;
+import java.util.List;
 import java.util.Locale;
 
 /**
@@ -28,31 +31,68 @@ public class MyDateUtils {
         };
     }
 
-    public static Locale getLocale(String localeString) {
-        String language = getLanguage(localeString);
-        String country = getCountry(localeString);
-        for(Locale loc: Locale.getAvailableLocales()) {
-            if(loc.getLanguage().equalsIgnoreCase(language) && loc.getCountry().equalsIgnoreCase(country)) {
-                return loc;
-            }
-        }
-        return Locale.forLanguageTag(language);
-    }
-
-    public static String getLanguage(String localeString) {
+    public static String extractLanguage(String localeString) {
         if (localeString != null && localeString.contains("_")) {
             return localeString.split("_")[0];
         } else {
-            throw new IllegalArgumentException("Expected data in format 'language_country', but found " + localeString);
+            throw new IllegalArgumentException("Expected data in format 'language_COUNTRY', but found " + localeString);
         }
     }
 
-    public static String getCountry(String localeString) {
+    public static String extractCountry(String localeString) {
         if (localeString != null && localeString.contains("_")) {
-            return localeString.split("_")[1].toUpperCase();
+            String[] parts = localeString.split("_");
+            if(parts.length > 1) {
+                return parts[1];
+            } else {
+                return parts[0].toUpperCase();
+            }
         } else {
-            throw new IllegalArgumentException("Expected data in format 'language_country', but found " + localeString);
+            throw new IllegalArgumentException("Expected data in format 'language_COUNTRY', but found " + localeString);
         }
     }
 
+    public static String getLanguageNameFromPattern(String localeString) {
+        LanguageCode code = LanguageCode.getByCodeIgnoreCase(extractLanguage(localeString));
+        if(code != null) {
+            return code.getName();
+        }
+        else {
+            System.err.println("Could not get the language name for " + localeString);
+            return Locale.forLanguageTag(extractLanguage(localeString)).getDisplayLanguage();
+        }
+    }
+
+    public static String getCountryNameFromPattern(String localeString) {
+        CountryCode code = CountryCode.getByCodeIgnoreCase(extractCountry(localeString));
+        if(code != null) {
+            return code.getName();
+        }
+        else {
+            System.err.println("Could not get the language name for " + localeString);
+            return Locale.forLanguageTag(extractLanguage(localeString)).getDisplayCountry();
+        }
+    }
+
+    public static String getLanguageCode(String displayLanguage) {
+        List<LanguageCode> codes = LanguageCode.findByName(displayLanguage);
+        
+        return codes.get(0).name();
+    }
+
+    public static String getCountryCode(String displayCountry) {
+        List<CountryCode> codes = CountryCode.findByName(displayCountry);
+        return codes.get(0).name();
+    }
+    
+    public static String getLanguage(String languageCode) {
+        LanguageCode code = LanguageCode.getByCodeIgnoreCase(languageCode);
+        return code.getName();
+    }
+
+    public static String getCountry(String countryCode) {
+        CountryCode code = CountryCode.getByCodeIgnoreCase(countryCode);
+        return code.getName();
+    }
+    
 }

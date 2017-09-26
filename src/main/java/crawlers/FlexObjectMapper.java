@@ -18,14 +18,12 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.net.URL;
 import java.nio.charset.Charset;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ejb.Schedule;
 import javax.ejb.Singleton;
 import services.NewsArticleServiceInterface;
-import services.NewsServiceException;
 import services.NewsSourceServiceInterface;
+import utils.FlexLogger;
 
 /**
  *
@@ -37,19 +35,19 @@ public class FlexObjectMapper {
     private static final String API_KEY = "5b4e00f3046843138d8368211777a4f2";
     private static final String SOURCES_URL = "http://newsapi.org/v1/sources?";
     private static final String ARTICLES_URL = "http://newsapi.org/v1/articles?";
-    
+
     private ObjectMapper objectMapper;
     @EJB
     private NewsArticleServiceInterface articlesService;
     @EJB
     private NewsSourceServiceInterface sourcesService;
-    
-    
+
+    private FlexLogger logger = new FlexLogger(getClass());
+
     public FlexObjectMapper() {
         objectMapper = new ObjectMapper();
     }
-    
-    
+
     public String getSourcesQuery(String category, String language2Letter, String country) {
         boolean hasCategory = category != null && !category.isEmpty();
         boolean haslanguage = language2Letter != null && !language2Letter.isEmpty();
@@ -57,70 +55,70 @@ public class FlexObjectMapper {
         boolean hasApiKey = API_KEY != null && !API_KEY.isEmpty();
 
         StringBuilder builder = new StringBuilder(SOURCES_URL);
-        
-        if(hasCategory) {
+
+        if (hasCategory) {
             builder.append("category=");
             builder.append(category);
             builder.append("&");
         }
-        
-        if(haslanguage) {
+
+        if (haslanguage) {
             builder.append("language=");
             builder.append(language2Letter);
             builder.append("&");
         }
-        
-        if(hasCountry) {
+
+        if (hasCountry) {
             builder.append("country=");
             builder.append(country);
             builder.append("&");
         }
 
-        if(hasApiKey) {
+        if (hasApiKey) {
             builder.append("apiKey=");
             builder.append(API_KEY);
         }
 
         return builder.toString();
     }
-    
+
     public String getArticlesQuery(String sourceId) {
         boolean hasSourceId = sourceId != null && !sourceId.isEmpty();
         boolean hasApiKey = API_KEY != null && !API_KEY.isEmpty();
 
         StringBuilder builder = new StringBuilder(ARTICLES_URL);
-        
-        if(hasSourceId) {
+
+        if (hasSourceId) {
             builder.append("source=");
             builder.append(sourceId);
             builder.append("&");
         }
-        
-        if(hasApiKey) {
+
+        if (hasApiKey) {
             builder.append("apiKey=");
             builder.append(API_KEY);
         }
 
         return builder.toString();
     }
-    
+
     public String makeApiCall(String url) {
         try (InputStream is = new URL(url).openConnection().getInputStream()) {
             BufferedReader rd = new BufferedReader(new InputStreamReader(is, Charset.forName("UTF-8")));
             return readAllData(rd);
-        } catch(Exception e) {
+        } catch (Exception e) {
             throw new services.NewsServiceException(e);
         }
     }
-    
-    @Schedule(hour="*", minute="7/10")
+
+    @Schedule(hour = "*", minute = "7/10")
     public void loadAllData() {
+        logger.info("%s", "Start loading data from " + SOURCES_URL);
         try {
             String result = makeApiCall(getSourcesQuery(null, null, null));
-            System.out.println(result);
 
             MultipleSourcesResponse sourcesResponse = objectMapper.readValue(result, MultipleSourcesResponse.class);
-            if("ok".equals(sourcesResponse.getStatus())) {
+            if ("ok".equals(sourcesResponse.getStatus())) {
                 sourcesResponse.getSources().forEach(ssr -> {
                     NewsSource source = ssr.convert2NewsSource();
                     loadAllArticles(source);
@@ -128,43 +126,47 @@ public class FlexObjectMapper {
                 });
             }
         } catch (IOException ex) {
-            Logger.getLogger(FlexObjectMapper.class.getName()).log(Level.SEVERE, null, ex);
-            //throw new NewsServiceException(ex);
+            logger.error("%s", ex.getMessage());
         }
+        logger.info("%s", "Finished: " + SOURCES_URL);
     }
 
     public void loadAllArticles(NewsSource source) {
         try {
             String result = makeApiCall(getArticlesQuery(source.getSourceId()));
-            System.out.println(result);
 
             MultipleArticlesResponse articlesResponse = objectMapper.readValue(result, MultipleArticlesResponse.class);
-            if("ok".equals(articlesResponse.getStatus())) {
-               articlesResponse.getArticles().forEach(sar -> {
+            if ("ok".equals(articlesResponse.getStatus())) {
+                logger.info("%s", " Processing source " + source);
+                articlesResponse.getArticles().forEach(sar -> {
                     NewsArticle article = sar.convert2NewsArticle(source);
-                    NewsAuthor author = sar.convert2NewsAuthor(source);
-                    author.addArticle(article);
-                    source.addCorrespondent(author);
-               });
+                    boolean shouldSave = article.getTitle() != null
+                            && !article.getTitle().isEmpty()
+                            && articlesService.findArticleWithTitle(article.getTitle()) == null;
+                    if (shouldSave) {
+                        logger.info("%s", "\tSaving article " + article);
+                        NewsAuthor author = sar.convert2NewsAuthor(source);
+                        author.addArticle(article);
+                        source.addCorrespondent(author);
+                    }
+                });
             }
         } catch (IOException ex) {
-            Logger.getLogger(FlexObjectMapper.class.getName()).log(Level.SEVERE, null, ex);
-            throw new NewsServiceException(ex);
+            logger.error("%s", ex.getMessage());
         }
     }
-    
+
     protected void saveArticle(NewsArticle article) {
-        if(articlesService != null) {
+        if (articlesService != null) {
             articlesService.save(article);
         }
     }
 
     protected NewsSource saveReturnSource(NewsSource source) {
-        if(sourcesService != null) {
+        if (sourcesService != null) {
             sourcesService.save(source);
             return sourcesService.findSourceWithSourceId(source.getSourceId());
-        }
-        else {
+        } else {
             return source;
         }
     }
@@ -178,5 +180,8 @@ public class FlexObjectMapper {
         return sb.toString();
     }
 
-    
+    void setNewsArticlesService(NewsArticleServiceInterface newsArticleService) {
+        articlesService = newsArticleService;
+    }
+
 }

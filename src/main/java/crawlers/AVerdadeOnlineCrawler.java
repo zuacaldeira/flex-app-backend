@@ -54,7 +54,7 @@ public class AVerdadeOnlineCrawler extends FlexNewsCrawler {
         String url = getUrl();
         String category = "geral";
         String language = "pt";
-        String country = "mz";
+        String country = "MZ";
 
         NewsSource source = new NewsSource(sourceId, name, description, url, category, language, country);
         source.setLogoUrl(Logos.getLogo(sourceId));

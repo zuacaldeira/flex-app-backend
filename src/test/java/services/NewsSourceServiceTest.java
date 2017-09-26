@@ -34,49 +34,49 @@ public class NewsSourceServiceTest extends Neo4jTest {
     @DataProvider
     public static Object[][] sourcesData() {
         return new Object[][]{
-            {new NewsSource("sourceId", "name", "description", "url", "category", "language", "country")}
+            {new NewsSource("sourceId", "name", "description", "url", "category", "language", "country".toUpperCase())}
         };
     }
 
     @DataProvider
     public static Object[][] searchByCategoryData() {
         return new Object[][]{
-            {new NewsSource("sourceId", "name", "description", "url", "category", "language", "country"), "category"}
+            {new NewsSource("sourceId", "name", "description", "url", "category", "language", "country".toUpperCase()), "category"}
         };
     }
 
     @DataProvider
     public static Object[][] searchByNameData() {
         return new Object[][]{
-            {new NewsSource("sourceId", "name", "description", "url", "category", "language", "country"), "name"}
+            {new NewsSource("sourceId", "name", "description", "url", "category", "language", "country".toUpperCase()), "name"}
         };
     }
 
     @DataProvider
     public static Object[][] searchBySourceIdData() {
         return new Object[][]{
-            {new NewsSource("sourceId", "name", "description", "url", "category", "language", "country"), "sourceId"}
+            {new NewsSource("sourceId", "name", "description", "url", "category", "language", "country".toUpperCase()), "sourceId"}
         };
     }
 
     @DataProvider
     public static Object[][] searchByLanguageData() {
         return new Object[][]{
-            {new NewsSource("sourceId", "name", "description", "url", "category", "language", "country"), "language"}
+            {new NewsSource("sourceId", "name", "description", "url", "category", "language", "country".toUpperCase()), "language"}
         };
     }
 
     @DataProvider
     public static Object[][] searchByCountryData() {
         return new Object[][]{
-            {new NewsSource("sourceId", "name", "description", "url", "category", "language", "country"), "country"}
+            {new NewsSource("sourceId", "name", "description", "url", "category", "language", "country".toUpperCase()), "country"}
         };
     }
 
     @DataProvider
     public static Object[][] searchByLocaleData() {
         return new Object[][]{
-            {new NewsSource("sourceId", "name", "description", "url", "category", "language", "country"), "language_country"}
+            {new NewsSource("sourceId", "name", "description", "url", "category", "language", "country".toUpperCase()), "language_COUNTRY"}
         };
     }
 
@@ -163,10 +163,10 @@ public class NewsSourceServiceTest extends Neo4jTest {
     @UseDataProvider("searchByCountryData")
     public void testSourceWithCountry(NewsSource article, String country) {
         NewsSourceService service = new NewsSourceService();
-        assertTrue(service.findSourcesWithCountry(country).isEmpty());
+        assertTrue(service.findSourcesWithCountry(country.toUpperCase()).isEmpty());
         service.save(article);
         assertFalse(service.findAllSources().isEmpty());
-        assertFalse(service.findSourcesWithCountry(country).isEmpty());
+        assertFalse(service.findSourcesWithCountry(country.toUpperCase()).isEmpty());
     }
     
     @Test
@@ -176,7 +176,7 @@ public class NewsSourceServiceTest extends Neo4jTest {
         assertTrue(service.findCountries().isEmpty());
         service.save(source);
         assertFalse(service.findAllSources().isEmpty());
-        assertTrue(service.findCountries().contains(country));
+        assertTrue(service.findCountries().contains(country.toUpperCase()));
     }
     
     @Test

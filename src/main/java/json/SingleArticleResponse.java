@@ -101,7 +101,7 @@ public class SingleArticleResponse {
         }
         String sourceId = source.getSourceId();
         String language = source.getLanguage();
-        String country = source.getCountry();
+        String country = source.getCountry().toUpperCase();
         NewsArticle article = new NewsArticle(title, description, url, urlToImage, date, sourceId, language, country);
         return article;
     }

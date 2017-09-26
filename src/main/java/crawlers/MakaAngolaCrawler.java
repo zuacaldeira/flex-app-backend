@@ -50,7 +50,7 @@ public class MakaAngolaCrawler extends FlexNewsCrawler {
         String url = getUrl();
         String category = "política";
         String language = "pt";
-        String country = "ao";
+        String country = "AO";
 
         NewsSource source = new NewsSource(sourceId, name, description, url, category, language, country);
         source.setLogoUrl(Logos.getLogo("maka-angola"));

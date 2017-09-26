@@ -26,18 +26,45 @@ public class NewsArticleService extends  AbstractDBService<NewsArticle> implemen
     
     
     @Override
+    public NewsArticle findArticleWithTitle(String title) {
+        return getSession().load(NewsArticle.class, title, 2);
+    }
+
+    @Override
     public Collection<NewsArticle> findAllArticles() {
         return getSession().loadAll(NewsArticle.class, 2);
     }
     
     @Override
     public Collection<NewsArticle> findArticlesWithText(String value) {
+        if(value == null || value.isEmpty()){
+            throw new NewsServiceException(new IllegalArgumentException("Value cannot be a null nor empty string"));
+        }
         Filter fTitle = new Filter("title", ComparisonOperator.CONTAINING, value);
         Filter fDescription = new Filter("description", ComparisonOperator.CONTAINING, value);
         fDescription.setBooleanOperator(BooleanOperator.OR);
         Filters filters = new Filters(fTitle, fDescription);
         return getSession().loadAll(NewsArticle.class, filters, 2);
     }
+    
+    @Override
+    public Collection<NewsArticle> findArticlesWithText(String username, String value) {
+        if(value == null || value.isEmpty()){
+            throw new NewsServiceException(new IllegalArgumentException("Value cannot be a null nor empty string"));
+        }
+        if(username == null || username.isEmpty()) {
+            throw new NewsServiceException(new IllegalArgumentException("Username cannot be null nor empty string"));
+        }
+        String query = "MATCH (u:FlexUser)--(n:NewsArticle) ";
+        query += "WHERE u.username=" + DatabaseUtils.getInstance().wrapUp(username) + " ";
+        query += " AND (n.title CONTAINS " + DatabaseUtils.getInstance().wrapUp(value) + " ";
+        query += " OR n.description CONTAINS " + DatabaseUtils.getInstance().wrapUp(value) + ") ";
+        query += " RETURN n ";
+        query += " ORDER BY n.publishedAt DESC LIMIT " + LIMIT;
+        System.out.println(query);
+        return super.executeQuery(query);
+    }
+    
 
     @Override
     public Class<NewsArticle> getClassType() {
@@ -101,23 +128,14 @@ public class NewsArticleService extends  AbstractDBService<NewsArticle> implemen
         return super.executeQuery(query);
     }
 
-    @Override
-    public Collection<NewsArticle> findArticlesWithText(String username, String value) {
-        String query = "MATCH (u:FlexUser)--(n:NewsArticle) ";
-        query += "WHERE u.username=" + DatabaseUtils.getInstance().wrapUp(username) + " ";
-        query += " AND (n.title CONTAINS " + DatabaseUtils.getInstance().wrapUp(value) + " ";
-        query += " OR n.description CONTAINS " + DatabaseUtils.getInstance().wrapUp(value) + ") ";
-        query += " RETURN n ";
-        query += " ORDER BY n.publishedAt DESC LIMIT " + LIMIT;
-        System.out.println(query);
-        return super.executeQuery(query);
-    }
 
     @Override
     public Collection<NewsArticle> findArticlesWithLanguage(String username, String language) {
-        String query = "MATCH (n:NewsArticle)--(u:FlexUser) ";
+        String query = "MATCH (u:FlexUser), (n:NewsArticle) ";
         query += "WHERE u.username=" + DatabaseUtils.getInstance().wrapUp(username) + " ";
         query += "AND n.language=" + DatabaseUtils.getInstance().wrapUp(language) + " ";
+        //query += "OR  s.language=" + DatabaseUtils.getInstance().wrapUp(language) + " ";
+        query += "AND NOT ( (u)-[:READ|FAVORITE|FAKE]->(n)) ";
         query += "  RETURN n ";
         query += "  ORDER BY n.publishedAt DESC LIMIT " + LIMIT;
         return super.executeQuery(query);
@@ -144,9 +162,10 @@ public class NewsArticleService extends  AbstractDBService<NewsArticle> implemen
 
     @Override
     public Collection<NewsArticle> findArticlesWithCountry(String username, String country) {
-        String query = "MATCH (n:NewsArticle)--(u:FlexUser) ";
+        String query = "MATCH (u:FlexUser), (n:NewsArticle)--(a:NewsAuthor)--(s:NewsSource) ";
         query += "WHERE u.username=" + DatabaseUtils.getInstance().wrapUp(username) + " ";
         query += "AND n.country=" + DatabaseUtils.getInstance().wrapUp(country) + " ";
+        query += "AND NOT ( (u)-[:READ|FAVORITE|FAKE]->(n)) ";
         query += "  RETURN n ";
         query += "  ORDER BY n.publishedAt DESC LIMIT " + LIMIT;
         System.out.println(query);

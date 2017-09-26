@@ -19,6 +19,7 @@ public interface NewsSourceServiceInterface extends DBService<NewsSource> {
     public Collection<NewsSource> findSourcesWithCategory(String category);
     public Collection<NewsSource> findSourcesWithLanguage(String language);
     public Collection<NewsSource> findSourcesWithCountry(String country);    
+    public Collection<NewsSource> findSourcesWithoutLogo();
     public Collection<String> findCategories();
     public Collection<String> findNames();
     public Collection<String> findLanguages();

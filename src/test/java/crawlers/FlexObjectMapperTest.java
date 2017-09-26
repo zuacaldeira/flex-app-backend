@@ -11,6 +11,7 @@ import com.tngtech.java.junit.dataprovider.UseDataProvider;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import org.junit.runner.RunWith;
+import services.NewsArticleService;
 
 /**
  *
@@ -92,6 +93,7 @@ public class FlexObjectMapperTest {
     public void testLoadAllData() {
         System.out.println("loadAllData");
         FlexObjectMapper instance = new FlexObjectMapper();
+        instance.setNewsArticlesService(new NewsArticleService());
         instance.loadAllData();
         assertTrue(true);
     }

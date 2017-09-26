@@ -36,20 +36,44 @@ public class NewsArticleServiceTest extends Neo4jTest {
     @DataProvider
     public static Object[][] articlesData() {
         return new Object[][]{
-            {new NewsArticle("title", "description", "url", "imageUrl", new Date(), "sourceId", "language", "country")}
+            {new NewsArticle("title", "description", "url", "imageUrl", new Date(), "sourceId", "language", "country".toUpperCase())}
         };
     }
     @DataProvider
     public static Object[][] searchData() {
         return new Object[][]{
-            {new NewsArticle("title", "description", "url", "imageUrl", new Date(), "sourceId", "language", "country"), "title"},
-            {new NewsArticle("title", "description", "url", "imageUrl", new Date(), "sourceId", "language", "country"), "description"}
+            {new NewsArticle("title", "description", "url", "imageUrl", new Date(), "sourceId", "language", "country".toUpperCase()), "title"},
+            {new NewsArticle("title", "description", "url", "imageUrl", new Date(), "sourceId", "language", "country".toUpperCase()), "description"}
         };
     }
 
     @DataProvider
+    public static Object[][] searchDataForUser() {
+        return new Object[][]{
+            {new NewsArticle("title", "description", "url", "imageUrl", new Date(), "sourceId", "language", "country".toUpperCase()), TEST_USERNAME, "title"},
+            {new NewsArticle("title", "description", "url", "imageUrl", new Date(), "sourceId", "language", "country".toUpperCase()), TEST_USERNAME, "description"}
+        };
+    }
+
+    @DataProvider
+    public static Object[][] negativeSearchDataForUser() {
+        return new Object[][]{
+            {new NewsArticle("title", "description", "url", "imageUrl", new Date(), "sourceId", "language", "country".toUpperCase()), null, "title"},
+            {new NewsArticle("title", "description", "url", "imageUrl", new Date(), "sourceId", "language", "country".toUpperCase()), "", "description"}
+        };
+    }
+
+    @DataProvider
+    public static Object[][] negativeSearchData() {
+        return new Object[][]{
+            {new NewsArticle("title", "description", "url", "imageUrl", new Date(), "sourceId", "language", "country".toUpperCase()), null},
+            {new NewsArticle("title", "description", "url", "imageUrl", new Date(), "sourceId", "language", "country".toUpperCase()), ""}
+        };
+    }
+    
+    @DataProvider
     public static Object[][] searchByCategoryData() {
-        NewsArticle article = new NewsArticle("title", "description", "url", "imageUrl", new Date(), "sourceId", "language", "country");
+        NewsArticle article = new NewsArticle("title", "description", "url", "imageUrl", new Date(), "sourceId", "language", "country".toUpperCase());
         article.addCategory("category");
         
         return new Object[][]{
@@ -59,7 +83,7 @@ public class NewsArticleServiceTest extends Neo4jTest {
 
     @DataProvider
     public static Object[][] searchBySourceData() {
-        NewsArticle article = new NewsArticle("title", "description", "url", "imageUrl", new Date(), "sourceId", "language", "country");
+        NewsArticle article = new NewsArticle("title", "description", "url", "imageUrl", new Date(), "sourceId", "language", "country".toUpperCase());
         article.setSourceId("sourceId");
         
         return new Object[][]{
@@ -69,7 +93,7 @@ public class NewsArticleServiceTest extends Neo4jTest {
 
     @DataProvider
     public static Object[][] searchByLanguageData() {
-        NewsArticle article = new NewsArticle("title", "description", "url", "imageUrl", new Date(), "sourceId", "language", "country");
+        NewsArticle article = new NewsArticle("title", "description", "url", "imageUrl", new Date(), "sourceId", "language", "country".toUpperCase());
         article.setSourceId("sourceId");
         
         return new Object[][]{
@@ -79,7 +103,7 @@ public class NewsArticleServiceTest extends Neo4jTest {
 
     @DataProvider
     public static Object[][] searchByCountryData() {
-        NewsArticle article = new NewsArticle("title", "description", "url", "imageUrl", new Date(), "sourceId", "language", "country");
+        NewsArticle article = new NewsArticle("title", "description", "url", "imageUrl", new Date(), "sourceId", "language", "country".toUpperCase());
         return new Object[][]{
             {article, "country"}
         };
@@ -87,7 +111,7 @@ public class NewsArticleServiceTest extends Neo4jTest {
 
     @DataProvider
     public static Object[][] readData() {
-        NewsArticle article = new NewsArticle("title", "description", "url", "imageUrl", new Date(), "sourceId", "language", "country");
+        NewsArticle article = new NewsArticle("title", "description", "url", "imageUrl", new Date(), "sourceId", "language", "country".toUpperCase());
         return new Object[][]{
             {article}
         };
@@ -112,16 +136,36 @@ public class NewsArticleServiceTest extends Neo4jTest {
         assertFalse(service.findArticlesWithText(searchString).isEmpty());
     }
     
-    @Test
-    @UseDataProvider("searchData")
-    public void testArticleWithTextForUser(NewsArticle article, String searchString) {
+    @Test(expected = NewsServiceException.class)
+    @UseDataProvider("negativeSearchData")
+    public void testArticleWithTextShouldFail(NewsArticle article, String searchString) {
         NewsArticleService service = new NewsArticleService();
-        assertTrue(service.findArticlesWithText(TEST_USERNAME, searchString).isEmpty());
+        assertTrue(service.findArticlesWithText(searchString).isEmpty());
+        service.save(article);
+        assertFalse(service.findArticlesWithText(searchString).isEmpty());
+    }
+
+
+    @Test
+    @UseDataProvider("searchDataForUser")
+    public void testArticleWithTextForUser(NewsArticle article, String username, String searchString) {
+        NewsArticleService service = new NewsArticleService();
+        assertTrue(service.findArticlesWithText(username, searchString).isEmpty());
         service.save(article);
         assertFalse(service.findAllArticles().isEmpty());
-        assertTrue(service.findArticlesWithText(TEST_USERNAME, searchString).isEmpty());
+        assertTrue(service.findArticlesWithText(username, searchString).isEmpty());
     }
  
+    @Test(expected=NewsServiceException.class)
+    @UseDataProvider("negativeSearchDataForUser")
+    public void testArticleWithTextForUserShouldFail(NewsArticle article, String username, String searchString) {
+        NewsArticleService service = new NewsArticleService();
+        assertTrue(service.findArticlesWithText(username, searchString).isEmpty());
+        service.save(article);
+        assertFalse(service.findAllArticles().isEmpty());
+        assertTrue(service.findArticlesWithText(username, searchString).isEmpty());
+    }
+
     @Test
     @UseDataProvider("searchByCategoryData")
     public void testArticleWithCategory(NewsArticle article, String category) {
@@ -179,17 +223,17 @@ public class NewsArticleServiceTest extends Neo4jTest {
         assertTrue(service.findArticlesWithLanguage(TEST_USERNAME, language).isEmpty());
         service.save(article);
         assertFalse(service.findAllArticles().isEmpty());
-        assertTrue(service.findArticlesWithLanguage(TEST_USERNAME, language).isEmpty());
+        assertFalse(service.findArticlesWithLanguage(TEST_USERNAME, language).isEmpty());
     }
 
     @Test
     @UseDataProvider("searchByCountryData")
     public void testArticleWithCountry(NewsArticle article, String country) {
         NewsArticleService service = new NewsArticleService();
-        assertTrue(service.findArticlesWithCountry(country).isEmpty());
+        assertTrue(service.findArticlesWithCountry(country.toUpperCase()).isEmpty());
         service.save(article);
         assertFalse(service.findAllArticles().isEmpty());
-        assertFalse(service.findArticlesWithCountry(country).isEmpty());
+        assertFalse(service.findArticlesWithCountry(country.toUpperCase()).isEmpty());
     }
 
     @Test

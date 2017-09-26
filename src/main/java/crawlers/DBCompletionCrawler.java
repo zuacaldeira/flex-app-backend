@@ -30,7 +30,7 @@ public class DBCompletionCrawler {
     
     @Schedule(hour = "*", minute="1/10")
     public void completeLogos() {
-        List<NewsSource> sources = (List<NewsSource>) sourcesService.findAll("logoUrl", null);
+        List<NewsSource> sources = (List<NewsSource>) sourcesService.findSourcesWithoutLogo();
         logger.info("FFFFFFFFFF Found %d sources without logo", sources.size());
         
         for(NewsSource s: sources) {

@@ -26,6 +26,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import services.NewsArticleServiceInterface;
+import services.NewsSourceServiceInterface;
 import utils.FlexLogger;
 
 /**
@@ -35,6 +36,7 @@ import utils.FlexLogger;
 public abstract class FlexNewsCrawler {
 
     @EJB private NewsArticleServiceInterface articlesService;
+    @EJB private NewsSourceServiceInterface sourcesService;
 
     private FlexLogger logger;
     
@@ -44,11 +46,12 @@ public abstract class FlexNewsCrawler {
     
     public void crawlWebsite(String url, NewsSource source) {
         try {
-            logger.log("Loading articles from: %s", url);
+            logger.info("Loading articles from: %s", url);
             Set<String> visited = new HashSet<>();
             visited.add(url);
             crawlUrl(openDocument(url), source, visited);
-            logger.log("Finished: %s", url);
+            sourcesService.save(source);
+            logger.info("Finished: %s", url);
         } catch (Exception e) {
             e.printStackTrace();
             logger.error("Error: %s -- %s", url, e.getMessage());
@@ -137,7 +140,8 @@ public abstract class FlexNewsCrawler {
     }
     
     private void saveArticle(String articleUrl, String title, String imageUrl, String description, Date date, Set<NewsAuthor> authors, NewsSource source) {
-        if(title != null) {
+        boolean shouldSave = title != null && articlesService != null && articlesService.findArticleWithTitle(title) == null;
+        if(shouldSave) {
             NewsArticle newsArticle = new NewsArticle();
             newsArticle.setSourceId(source.getSourceId());
             newsArticle.setLanguage(source.getLanguage());
@@ -154,12 +158,12 @@ public abstract class FlexNewsCrawler {
             newsArticle.setAuthors(authors);
             source.setCorrespondents(authors);
 
-            if(articlesService != null) {
-                articlesService.save(newsArticle);
-                logger.log("\tStored new article: %s", newsArticle.getTitle());
-            } else {
-                logger.log("\tIgnored new article: %s", newsArticle.getTitle());
-            }
+            articlesService.save(newsArticle);
+            logger.info("\tStored new article: %s", newsArticle.getTitle());
+        } 
+        
+        else {
+            logger.info("\tIgnored old article: %s", title);
         }
     }
 
@@ -168,11 +172,7 @@ public abstract class FlexNewsCrawler {
     protected abstract Elements getArticles(Document document);
 
     public String getUrl(Element article) {
-        UrlElement urlElement = getUrlElement(article);
-        if (urlElement != null) {
-            return urlElement.getValue();
-        }
-        return null;
+        return getUrlElement(article).getValue();
     }
 
     public UrlElement getUrlElement(Element article) {

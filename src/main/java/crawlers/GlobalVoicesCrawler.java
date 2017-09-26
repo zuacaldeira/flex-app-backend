@@ -22,50 +22,50 @@ public class GlobalVoicesCrawler extends GlobalVoicesAbstractCrawler {
     @Schedule(hour = "*", minute = "3/10", persistent = false)
     public void crawlSet1() {
         //getLogger().on();
-        crawlWebsite(getUrl("am"), getMySource("am"));
-        crawlWebsite(getUrl("ar"), getMySource("ar"));
-        crawlWebsite(getUrl("aym"), getMySource("aym"));
-        crawlWebsite(getUrl("bg"), getMySource("bg"));
-        crawlWebsite(getUrl("bn"), getMySource("bn"));
-        crawlWebsite(getUrl("ca"), getMySource("ca"));
-        crawlWebsite(getUrl("cs"), getMySource("cs"));
-        crawlWebsite(getUrl("da"), getMySource("da"));
+        crawlWebsite(getUrl("am"), getMySource("am", "ET"));
+        crawlWebsite(getUrl("ar"), getMySource("ar", "SD"));
+        crawlWebsite(getUrl("aym"), getMySource("aym", "PE"));
+        crawlWebsite(getUrl("bg"), getMySource("bg", "BG"));
+        crawlWebsite(getUrl("bn"), getMySource("bn", "BD"));
+        crawlWebsite(getUrl("ca"), getMySource("ca", "ES"));
+        crawlWebsite(getUrl("cs"), getMySource("cs", "CZ"));
+        crawlWebsite(getUrl("da"), getMySource("da", "DK"));
         crawlWebsite(getUrl("de"), getMySource("de"));
-        crawlWebsite(getUrl("el"), getMySource("el"));
-        crawlWebsite(getUrl("en"), getMySource("en"));
-        crawlWebsite(getUrl("eo"), getMySource("eo"));
-        crawlWebsite(getUrl("es"), getMySource("es"));
-        crawlWebsite(getUrl("fa"), getMySource("fa"));
-        crawlWebsite(getUrl("fil"), getMySource("fil"));
-        crawlWebsite(getUrl("fr"), getMySource("fr"));
-        crawlWebsite(getUrl("he"), getMySource("he"));
-        crawlWebsite(getUrl("hi"), getMySource("hi"));
-        crawlWebsite(getUrl("hu"), getMySource("hu"));
-        crawlWebsite(getUrl("id"), getMySource("id"));
-        crawlWebsite(getUrl("it"), getMySource("it"));
-        crawlWebsite(getUrl("jp"), getMySource("jp"));
-        crawlWebsite(getUrl("km"), getMySource("km"));
-        crawlWebsite(getUrl("ko"), getMySource("ko"));
-        crawlWebsite(getUrl("mg"), getMySource("mg"));
-        crawlWebsite(getUrl("mk"), getMySource("mk"));
-        //crawlWebsite(getUrl("my"), getMySource("my"));
-        crawlWebsite(getUrl("ne"), getMySource("ne"));
-        crawlWebsite(getUrl("or"), getMySource("or"));
-        crawlWebsite(getUrl("pa"), getMySource("pa"));
-        crawlWebsite(getUrl("pl"), getMySource("pl"));
-        crawlWebsite(getUrl("ps"), getMySource("ps"));
-        crawlWebsite(getUrl("pt"), getMySource("pt"));
-        crawlWebsite(getUrl("ro"), getMySource("ro"));
-        crawlWebsite(getUrl("ru"), getMySource("ru"));
-        crawlWebsite(getUrl("sq"), getMySource("sq"));
-        crawlWebsite(getUrl("sr"), getMySource("sr"));
-        crawlWebsite(getUrl("sv"), getMySource("sv"));
-        crawlWebsite(getUrl("sw"), getMySource("sw"));
-        crawlWebsite(getUrl("tet"), getMySource("tet"));
-        crawlWebsite(getUrl("tr"), getMySource("tr"));
-        crawlWebsite(getUrl("ur"), getMySource("ur"));
-        crawlWebsite(getUrl("zhs"), getMySource("zhs"));
-        crawlWebsite(getUrl("zht"), getMySource("zht"));
+        crawlWebsite(getUrl("el"), getMySource("el", "GR"));
+        crawlWebsite(getUrl("en"), getMySource("en", "GB"));
+        crawlWebsite(getUrl("eo"), getMySource("eo", "001"));
+        crawlWebsite(getUrl("es"), getMySource("es", "ES"));
+        crawlWebsite(getUrl("fa"), getMySource("fa", "IR"));
+        crawlWebsite(getUrl("fil"), getMySource("fil", "PH"));
+        crawlWebsite(getUrl("fr"), getMySource("fr", "FR"));
+        crawlWebsite(getUrl("he"), getMySource("he", "IL"));
+        crawlWebsite(getUrl("hi"), getMySource("hi", "IN"));
+        crawlWebsite(getUrl("hu"), getMySource("hu", "HU"));
+        crawlWebsite(getUrl("id"), getMySource("in", "ID"));
+        crawlWebsite(getUrl("it"), getMySource("it", "IT"));
+        crawlWebsite(getUrl("jp"), getMySource("ja", "jp"));
+        crawlWebsite(getUrl("km"), getMySource("km", "KH"));
+        crawlWebsite(getUrl("ko"), getMySource("ko", "KR"));
+        crawlWebsite(getUrl("mg"), getMySource("mg", "MG"));
+        crawlWebsite(getUrl("mk"), getMySource("mk", "MK"));
+        //crawlWebsite(getUrl("my"), getMySource("my", "MM"));
+        crawlWebsite(getUrl("ne"), getMySource("ne", "NP"));
+        crawlWebsite(getUrl("or"), getMySource("or", "IN"));
+        crawlWebsite(getUrl("pa"), getMySource("pa", "PK"));
+        crawlWebsite(getUrl("pl"), getMySource("pl", "PL"));
+        crawlWebsite(getUrl("ps"), getMySource("ps", "AF"));
+        crawlWebsite(getUrl("pt"), getMySource("pt", "PT"));
+        crawlWebsite(getUrl("ro"), getMySource("ro", "RO"));
+        crawlWebsite(getUrl("ru"), getMySource("ru", "RU"));
+        crawlWebsite(getUrl("sq"), getMySource("sq", "AL"));
+        crawlWebsite(getUrl("sr"), getMySource("sr", "RS"));
+        crawlWebsite(getUrl("sv"), getMySource("sv", "SE"));
+        crawlWebsite(getUrl("sw"), getMySource("sw", "TZ"));
+        crawlWebsite(getUrl("tet"), getMySource("tet", "TL"));
+        crawlWebsite(getUrl("tr"), getMySource("tr", "TR"));
+        crawlWebsite(getUrl("ur"), getMySource("ur", "IN"));
+        crawlWebsite(getUrl("zhs"), getMySource("zhs", "CN"));
+        crawlWebsite(getUrl("zht"), getMySource("zht", "CN"));
         //getLogger().off();
     }
     
@@ -93,10 +93,25 @@ public class GlobalVoicesCrawler extends GlobalVoicesAbstractCrawler {
         NewsSource source = getMySource();
         source.setSourceId(source.getSourceId() + "-" + language);
         source.setName(source.getName() + " (" + language + ")");
-        source.setUrl(getUrl(language));
         source.setDescription(source.getDescription());
         source.setLanguage(language);
-        source.setCountry(language);
+        source.setCountry(language.toUpperCase());
+        return source;
+    }
+    
+    private NewsSource getMySource(String language, String country) {
+        NewsSource source = getMySource();
+        source.setSourceId(source.getSourceId() + "-" + language);
+        source.setName(source.getName() + " (" + language + ")");
+        source.setUrl(getUrl(language));
+        source.setDescription(source.getDescription());
+        if(language.startsWith("zh")) {
+            source.setLanguage("zh");
+        }
+        else {
+            source.setLanguage(language);
+        }
+        source.setCountry(country);
         return source;
     }
 }

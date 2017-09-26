@@ -49,9 +49,9 @@ public class NewsArticle extends GraphEntity implements Comparable<NewsArticle>{
         this.publishedAt = publishedAt;
         this.sourceId = sourceId;
         this.language = language;
-        this.country = country;
         this.categories = categories;
         this.authors = authors;
+        setCountry(country);
     }
     
     
@@ -125,7 +125,7 @@ public class NewsArticle extends GraphEntity implements Comparable<NewsArticle>{
     }
 
     public void setCountry(String country) {
-        this.country = country;
+        this.country = country.toUpperCase();
     }
 
     public Set<String> getCategories() {

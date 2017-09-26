@@ -38,7 +38,7 @@ public class NewsSource extends GraphEntity implements Comparable<NewsSource> {
         this.url = url;
         this.category = category;
         this.language = language;
-        this.country = country;
+        setCountry(country);
     }
 
     public String getSourceId() {
@@ -94,7 +94,7 @@ public class NewsSource extends GraphEntity implements Comparable<NewsSource> {
     }
 
     public void setCountry(String country) {
-        this.country = country;
+        this.country = country.toUpperCase();
     }
 
     @Override

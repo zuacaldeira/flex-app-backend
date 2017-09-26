@@ -15,6 +15,7 @@ import javax.ejb.Remote;
  */
 @Remote
 public interface NewsArticleServiceInterface  extends DBService<NewsArticle> {
+    public NewsArticle findArticleWithTitle(String title);
     public Collection<NewsArticle> findAllArticles();
 
     public Collection<NewsArticle> findArticlesWithText(String search);
@@ -53,4 +54,5 @@ public interface NewsArticleServiceInterface  extends DBService<NewsArticle> {
     public void removeMarkAsRead(String username, NewsArticle entity);
     public void removeMarkAsFavorite(String username, NewsArticle entity);
     public void removeMarkAsFake(String username, NewsArticle entity);
+
   }

@@ -35,6 +35,12 @@ public class NewsSourceService extends AbstractDBService<NewsSource>  implements
     }
 
     @Override
+    public Collection<NewsSource> findSourcesWithoutLogo() {
+        Filter nullLogoFilter = new Filter("logoUrl", ComparisonOperator.IS_NULL);
+        return getSession().loadAll(NewsSource.class, nullLogoFilter, 2);
+    }
+
+    @Override
     public Collection<NewsSource> findSourcesWithLanguage(String language) {
         Filter fCategory = new Filter("language", ComparisonOperator.EQUALS, language);
         return getSession().loadAll(NewsSource.class, fCategory, 2);
