@@ -42,10 +42,11 @@ public class FlexObjectMapper {
     @EJB
     private NewsSourceServiceInterface sourcesService;
 
-    private FlexLogger logger = new FlexLogger(getClass());
+    private FlexLogger logger;
 
     public FlexObjectMapper() {
         objectMapper = new ObjectMapper();
+        logger = new FlexLogger(FlexObjectMapper.class);
     }
 
     public String getSourcesQuery(String category, String language2Letter, String country) {
@@ -107,6 +108,7 @@ public class FlexObjectMapper {
             BufferedReader rd = new BufferedReader(new InputStreamReader(is, Charset.forName("UTF-8")));
             return readAllData(rd);
         } catch (Exception e) {
+            logger.error("%s", "Error calling news api..." + e.getMessage());
             throw new services.NewsServiceException(e);
         }
     }
@@ -137,14 +139,14 @@ public class FlexObjectMapper {
 
             MultipleArticlesResponse articlesResponse = objectMapper.readValue(result, MultipleArticlesResponse.class);
             if ("ok".equals(articlesResponse.getStatus())) {
-                logger.info("%s", " Processing source " + source);
+                logger.info("%s", "Processing source " + source.getName());
                 articlesResponse.getArticles().forEach(sar -> {
                     NewsArticle article = sar.convert2NewsArticle(source);
                     boolean shouldSave = article.getTitle() != null
                             && !article.getTitle().isEmpty()
                             && articlesService.findArticleWithTitle(article.getTitle()) == null;
                     if (shouldSave) {
-                        logger.info("%s", "\tSaving article " + article);
+                        logger.info("%s", "\tSaved new article " + article.getTitle());
                         NewsAuthor author = sar.convert2NewsAuthor(source);
                         author.addArticle(article);
                         source.addCorrespondent(author);

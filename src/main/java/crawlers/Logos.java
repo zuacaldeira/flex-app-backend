@@ -36,7 +36,7 @@ public final class Logos {
         logos.put("cnn", "https://pbs.twimg.com/profile_images/508960761826131968/LnvhR8ED_400x400.png");
         logos.put("daily-mail", "https://pbs.twimg.com/profile_images/907912182523981824/3vkEVuHh_400x400.jpg");
         logos.put("der-tagesspiegel", "https://pbs.twimg.com/profile_images/455980930293702658/V0W08c8o_400x400.png");
-        logos.put("die-zeit", "https://pbs.twimg.com/profile_images/908207425328742400/ukUTfp16_400x400.jpg");
+        logos.put("die-zeit", "https://pbs.twimg.com/profile_images/899901264942813184/_n5m0ro7_400x400.jpg");
         logos.put("engadget", "https://pbs.twimg.com/profile_images/655059892022022144/Pq3Q_1oU_400x400.png");
         logos.put("entertainment-weekly", "https://pbs.twimg.com/profile_images/881539688418471937/lf5NWhm__400x400.jpg");
         logos.put("espn", "https://pbs.twimg.com/profile_images/903763131872288768/lR7-Fb1N_400x400.jpg");

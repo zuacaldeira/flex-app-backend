@@ -47,7 +47,7 @@ public class FlexLogger {
     }
 
     private void sout(String format, Object[] values) {
-        String newFormat = "[%-25s] " + format;
+        String newFormat = "[%25s] " + format;
         Object[] newValues =  new Object[values.length+1];
         newValues[0] = aClass.getSimpleName();
         int i = 1;
