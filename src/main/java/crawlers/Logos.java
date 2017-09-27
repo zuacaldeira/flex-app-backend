@@ -95,6 +95,7 @@ public final class Logos {
         logos.put("new-scientist", "https://pbs.twimg.com/profile_images/843789564074496001/m34mTHmg_400x400.jpg");
        
         logos.put("the-buggle", "http://thebugle.co.za/images/ui/ban.png");
+        logos.put("iol-news-za", "https://pbs.twimg.com/profile_images/824593266658213893/L5_ynJNM_400x400.jpg");
     }
 
     public static String getLogo(String sourceId) {
