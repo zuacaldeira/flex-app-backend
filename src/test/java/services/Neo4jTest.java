@@ -20,10 +20,8 @@ import org.neo4j.ogm.testutil.TestServer;
 public class Neo4jTest {
     
     private static TestServer testServer;
-    private final Class<?> entityType;
 
-    public Neo4jTest(Class<?> entityType) {
-        this.entityType = entityType;
+    public Neo4jTest() {
     }
     
     
@@ -39,7 +37,7 @@ public class Neo4jTest {
     @Before
     public void cleanUp() {
         System.out.println("-- CLEANUP --");
-        Neo4jSessionFactory.getInstance().getNeo4jSession().deleteAll(entityType);
+        Neo4jSessionFactory.getInstance().getNeo4jSession().purgeDatabase();
     }
     
     @AfterClass

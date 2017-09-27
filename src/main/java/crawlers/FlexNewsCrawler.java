@@ -140,7 +140,11 @@ public abstract class FlexNewsCrawler {
     }
     
     private void saveArticle(String articleUrl, String title, String imageUrl, String description, Date date, Set<NewsAuthor> authors, NewsSource source) {
-        boolean shouldSave = title != null && articlesService != null && articlesService.findArticleWithTitle(title) == null;
+        boolean shouldSave = 
+                title != null 
+                && !title.isEmpty() 
+                && articlesService != null 
+                && articlesService.findArticleWithTitle(title) == null;
         if(shouldSave) {
             NewsArticle newsArticle = new NewsArticle();
             newsArticle.setSourceId(source.getSourceId());
@@ -293,6 +297,14 @@ public abstract class FlexNewsCrawler {
 
     public FlexLogger getLogger() {
         return logger;
+    }
+
+    public void setArticlesService(NewsArticleServiceInterface articlesService) {
+        this.articlesService = articlesService;
+    }
+
+    public void setSourcesService(NewsSourceServiceInterface sourcesService) {
+        this.sourcesService = sourcesService;
     }
 
 

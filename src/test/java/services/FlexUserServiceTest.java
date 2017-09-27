@@ -22,7 +22,7 @@ public class FlexUserServiceTest extends Neo4jTest {
     private String TEST_PASSWORD = "test:password";
 
     public FlexUserServiceTest() {
-        super(FlexUser.class);
+        super();
     }
 
     @Test

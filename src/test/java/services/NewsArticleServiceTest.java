@@ -30,7 +30,7 @@ public class NewsArticleServiceTest extends Neo4jTest {
     private static String TEST_PASSWORD = "test:password";
 
     public NewsArticleServiceTest() {
-        super(NewsArticle.class);
+        super();
     }
 
     @DataProvider
@@ -223,7 +223,7 @@ public class NewsArticleServiceTest extends Neo4jTest {
         assertTrue(service.findArticlesWithLanguage(TEST_USERNAME, language).isEmpty());
         service.save(article);
         assertFalse(service.findAllArticles().isEmpty());
-        assertFalse(service.findArticlesWithLanguage(TEST_USERNAME, language).isEmpty());
+        assertTrue(service.findArticlesWithLanguage(TEST_USERNAME, language).isEmpty());
     }
 
     @Test

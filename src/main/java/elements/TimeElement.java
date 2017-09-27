@@ -26,14 +26,13 @@ public class TimeElement extends ArticleElement {
     }
 
     public Date getDate() {
-        if(getValue() != null) {
+        if(getValue() != null && !getValue().isEmpty()) {
             try {
                 return DateUtils.parseDate(getValue(), MyDateUtils.getParsePatterns());
             } catch (ParseException ex) {
-                Logger.getLogger(TimeElement.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-        return null;
+        return new Date();
     }
     
 }

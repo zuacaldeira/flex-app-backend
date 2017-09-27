@@ -28,7 +28,7 @@ public class NewsSourceServiceTest extends Neo4jTest {
     private static String TEST_PASSWORD = "test:password";
 
     public NewsSourceServiceTest() {
-        super(NewsSource.class);
+        super();
     }
 
     @DataProvider
