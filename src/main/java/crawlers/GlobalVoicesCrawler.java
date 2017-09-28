@@ -19,8 +19,8 @@ public class GlobalVoicesCrawler extends GlobalVoicesAbstractCrawler {
     public GlobalVoicesCrawler() {
     }
 
-    @Schedule(hour = "*", minute = "3/10", persistent = false)
-    public void crawlSet1() {
+    @Schedule(hour = "*", minute = "3/10")
+    public void crawl() {
         //getLogger().on();
         crawlWebsite(getUrl("am"), getMySource("am", "ET"));
         crawlWebsite(getUrl("ar"), getMySource("ar", "SD"));
@@ -75,10 +75,11 @@ public class GlobalVoicesCrawler extends GlobalVoicesAbstractCrawler {
         String name = "Global Voices";
         String description = "";
         String url = "https://globalvoices.org";
-        String category = "geral";
+        String category = "general";
         String language = "en";
+        String country = "GB";
 
-        NewsSource source = new NewsSource(sourceId, name, description, url, category, language, language);
+        NewsSource source = new NewsSource(sourceId, name, description, url, category, language, country);
         source.setLogoUrl(Logos.getLogo("global-voices"));
         
         return source;
