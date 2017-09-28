@@ -14,18 +14,22 @@ import elements.ImageUrlElement;
 import db.NewsArticle;
 import db.NewsAuthor;
 import db.NewsSource;
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ejb.EJB;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import services.NewsArticleServiceInterface;
+import services.NewsServiceException;
 import services.NewsSourceServiceInterface;
 import utils.FlexLogger;
 
@@ -68,8 +72,13 @@ public abstract class FlexNewsCrawler {
         try {
             return Jsoup.connect(url).userAgent("Mozilla").get();
         } catch (Exception e) {
-            logger.log("\tERROR - Couldn't open document %s caused by: %s", url, e.getMessage());
-            return null;
+            try {
+                logger.error("%s %s: %s", "\tERROR - Couldn't open document ", url, e.getMessage());
+                return Jsoup.connect(url).get();
+            } catch (IOException ex) {
+                logger.error("%s %s: %s", "\tERROR - Couldn't open document ", url, e.getMessage());
+                throw new NewsServiceException(ex);
+            }
         }
     }
 

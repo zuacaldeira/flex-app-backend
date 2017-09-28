@@ -18,6 +18,8 @@ public class MyDateUtils {
 
     public static String[] getParsePatterns() {
         return new String[]{
+            "dd/MM/yyyy",
+            "dd/MM/yyyy HH:mm Z",
             "yyyy-MM-dd",
             "yyyy-MM-dd HH:mm:ss",
             "yyyy-MM-dd HH:mm:ssZ",

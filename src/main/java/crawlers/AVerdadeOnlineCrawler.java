@@ -32,8 +32,8 @@ public class AVerdadeOnlineCrawler extends FlexNewsCrawler {
         return "http://www.verdade.co.mz";
     }
     
-    @Schedule(hour = "*", minute = "*/10", persistent = false)
-    public void crawlSet1() {
+    @Schedule(hour = "*", minute = "*/10")
+    public void crawl() {
         crawlWebsite(getUrl(), getMySource());
         crawlWebsite(getUrl()+ "/destaques", getMySource());
         crawlWebsite(getUrl() + "/destaques/africa", getMySource());
@@ -51,7 +51,7 @@ public class AVerdadeOnlineCrawler extends FlexNewsCrawler {
         String sourceId = "verdade-online";
         String name = "@Verdade Online";
         String description = "";
-        String url = getUrl();
+        String url = "http://www.verdade.co.mz";
         String category = "geral";
         String language = "pt";
         String country = "MZ";

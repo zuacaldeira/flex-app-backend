@@ -37,7 +37,7 @@ public class IOLNewsIsolezweCrawlerTest extends Neo4jTest {
         assertEquals("https://www.iol.co.za/isolezwe", source.getUrl());
         assertEquals("sw", source.getLanguage());
         assertEquals("ZA", source.getCountry());
-        assertEquals(Logos.getLogo("iol-news-isolezwe"), source.getLogoUrl());
+        assertEquals(Logos.getLogo("iol-news-za"), source.getLogoUrl());
     }
     /**
      * Test of crawlWebsite method, of class TheBugleZACrawler.

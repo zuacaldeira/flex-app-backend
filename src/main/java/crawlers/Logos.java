@@ -96,6 +96,7 @@ public final class Logos {
        
         logos.put("the-buggle", "http://thebugle.co.za/images/ui/ban.png");
         logos.put("iol-news-za", "https://pbs.twimg.com/profile_images/824593266658213893/L5_ynJNM_400x400.jpg");
+        logos.put("a-nacao", "http://anacao.cv/wp-content/uploads/2014/10/Logo-A-Na%C3%A7%C3%A3o-300x102.png");
     }
 
     public static String getLogo(String sourceId) {

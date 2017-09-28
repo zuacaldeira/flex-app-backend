@@ -29,7 +29,7 @@ public class IOLNewsIsolezweCrawler extends AbstactIOLNewsCrawler {
         String country = "ZA";
 
         NewsSource source = new NewsSource(sourceId, name, description, url, category, language, country);
-        source.setLogoUrl(Logos.getLogo(sourceId));
+        source.setLogoUrl(Logos.getLogo("iol-news-za"));
 
         return source;
     }
