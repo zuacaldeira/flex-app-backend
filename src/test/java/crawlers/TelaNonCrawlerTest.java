@@ -13,30 +13,29 @@ import org.junit.Test;
  *
  * @author zua
  */
-public class ANacaoCVCrawlerTest extends AbstractCrawlerTest {
+public class TelaNonCrawlerTest extends AbstractCrawlerTest {
 
-
-    public ANacaoCVCrawlerTest() {
+    public TelaNonCrawlerTest() {
     }
-    
+
     @Test
     @Override
     public void testGetMySource() {
         System.out.println("getMySource");
         FlexNewsCrawler crawler = getCrawler();
         NewsSource source = crawler.getMySource();
-        assertEquals("a-nacao", source.getSourceId());        
-        assertEquals("A Nação", source.getName());        
-        assertEquals("pt", source.getLanguage());        
-        assertEquals("CV", source.getCountry());        
-        assertEquals("http://anacao.cv/", source.getUrl());        
-        assertEquals("geral", source.getCategory());        
-        assertEquals(Logos.getLogo("a-nacao"), source.getLogoUrl());        
+        assertEquals("tela-non", source.getSourceId());
+        assertEquals("Téla Nón", source.getName());
+        assertEquals("pt", source.getLanguage());
+        assertEquals("ST", source.getCountry());
+        assertEquals("http://www.telanon.info/", source.getUrl());
+        assertEquals("geral", source.getCategory());
+        assertEquals(Logos.getLogo("tela-non"), source.getLogoUrl());
     }
 
     @Override
     protected FlexNewsCrawler getCrawler() {
-        return new ANacaoCVCrawler();
+        return new TelaNonCrawler();
     }
 
 }

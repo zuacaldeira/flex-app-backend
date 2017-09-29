@@ -21,17 +21,22 @@ public class Neo4jTest {
     
     private static TestServer testServer;
 
+    private static int getRandomPort() {
+        return 60000 + (int) (Math.random()*1000);
+    }
+
     public Neo4jTest() {
     }
     
     
     @BeforeClass
     public static void startDB() {
-        testServer = new TestServer(false, false, 1);
+        testServer = new TestServer(false, false, 10, getRandomPort());
         testServer.startServer();
         System.out.println("DB Username is " + testServer.getUsername());
         System.out.println("DB Password is " + testServer.getPassword());
         System.out.println("Server is running? " + testServer.getGraphDatabaseService().isAvailable(10000)); 
+        System.out.println("Port " + testServer.getPort()); 
     }
     
     @Before
@@ -43,6 +48,7 @@ public class Neo4jTest {
     @AfterClass
     public static void stopDB() {
         testServer.shutdown();
+        System.out.println("-- Server Shutdown --");
     }
     
     

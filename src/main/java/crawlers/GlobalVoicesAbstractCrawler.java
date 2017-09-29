@@ -42,7 +42,7 @@ public abstract class GlobalVoicesAbstractCrawler extends FlexNewsCrawler {
 
     @Override
     protected String getImageUrlValue(Document document) {
-        String src = document.select("div > a > img").attr("src");
+        String src = document.select("div > a > img").first().attr("src");
         if(src != null) {
             //style = style.replace("background-image: url(", "");
             //style = style.replace(")", "");

@@ -8,12 +8,14 @@ package services;
 import com.tngtech.java.junit.dataprovider.DataProvider;
 import com.tngtech.java.junit.dataprovider.DataProviderRunner;
 import com.tngtech.java.junit.dataprovider.UseDataProvider;
+import db.Neo4jSessionFactory;
 import db.NewsSource;
 import org.junit.Assert;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -22,7 +24,7 @@ import org.junit.runner.RunWith;
  * @author zua
  */
 @RunWith(DataProviderRunner.class)
-public class NewsSourceServiceTest extends Neo4jTest {
+public class NewsSourceServiceTest {
 
     private static String TEST_USERNAME = "test:username";
     private static String TEST_PASSWORD = "test:password";
@@ -80,6 +82,11 @@ public class NewsSourceServiceTest extends Neo4jTest {
         };
     }
 
+    @Before
+    public void cleanUp() {
+        System.out.println("-- CLEANUP --");
+        Neo4jSessionFactory.getInstance().getNeo4jSession().purgeDatabase();
+    }
     
     @Test
     @UseDataProvider("sourcesData")

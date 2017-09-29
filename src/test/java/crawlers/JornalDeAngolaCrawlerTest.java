@@ -13,30 +13,29 @@ import org.junit.Test;
  *
  * @author zua
  */
-public class ANacaoCVCrawlerTest extends AbstractCrawlerTest {
+public class JornalDeAngolaCrawlerTest extends AbstractCrawlerTest {
 
-
-    public ANacaoCVCrawlerTest() {
+    public JornalDeAngolaCrawlerTest() {
     }
-    
+
     @Test
     @Override
     public void testGetMySource() {
         System.out.println("getMySource");
         FlexNewsCrawler crawler = getCrawler();
         NewsSource source = crawler.getMySource();
-        assertEquals("a-nacao", source.getSourceId());        
-        assertEquals("A Nação", source.getName());        
-        assertEquals("pt", source.getLanguage());        
-        assertEquals("CV", source.getCountry());        
-        assertEquals("http://anacao.cv/", source.getUrl());        
-        assertEquals("geral", source.getCategory());        
-        assertEquals(Logos.getLogo("a-nacao"), source.getLogoUrl());        
+        assertEquals("jornal-de-angola", source.getSourceId());
+        assertEquals("Jornal de Angola", source.getName());
+        assertEquals("pt", source.getLanguage());
+        assertEquals("AO", source.getCountry());
+        assertEquals("http://jornaldeangola.sapo.ao", source.getUrl());
+        assertEquals("geral", source.getCategory());
+        assertEquals(Logos.getLogo("jornal-de-angola"), source.getLogoUrl());
     }
 
     @Override
     protected FlexNewsCrawler getCrawler() {
-        return new ANacaoCVCrawler();
+        return new JornalDeAngolaCrawler();
     }
 
 }

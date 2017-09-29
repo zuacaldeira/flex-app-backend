@@ -14,15 +14,12 @@ import elements.ImageUrlElement;
 import db.NewsArticle;
 import db.NewsAuthor;
 import db.NewsSource;
-import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.ejb.EJB;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -51,14 +48,13 @@ public abstract class FlexNewsCrawler {
     public void crawlWebsite(String url, NewsSource source) {
         try {
             logger.info("Loading articles from: %s", url);
-            Set<String> visited = new HashSet<>();
-            visited.add(url);
-            crawlUrl(openDocument(url), source, visited);
+            Document document = openDocument(url);
+            crawlUrl(document, source);
             sourcesService.save(source);
             logger.info("Finished: %s", url);
         } catch (Exception e) {
-            e.printStackTrace();
             logger.error("Error: %s -- %s", url, e.getMessage());
+            throw new NewsServiceException(e);
         }
     }
 
@@ -72,30 +68,23 @@ public abstract class FlexNewsCrawler {
         try {
             return Jsoup.connect(url).userAgent("Mozilla").get();
         } catch (Exception e) {
-            try {
-                logger.error("%s %s: %s", "\tERROR - Couldn't open document ", url, e.getMessage());
-                return Jsoup.connect(url).get();
-            } catch (IOException ex) {
-                logger.error("%s %s: %s", "\tERROR - Couldn't open document ", url, e.getMessage());
-                throw new NewsServiceException(ex);
-            }
+            logger.error("%s %s: %s", "\tERROR - Couldn't open document ", url, e.getMessage());
+            return null;
         }
     }
 
-    private NewsSource getSource() {
+    protected NewsSource getSource() {
         return getMySource();
     }
 
-    private void crawlUrl(Document document, final NewsSource source, Set<String> visitedUrls) {
-        if (document != null) {
-            Elements articles = getArticles(document);
-            for (Element article : articles) {                
-                importArticle(article, source);
-            }
+    private void crawlUrl(Document document, final NewsSource source) {
+        Elements articles = getArticles(document);
+        for (Element article : articles) {                
+            importArticle(article, source);
         }
     }
 
-    private void importArticle(Element article, NewsSource source) {
+    protected void importArticle(Element article, NewsSource source) {
         //prettyPrint(article);
         logger.log("Processing article: %s", article.text());
 
@@ -114,19 +103,19 @@ public abstract class FlexNewsCrawler {
             }
 
             String title = getTitle(document);
-            if(title == null) {
+            if(title == null || title.isEmpty()) {
                 logger.log("\tMissing title: %s", article.text());
                 return;
             }
 
             String imageUrl = getImageUrl(document);
-            if(imageUrl == null) {
+            if(imageUrl == null || imageUrl.isEmpty()) {
                 logger.log("\tMissing image url: %s", article.text());
                 //return;
             }
 
             String description = getContent(document);
-            if(description == null) {
+            if(description == null || description.isEmpty()) {
                 logger.log("\tMissing description: %s", article.text());
                 return;
             }
@@ -314,6 +303,10 @@ public abstract class FlexNewsCrawler {
 
     public void setSourcesService(NewsSourceServiceInterface sourcesService) {
         this.sourcesService = sourcesService;
+    }
+
+    public void crawl() {
+        crawlWebsite(getMySource().getUrl(), getMySource());
     }
 
 

@@ -5,34 +5,49 @@
  */
 package crawlers;
 
+import db.NewsSource;
+import org.jsoup.nodes.Document;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import org.junit.Test;
-import services.Neo4jTest;
-import services.NewsArticleService;
-import services.NewsSourceService;
 
 /**
  *
  * @author zua
  */
-public class TheBugleZACrawlerTest extends Neo4jTest {
-
+public class TheBugleZACrawlerTest extends AbstractCrawlerTest {
 
     public TheBugleZACrawlerTest() {
     }
 
-    /**
-     * Test of crawlWebsite method, of class TheBugleZACrawler.
-     */
-    @Test
-    public void testCrawl() throws Exception {
-        System.out.println("crawlWebsite");
-        TheBugleZACrawler crawler = new TheBugleZACrawler();
-        crawler.setArticlesService(new NewsArticleService());
-        crawler.setSourcesService(new NewsSourceService());
-        crawler.crawl();
+    @Override
+    protected FlexNewsCrawler getCrawler() {
+        return new TheBugleZACrawler();
     }
 
-
-
+    @Test
+    @Override
+    public void testGetMySource() {
+        System.out.println("getMySource");
+        FlexNewsCrawler crawler = getCrawler();
+        NewsSource source = crawler.getMySource();
+        assertEquals("the-bugle", source.getSourceId());
+        assertEquals("The Bugle", source.getName());
+        assertEquals("en", source.getLanguage());
+        assertEquals("ZA", source.getCountry());
+        assertEquals("http://thebugle.co.za/home.php", source.getUrl());
+        assertEquals("lifestyle", source.getCategory());
+        assertEquals(Logos.getLogo("the-bugle"), source.getLogoUrl());
+    }
+    
+    @Test
+    public void testGetTime() {
+        System.out.println("getTime");
+        FlexNewsCrawler crawler = getCrawler();
+        Document document = getArticleDocumentPage(crawler);
+        assertNotNull(document);
+        
+        String time = crawler.getTimeValue(document);
+    }
 
 }

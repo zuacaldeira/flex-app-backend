@@ -28,8 +28,8 @@ public class DBCompletionCrawler {
     // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")
     
-    @Schedule(hour = "*", minute="1/10")
-    public void completeLogos() {
+    @Schedule(hour = "*", minute="*/10")
+    public void crawl() {
         List<NewsSource> sources = (List<NewsSource>) sourcesService.findSourcesWithoutLogo();
         logger.info("FFFFFFFFFF Found %d sources without logo", sources.size());
         
@@ -40,4 +40,11 @@ public class DBCompletionCrawler {
             }
         }
     }
+
+    public void setSourcesService(NewsSourceServiceInterface sourcesService) {
+        this.sourcesService = sourcesService;
+    }
+    
+    
+    
 }

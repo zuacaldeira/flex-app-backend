@@ -6,30 +6,26 @@
 package crawlers;
 
 import db.NewsSource;
-import org.jsoup.nodes.Document;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 import org.junit.Ignore;
 import org.junit.Test;
-import services.Neo4jTest;
-import services.NewsArticleService;
-import services.NewsSourceService;
 
 /**
  *
  * @author zua
  */
 @Ignore
-public class ExpressoDasIlhasCrawlerTest extends Neo4jTest {
+public class ExpressoDasIlhasCrawlerTest extends AbstractCrawlerTest {
 
 
     public ExpressoDasIlhasCrawlerTest() {
     }
     
     @Test
+    @Override
     public void testGetMySource() {
         System.out.println("getMySource");
-        FlexNewsCrawler crawler = new ExpressoDasIlhasCrawler();
+        FlexNewsCrawler crawler = getCrawler();
         NewsSource source = crawler.getMySource();
         assertEquals("expresso-das-ilhas", source.getSourceId());        
         assertEquals("Expresso das Ilhas", source.getName());        
@@ -39,28 +35,11 @@ public class ExpressoDasIlhasCrawlerTest extends Neo4jTest {
         assertEquals("geral", source.getCategory());        
     }
 
-    
-    @Test
-    public void testGetArticles() {
-        System.out.println("getArticles");
-        FlexNewsCrawler crawler = new ExpressoDasIlhasCrawler();
-        Document document = crawler.openDocument("http://www.expressodasilhas.sapo.cv");
-        assertNotNull(crawler.getArticles(document));
-    }
-    
-    /**
-     * Test of crawlWebsite method, of class TheBugleZACrawler.
-     */
-    @Test
-    public void testCrawl() throws Exception {
-        System.out.println("crawl");
-        ExpressoDasIlhasCrawler crawler = new ExpressoDasIlhasCrawler();
-        crawler.setArticlesService(new NewsArticleService());
-        crawler.setSourcesService(new NewsSourceService());
-        crawler.crawl();
+    @Override
+    protected FlexNewsCrawler getCrawler() {
+        return new ExpressoDasIlhasCrawler();
     }
 
-
-
+    
 
 }

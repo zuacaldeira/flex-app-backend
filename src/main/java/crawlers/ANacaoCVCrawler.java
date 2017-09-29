@@ -22,12 +22,11 @@ public class ANacaoCVCrawler extends FlexNewsCrawler {
     public ANacaoCVCrawler() {
     }
 
-    
-    @Schedule(hour="*", minute="*/13")
+    @Schedule(hour = "*", minute = "*/13")
     public void crawl() {
         crawlWebsite(getMySource().getUrl(), getMySource());
     }
-    
+
     @Override
     public NewsSource getMySource() {
         String sourceId = "a-nacao";
@@ -40,7 +39,7 @@ public class ANacaoCVCrawler extends FlexNewsCrawler {
 
         NewsSource source = new NewsSource(sourceId, name, description, url, category, language, country);
         source.setLogoUrl(Logos.getLogo(sourceId));
-        
+
         return source;
     }
 
@@ -92,5 +91,5 @@ public class ANacaoCVCrawler extends FlexNewsCrawler {
         getLogger().log("%s %s", "Found time ", times.first().text());
         return times.first().text();
     }
-    
+
 }

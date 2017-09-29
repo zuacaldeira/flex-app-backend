@@ -5,18 +5,19 @@
  */
 package services;
 
-import db.FlexUser;
+import db.Neo4jSessionFactory;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import org.junit.Before;
 import org.junit.Test;
 
 /**
  *
  * @author zua
  */
-public class FlexUserServiceTest extends Neo4jTest {
+public class FlexUserServiceTest  {
 
     private String TEST_USERNAME = "test:username";
     private String TEST_PASSWORD = "test:password";
@@ -25,6 +26,12 @@ public class FlexUserServiceTest extends Neo4jTest {
         super();
     }
 
+    @Before
+    public void cleanUp() {
+        System.out.println("-- CLEANUP --");
+        Neo4jSessionFactory.getInstance().getNeo4jSession().purgeDatabase();
+    }
+    
     @Test
     public void testFindAllUsers() {
         System.out.println("\ttestFindAllUsers");

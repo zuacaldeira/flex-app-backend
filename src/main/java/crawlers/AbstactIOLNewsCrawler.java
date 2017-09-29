@@ -19,8 +19,9 @@ public abstract class AbstactIOLNewsCrawler extends FlexNewsCrawler {
     protected abstract String getUrl();
     
     @Schedule(hour="*", minute="*/10")
-    protected void crawl() {
-        crawlWebsite(getUrl(), getMySource());
+    @Override
+    public void crawl() {
+        crawlWebsite(getMySource().getUrl(), getMySource());
     }
     
     @Override

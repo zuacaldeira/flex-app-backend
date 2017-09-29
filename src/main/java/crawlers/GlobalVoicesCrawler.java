@@ -86,11 +86,11 @@ public class GlobalVoicesCrawler extends GlobalVoicesAbstractCrawler {
     }
 
     
-    private String getUrl(String language) {
+    protected String getUrl(String language) {
         return "http://" + language + ".globalvoices.org";
     }
     
-    private NewsSource getMySource(String language) {
+    protected NewsSource getMySource(String language) {
         NewsSource source = getMySource();
         source.setSourceId(source.getSourceId() + "-" + language);
         source.setName(source.getName() + " (" + language + ")");
@@ -100,7 +100,7 @@ public class GlobalVoicesCrawler extends GlobalVoicesAbstractCrawler {
         return source;
     }
     
-    private NewsSource getMySource(String language, String country) {
+    protected NewsSource getMySource(String language, String country) {
         NewsSource source = getMySource();
         source.setSourceId(source.getSourceId() + "-" + language);
         source.setName(source.getName() + " (" + language + ")");

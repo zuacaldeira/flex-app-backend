@@ -6,28 +6,24 @@
 package crawlers;
 
 import db.NewsSource;
-import org.jsoup.nodes.Document;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 import org.junit.Test;
-import services.Neo4jTest;
-import services.NewsArticleService;
-import services.NewsSourceService;
 
 /**
  *
  * @author zua
  */
-public class AVerdadeOnlineCrawlerTest extends Neo4jTest {
+public class AVerdadeOnlineCrawlerTest extends AbstractCrawlerTest {
 
 
     public AVerdadeOnlineCrawlerTest() {
     }
     
     @Test
+    @Override
     public void testGetMySource() {
         System.out.println("getMySource");
-        FlexNewsCrawler crawler = new AVerdadeOnlineCrawler();
+        FlexNewsCrawler crawler = getCrawler();
         NewsSource source = crawler.getMySource();
         assertEquals("verdade-online", source.getSourceId());        
         assertEquals("@Verdade Online", source.getName());        
@@ -38,28 +34,9 @@ public class AVerdadeOnlineCrawlerTest extends Neo4jTest {
         assertEquals(Logos.getLogo("verdade-online"), source.getLogoUrl());        
     }
 
-    
-    @Test
-    public void testGetArticles() {
-        System.out.println("getArticles");
-        FlexNewsCrawler crawler = new AVerdadeOnlineCrawler();
-        Document document = crawler.openDocument(crawler.getMySource().getUrl());
-        assertNotNull(crawler.getArticles(document));
+    @Override
+    protected FlexNewsCrawler getCrawler() {
+        return new AVerdadeOnlineCrawler();
     }
-    
-    /**
-     * Test of crawlWebsite method, of class TheBugleZACrawler.
-     */
-    @Test
-    public void testCrawl() throws Exception {
-        System.out.println("crawl");
-        AVerdadeOnlineCrawler crawler = new AVerdadeOnlineCrawler();
-        crawler.setArticlesService(new NewsArticleService());
-        crawler.setSourcesService(new NewsSourceService());
-        crawler.crawl();
-    }
-
-
-
 
 }

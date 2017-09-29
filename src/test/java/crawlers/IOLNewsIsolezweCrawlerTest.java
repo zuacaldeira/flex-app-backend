@@ -8,30 +8,20 @@ package crawlers;
 import db.NewsSource;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
-import services.Neo4jTest;
-import services.NewsArticleService;
-import services.NewsSourceService;
 
 /**
  *
  * @author zua
  */
-public class IOLNewsIsolezweCrawlerTest extends Neo4jTest {
-
+public class IOLNewsIsolezweCrawlerTest extends AbstractCrawlerTest {
 
     public IOLNewsIsolezweCrawlerTest() {
     }
 
-    
     @Test
-    public void testGetUrl() {
-        IOLNewsIsolezweCrawler crawler = new IOLNewsIsolezweCrawler();
-        assertEquals("https://www.iol.co.za/isolezwe", crawler.getUrl());
-    }
-    
-    @Test
+    @Override
     public void testGetMySource() {
-        IOLNewsIsolezweCrawler crawler = new IOLNewsIsolezweCrawler();
+        FlexNewsCrawler crawler = getCrawler();
         NewsSource source = crawler.getMySource();
         assertEquals("iol-news-isolezwe", source.getSourceId());
         assertEquals("https://www.iol.co.za/isolezwe", source.getUrl());
@@ -39,19 +29,10 @@ public class IOLNewsIsolezweCrawlerTest extends Neo4jTest {
         assertEquals("ZA", source.getCountry());
         assertEquals(Logos.getLogo("iol-news-za"), source.getLogoUrl());
     }
-    /**
-     * Test of crawlWebsite method, of class TheBugleZACrawler.
-     */
-    @Test
-    public void testCrawl() throws Exception {
-        System.out.println("crawl");
-        IOLNewsIsolezweCrawler crawler = new IOLNewsIsolezweCrawler();
-        crawler.setArticlesService(new NewsArticleService());
-        crawler.setSourcesService(new NewsSourceService());
-        crawler.crawl();
+
+    @Override
+    protected FlexNewsCrawler getCrawler() {
+        return new IOLNewsIsolezweCrawler();
     }
-
-
-
 
 }

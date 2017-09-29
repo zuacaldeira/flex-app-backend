@@ -18,7 +18,14 @@ public class MyDateUtils {
 
     public static String[] getParsePatterns() {
         return new String[]{
+            "dd-MM-yyyy",
             "dd/MM/yyyy",
+            "yyyy-MM-dd'T'HH:mm:ss.S'Z'",
+            "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'",
+            "yyyy-MM-dd'T'HH:mm:ss.SSSSSS'Z'",
+            "yyyy-MM-dd'T'HH:mm:ss.SZ",
+            "yyyy-MM-dd'T'HH:mm:ss.SSSZ",
+            "yyyy-MM-dd'T'HH:mm:ss.SSSSSSZ",
             "dd/MM/yyyy HH:mm Z",
             "yyyy-MM-dd",
             "yyyy-MM-dd HH:mm:ss",
@@ -27,8 +34,6 @@ public class MyDateUtils {
             "yyyy-MM-dd'T'HH:mm:ssZ",
             "yyyy-MM-dd'T'HH:mm:ss.SZ",
             "yyyy-MM-dd'T'HH:mm:ss.SSZ",
-            "yyyy-MM-dd'T'HH:mm:ss.SSSZ",
-            "yyyy-MM-dd'T'HH:mm:ss.SSSSSSZ",
             "yyyy-MM-dd'T'HH:mm:ssXXX",
             "yyyy-MM-dd'T'HH:mm:ss.SSSXXX",
         };

@@ -29,7 +29,8 @@ public class MyDateUtilsTest {
             {"pt_MZ", "Portuguese"},
             {"pt_PT", "Portuguese"},
             {"pt_", "Portuguese"},
-            {"fil_", "Filipino"}
+            {"fil_", "Filipino"},
+            {"pt_STP", "Portuguese"}
         };
     }
 
@@ -40,8 +41,8 @@ public class MyDateUtilsTest {
             {"pt_MZ", "Mozambique"},
             {"pt_PT", "Portugal"},
             {"pt_", "Portugal"},
-            {"fil_PH", "Philippines"}
-            
+            {"fil_PH", "Philippines"},
+            {"pt_STP", "Sao Tome and Principe"}
         };
     }
 
@@ -51,7 +52,8 @@ public class MyDateUtilsTest {
             {"pt_AO", "AO"},
             {"pt_MZ", "MZ"},
             {"pt_PT", "PT"},
-            {"pt_", "PT"}
+            {"pt_", "PT"},
+            {"pt_STP", "STP"}
         };
     }
 
@@ -61,7 +63,8 @@ public class MyDateUtilsTest {
             {"pt_AO", "pt"},
             {"pt_MZ", "pt"},
             {"pt_PT", "pt"},
-            {"pt_", "pt"}            
+            {"pt_", "pt"},            
+            {"pt_STP", "pt"}
         };
     }
 
@@ -82,6 +85,7 @@ public class MyDateUtilsTest {
             {"United Kingdom", "GB"},
             {"Germany", "DE"},
             {"Ethiopia", "ET"},
+            {"Sao Tome and Principe", "ST"},
         };
     }
 
@@ -102,6 +106,8 @@ public class MyDateUtilsTest {
             {"GB", "United Kingdom"},
             {"DE", "Germany"},
             {"ET", "Ethiopia"},
+            {"STP", "Sao Tome and Principe"},
+            {"ST", "Sao Tome and Principe"}
         };
     }
 

@@ -5,34 +5,34 @@
  */
 package crawlers;
 
+import db.NewsSource;
+import static org.junit.Assert.assertEquals;
 import org.junit.Test;
-import services.Neo4jTest;
-import services.NewsArticleService;
-import services.NewsSourceService;
 
 /**
  *
  * @author zua
  */
-public class IOLNewsZACrawlerTest extends Neo4jTest {
-
+public class IOLNewsZACrawlerTest extends AbstractCrawlerTest {
 
     public IOLNewsZACrawlerTest() {
     }
 
-    /**
-     * Test of crawlWebsite method, of class TheBugleZACrawler.
-     */
-    @Test
-    public void testCrawl() throws Exception {
-        System.out.println("crawl");
-        IOLNewsZACrawler crawler = new IOLNewsZACrawler();
-        crawler.setArticlesService(new NewsArticleService());
-        crawler.setSourcesService(new NewsSourceService());
-        crawler.crawl();
+    @Override
+    protected FlexNewsCrawler getCrawler() {
+        return new IOLNewsZACrawler();
     }
 
-
-
+    @Test
+    @Override
+    public void testGetMySource() {
+        FlexNewsCrawler crawler = getCrawler();
+        NewsSource source = crawler.getMySource();
+        assertEquals("iol-news-za", source.getSourceId());
+        assertEquals("https://www.iol.co.za/news", source.getUrl());
+        assertEquals("en", source.getLanguage());
+        assertEquals("ZA", source.getCountry());
+        assertEquals(Logos.getLogo("iol-news-za"), source.getLogoUrl());
+    }
 
 }

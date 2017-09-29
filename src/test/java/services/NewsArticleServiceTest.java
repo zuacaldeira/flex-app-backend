@@ -16,6 +16,7 @@ import org.junit.Assert;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -24,13 +25,19 @@ import org.junit.runner.RunWith;
  * @author zua
  */
 @RunWith(DataProviderRunner.class)
-public class NewsArticleServiceTest extends Neo4jTest {
+public class NewsArticleServiceTest {
 
     private static String TEST_USERNAME = "test:username";
     private static String TEST_PASSWORD = "test:password";
 
     public NewsArticleServiceTest() {
         super();
+    }
+
+    @Before
+    public void cleanUp() {
+        System.out.println("-- CLEANUP --");
+        Neo4jSessionFactory.getInstance().getNeo4jSession().purgeDatabase();
     }
 
     @DataProvider
