@@ -5,10 +5,8 @@
  */
 package elements;
 
-import java.text.ParseException;
 import java.util.Date;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.Locale;
 import org.apache.commons.lang3.time.DateUtils;
 import utils.MyDateUtils;
 
@@ -18,7 +16,7 @@ import utils.MyDateUtils;
  */
 public class TimeElement extends ArticleElement {
 
-    private final String language;
+    private String language;
 
     public TimeElement(String value, String language) {
         super(value);
@@ -26,13 +24,26 @@ public class TimeElement extends ArticleElement {
     }
 
     public Date getDate() {
-        if(getValue() != null && !getValue().isEmpty()) {
-            try {
-                return DateUtils.parseDate(getValue(), MyDateUtils.getParsePatterns());
-            } catch (ParseException ex) {
+        try {
+            if(getValue() != null && !getValue().isEmpty()) {
+                if(language != null) {
+                    Locale locale = Locale.forLanguageTag(language);
+                    return DateUtils.parseDate(getValue(), locale, MyDateUtils.getParsePatterns());
+                }
+                else {
+                    return DateUtils.parseDate(getValue(), MyDateUtils.getParsePatterns());                
+                }
             }
+            else {
+                return new Date();
+            }
+        } catch(Exception e) {
+            return new Date();
         }
-        return new Date();
+    }
+
+    public void setLanguage(String language) {
+        this.language = language;
     }
     
 }

@@ -14,7 +14,6 @@ import org.junit.Test;
  *
  * @author zua
  */
-@Ignore
 public class ExpressoDasIlhasCrawlerTest extends AbstractCrawlerTest {
 
 
@@ -39,6 +38,63 @@ public class ExpressoDasIlhasCrawlerTest extends AbstractCrawlerTest {
     protected FlexNewsCrawler getCrawler() {
         return new ExpressoDasIlhasCrawler();
     }
+
+    @Override
+    @Ignore
+    public void testImportArticle() {
+        super.testImportArticle(); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void testGetSource() {
+        super.testGetSource(); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    @Ignore
+    public void testGetTime() {
+        super.testGetTime(); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    @Ignore
+    public void testGetAuthors() {
+        super.testGetAuthors(); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    @Ignore
+    public void testGetContent() {
+        super.testGetContent(); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    @Ignore
+    public void testGetImageUrl() {
+        super.testGetImageUrl(); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    @Ignore
+    public void testGetTitle() {
+        super.testGetTitle(); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    @Ignore
+    public void testGetUrl() {
+        super.testGetUrl(); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    @Ignore
+    public void testGetArticles() {
+        super.testGetArticles(); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    
+    
+    
 
     
 

@@ -6,7 +6,6 @@
 package crawlers;
 
 import org.junit.Test;
-import services.Neo4jTest;
 import services.NewsArticleService;
 import services.NewsSourceService;
 
@@ -14,7 +13,7 @@ import services.NewsSourceService;
  *
  * @author zua
  */
-public abstract class AbstractCrawlerTestIT extends Neo4jTest {
+public abstract class AbstractCrawlerTestIT {
     
     protected abstract FlexNewsCrawler getCrawler();
 

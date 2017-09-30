@@ -68,7 +68,7 @@ public class GlobalVoicesCrawler extends GlobalVoicesAbstractCrawler {
         crawlWebsite(getUrl("zht"), getMySource("zht", "CN"));
         //getLogger().off();
     }
-    
+
     @Override
     public NewsSource getMySource() {
         String sourceId = "global-voices";
@@ -81,15 +81,14 @@ public class GlobalVoicesCrawler extends GlobalVoicesAbstractCrawler {
 
         NewsSource source = new NewsSource(sourceId, name, description, url, category, language, country);
         source.setLogoUrl(Logos.getLogo("global-voices"));
-        
+
         return source;
     }
 
-    
     protected String getUrl(String language) {
-        return "http://" + language + ".globalvoices.org";
+        return "https://" + language + ".globalvoices.org";
     }
-    
+
     protected NewsSource getMySource(String language) {
         NewsSource source = getMySource();
         source.setSourceId(source.getSourceId() + "-" + language);
@@ -97,19 +96,19 @@ public class GlobalVoicesCrawler extends GlobalVoicesAbstractCrawler {
         source.setDescription(source.getDescription());
         source.setLanguage(language);
         source.setCountry(language.toUpperCase());
+        source.setUrl(getUrl(language));
         return source;
     }
-    
+
     protected NewsSource getMySource(String language, String country) {
         NewsSource source = getMySource();
         source.setSourceId(source.getSourceId() + "-" + language);
         source.setName(source.getName() + " (" + language + ")");
         source.setUrl(getUrl(language));
         source.setDescription(source.getDescription());
-        if(language.startsWith("zh")) {
+        if (language.startsWith("zh")) {
             source.setLanguage("zh");
-        }
-        else {
+        } else {
             source.setLanguage(language);
         }
         source.setCountry(country);

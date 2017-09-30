@@ -27,8 +27,11 @@ public abstract class AbstactIOLNewsCrawler extends FlexNewsCrawler {
     @Override
     protected Elements getArticles(Document document) {
         Elements article = document.select("article");
-        getLogger().log("%s %d %s", "Found ", article.size(), " articles");
-        return article;
+        if(article != null) {
+            getLogger().log("%s %d %s", "Found ", article.size(), " articles");
+            return article;
+        }
+        throw new ArticlesNotFoundException();
     }
 
     @Override
@@ -38,7 +41,7 @@ public abstract class AbstactIOLNewsCrawler extends FlexNewsCrawler {
             getLogger().log("%s %s", "Found url ", link.absUrl("href"));
             return link.absUrl("href");
         }
-        return null;
+        throw new UrlNotFoundException();
     }
 
     @Override
@@ -48,7 +51,7 @@ public abstract class AbstactIOLNewsCrawler extends FlexNewsCrawler {
             getLogger().log("%s %s", "Found title ", title.text().trim());
             return title.text().trim();
         }
-        return null;
+        throw new TitleNotFoundException();
     }
 
     @Override
@@ -58,7 +61,7 @@ public abstract class AbstactIOLNewsCrawler extends FlexNewsCrawler {
             getLogger().log("%s %s", "Found image ", images.attr("content"));
             return images.attr("content");
         }
-        return null;
+        throw new ImageNotFoundException();
     }
 
     @Override
@@ -68,7 +71,7 @@ public abstract class AbstactIOLNewsCrawler extends FlexNewsCrawler {
             getLogger().log("%s %s", "Found content ", content.text());
             return content.text();
         }
-        return null;
+        throw new ContentNotFoundException();
     }
 
     @Override
@@ -78,7 +81,7 @@ public abstract class AbstactIOLNewsCrawler extends FlexNewsCrawler {
             getLogger().log("%s", "Found authors " + authors.text());
             return authors.text();
         }
-        return getMySource().getName();
+        throw new AuthorsNotFoundException();
     }
 
     @Override
@@ -88,7 +91,7 @@ public abstract class AbstactIOLNewsCrawler extends FlexNewsCrawler {
             getLogger().log("%s", "Found time " + time.attr("content"));
             return time.attr("content");
         }
-        return null;
+        throw new TimeNotFoundException();
     }    
 
 }

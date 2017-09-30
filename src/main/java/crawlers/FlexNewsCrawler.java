@@ -53,8 +53,8 @@ public abstract class FlexNewsCrawler {
             sourcesService.save(source);
             logger.info("Finished: %s", url);
         } catch (Exception e) {
-            logger.error("Error: %s -- %s", url, e.getMessage());
-            throw new NewsServiceException(e);
+            logger.error("Error: %s -- %s", url, e.getClass().getSimpleName());
+            //throw new NewsServiceException(e);
         }
     }
 
@@ -79,8 +79,12 @@ public abstract class FlexNewsCrawler {
 
     private void crawlUrl(Document document, final NewsSource source) {
         Elements articles = getArticles(document);
-        for (Element article : articles) {                
-            importArticle(article, source);
+        for (Element article : articles) {   
+            try {
+                importArticle(article, source);
+            } catch(NewsServiceException e) {
+                logger.error("%s", "Exception ", e.getClass().getSimpleName());
+            }
         }
     }
 
@@ -184,11 +188,7 @@ public abstract class FlexNewsCrawler {
     protected abstract String getUrlValue(Element article);
 
     public String getTitle(Document document) {
-        TitleElement titleElement = getTitleElement(document);
-        if (titleElement != null) {
-            return titleElement.getValue();
-        }
-        return null;
+        return getTitleElement(document).getValue();
     }
 
     public TitleElement getTitleElement(Document document) {
@@ -198,11 +198,7 @@ public abstract class FlexNewsCrawler {
     protected abstract String getTitleValue(Document document);
 
     public String getImageUrl(Document document) {
-        ImageUrlElement imageUrlElement = getImageUrlElement(document);
-        if (imageUrlElement != null) {
-            return imageUrlElement.getValue();
-        }
-        return null;
+        return getImageUrlElement(document).getValue();
     }
 
     public ImageUrlElement getImageUrlElement(Document document) {
@@ -212,11 +208,7 @@ public abstract class FlexNewsCrawler {
     protected abstract String getImageUrlValue(Document document);
 
     public String getContent(Document document) {
-        ContentElement contentElement = getContentElement(document);
-        if (contentElement != null) {
-            return contentElement.getValue();
-        }
-        return null;
+        return getContentElement(document).getValue();
     }
 
     public ContentElement getContentElement(Document document) {
@@ -269,10 +261,8 @@ public abstract class FlexNewsCrawler {
     
     public Date getPublishedAt(Document document) {
         TimeElement timeElement = getTimeElement(document);
-        if (timeElement != null) {
-            return timeElement.getDate();
-        }
-        return new Date();
+        timeElement.setLanguage(getSource().getLanguage());
+        return timeElement.getDate();
     }
 
     public TimeElement getTimeElement(Document document) {
@@ -306,7 +296,13 @@ public abstract class FlexNewsCrawler {
     }
 
     public void crawl() {
-        crawlWebsite(getMySource().getUrl(), getMySource());
+        if(canConnect()) {
+            crawlWebsite(getMySource().getUrl(), getMySource());
+        }
+    }
+
+    boolean canConnect() {
+        return openDocument(getMySource().getUrl()) != null;
     }
 
 

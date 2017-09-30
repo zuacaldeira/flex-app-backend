@@ -5,6 +5,9 @@
  */
 package utils;
 
+import java.util.Date;
+import org.apache.http.client.utils.DateUtils;
+
 /**
  *
  * @author zua
@@ -47,10 +50,11 @@ public class FlexLogger {
     }
 
     private void sout(String format, Object[] values) {
-        String newFormat = "[%25s] " + format;
-        Object[] newValues =  new Object[values.length+1];
-        newValues[0] = aClass.getSimpleName();
-        int i = 1;
+        String newFormat = "[%s] %25s: " + format;
+        Object[] newValues =  new Object[values.length+2];
+        newValues[0] = DateUtils.formatDate(new Date(), "dd/MM/yyyy HH:mm:ss");
+        newValues[1] = aClass.getSimpleName();
+        int i = 2;
         for(Object o: values) {
             newValues[i] = o;
             i++;

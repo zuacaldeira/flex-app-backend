@@ -17,5 +17,10 @@ public class NewsServiceException extends RuntimeException {
     public NewsServiceException(Throwable e) {
         super(e);
     }
+
+    public NewsServiceException() {
+    }
+    
+    
     
 }

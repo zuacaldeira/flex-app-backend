@@ -6,14 +6,13 @@
 package crawlers;
 
 import org.junit.Test;
-import services.Neo4jTest;
 import services.NewsSourceService;
 
 /**
  *
  * @author zua
  */
-public class DBCompletionCrawlerTest extends Neo4jTest {
+public class DBCompletionCrawlerTest {
 
 
     public DBCompletionCrawlerTest() {
