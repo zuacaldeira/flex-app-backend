@@ -9,13 +9,4 @@ package crawlers;
  *
  * @author zua
  */
-public class IOLNewsZACrawlerTestIT extends AbstractCrawlerTestIT {
-
-    public IOLNewsZACrawlerTestIT() {
-    }
-
-    @Override
-    protected FlexNewsCrawler getCrawler() {
-        return new IOLNewsZACrawler();
-    }
-}
+public interface SlowTest {}

@@ -20,7 +20,13 @@ public class MyDateUtils {
         return new String[]{
             "dd-MM-yyyy",
             "dd/MM/yyyy",
+            "dd MMM yyyy",
+            "dd MMMM yyyy",
             "yyyy-MM-dd'T'HH:mm:ss.S'Z'",
+            "dd-MM-yyyy hh:mm a z",
+            "dd/MM/yyyy, hh:mm a z",
+            "dd MMM yyyy hh:mm a z",
+            "dd MMMM yyyy hh:mm a z",
             "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'",
             "yyyy-MM-dd'T'HH:mm:ss.SSSSSS'Z'",
             "yyyy-MM-dd'T'HH:mm:ss.SZ",

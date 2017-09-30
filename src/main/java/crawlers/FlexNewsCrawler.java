@@ -26,7 +26,6 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import services.NewsArticleServiceInterface;
-import services.NewsServiceException;
 import services.NewsSourceServiceInterface;
 import utils.FlexLogger;
 
@@ -53,8 +52,7 @@ public abstract class FlexNewsCrawler {
             sourcesService.save(source);
             logger.info("Finished: %s", url);
         } catch (Exception e) {
-            logger.error("Error: %s -- %s", url, e.getClass().getSimpleName());
-            //throw new NewsServiceException(e);
+            logger.error("Exception loading %s %s", url, e.getClass().getSimpleName());
         }
     }
 
@@ -69,7 +67,7 @@ public abstract class FlexNewsCrawler {
             return Jsoup.connect(url).userAgent("Mozilla").get();
         } catch (Exception e) {
             logger.error("%s %s: %s", "\tERROR - Couldn't open document ", url, e.getMessage());
-            return null;
+            throw new DocumentNotFoundException();
         }
     }
 
@@ -82,7 +80,7 @@ public abstract class FlexNewsCrawler {
         for (Element article : articles) {   
             try {
                 importArticle(article, source);
-            } catch(NewsServiceException e) {
+            } catch(JsoupElementNotFoundException e) {
                 logger.error("%s", "Exception ", e.getClass().getSimpleName());
             }
         }
@@ -93,52 +91,13 @@ public abstract class FlexNewsCrawler {
         logger.log("Processing article: %s", article.text());
 
         String articleUrl = getUrl(article);
-        if(articleUrl == null) {
-            logger.log("\tMissing url: %s", article.text());
-            return;
-        }
-
-        
-        if(!articleUrl.endsWith(".pdf")) {
-            Document document = openDocument(articleUrl);
-            if(document == null) {
-                logger.log("\tCould't open document: %s", articleUrl);
-                return;
-            }
-
-            String title = getTitle(document);
-            if(title == null || title.isEmpty()) {
-                logger.log("\tMissing title: %s", article.text());
-                return;
-            }
-
-            String imageUrl = getImageUrl(document);
-            if(imageUrl == null || imageUrl.isEmpty()) {
-                logger.log("\tMissing image url: %s", article.text());
-                //return;
-            }
-
-            String description = getContent(document);
-            if(description == null || description.isEmpty()) {
-                logger.log("\tMissing description: %s", article.text());
-                return;
-            }
-
-            Date date = getPublishedAt(document);
-            if(date == null) {
-                logger.log("\tMissing published at: %s", article.text());
-                return;
-            }
-
-            Set<NewsAuthor> authors = getNewsAuthors(getAuthors(document));
-            if(authors == null) {
-                logger.log("\tMissing authors: %s", article.text());
-                return;
-            }
-
-            saveArticle(articleUrl, title, imageUrl, description, date, authors, source);
-        }
-
+        Document document = openDocument(articleUrl);
+        String title = getTitle(document);
+        String imageUrl = getImageUrl(document);
+        String description = getContent(document);
+        Date date = getPublishedAt(document);
+        Set<NewsAuthor> authors = getNewsAuthors(getAuthors(document));
+        saveArticle(articleUrl, title, imageUrl, description, date, authors, source);
     }
     
     private void saveArticle(String articleUrl, String title, String imageUrl, String description, Date date, Set<NewsAuthor> authors, NewsSource source) {

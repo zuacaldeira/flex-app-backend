@@ -9,13 +9,13 @@ package crawlers;
  *
  * @author zua
  */
-public class GlobalVoicesCrawlerTestIT extends AbstractCrawlerTestIT {
+public class JornalDeAngolaCrawlerSlowTest extends AbstractCrawlerSlowTest {
 
-    public GlobalVoicesCrawlerTestIT() {
+    public JornalDeAngolaCrawlerSlowTest() {
     }
 
     @Override
     protected FlexNewsCrawler getCrawler() {
-        return new GlobalVoicesCrawler();
+        return new JornalDeAngolaCrawler();
     }
 }

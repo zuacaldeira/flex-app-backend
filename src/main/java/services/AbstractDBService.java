@@ -152,7 +152,7 @@ public abstract class AbstractDBService<T extends GraphEntity> implements DBServ
     }
     
     @Override
-    public final T find(Long id) {
+    public final T find(String id) {
         if(id == null) {
             throw new IllegalArgumentException("Graph entity ID cannot be null");
         }
@@ -177,7 +177,7 @@ public abstract class AbstractDBService<T extends GraphEntity> implements DBServ
     }
     
     @Override
-    public final void delete(Long id) {
+    public final void delete(String id) {
         Session session = Neo4jSessionFactory.getInstance().getNeo4jSession();
         session.delete(find(id));
     }
@@ -228,23 +228,27 @@ public abstract class AbstractDBService<T extends GraphEntity> implements DBServ
     
     protected String getFindAllQuery(String username, String property, Object value, SortOrder order, int limit) {
         StringBuffer buffer = new StringBuffer();
-        buffer.append("MATCH (n:");
+        buffer.append("MATCH ");
+        if(username != null) {
+            buffer.append("(u:FlexUser), ");
+        }
+        buffer.append("(n:");
         buffer.append(getClassType().getSimpleName());
         buffer.append(") ");
+        
+        if(username != null || property != null) {
+            buffer.append("WHERE ");
+        }
+        
         if(username != null) {
-            buffer.append(", (u:FlexUser) ");
-            buffer.append("WHERE u.username=");
+            buffer.append("u.username= ");           
             buffer.append(DatabaseUtils.getInstance().wrapUp(username));
-            buffer.append(" ");
+            if(property != null && value != null) {
+                buffer.append(" AND ");           
+            }
         }
         
         if(property != null && value != null) {
-            if(username == null) {
-                buffer.append("AND ");
-            }
-            else {
-                buffer.append("WHERE ");
-            }
             buffer.append("n.");
             buffer.append(property);
             buffer.append("=");

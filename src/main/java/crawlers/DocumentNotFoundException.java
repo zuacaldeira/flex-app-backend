@@ -9,13 +9,9 @@ package crawlers;
  *
  * @author zua
  */
-public class AVerdadeOnlineCrawlerTestIT extends AbstractCrawlerTestIT {
+public class DocumentNotFoundException extends JsoupElementNotFoundException {
 
-    public AVerdadeOnlineCrawlerTestIT() {
+    public DocumentNotFoundException() {
     }
-
-    @Override
-    protected FlexNewsCrawler getCrawler() {
-        return new AVerdadeOnlineCrawler();
-    }
+    
 }

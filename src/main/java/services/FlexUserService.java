@@ -39,12 +39,10 @@ public class FlexUserService extends AbstractDBService<FlexUser> implements Flex
     }
 
     
-    @Override
     public SortOrder getSortOrderAsc() {
         return new SortOrder().add(SortOrder.Direction.ASC, "username");
     }
 
-    @Override
     public SortOrder getSortOrderDesc() {
         return new SortOrder().add(SortOrder.Direction.DESC, "username");
     }
@@ -58,10 +56,9 @@ public class FlexUserService extends AbstractDBService<FlexUser> implements Flex
     public FlexUser findUserNamed(String username) {
         return getSession().load(getClassType(), username, 2);
     }
-    
+
     @Override
     public void delete(FlexUser user) {
-        getSession().delete(user);
+        super.delete(user.getUsername());
     }
-    
 }

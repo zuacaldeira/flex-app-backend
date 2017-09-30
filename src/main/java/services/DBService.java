@@ -43,11 +43,11 @@ public interface DBService<T> {
     public Collection<T> findAllDesc(String username, String property, Object value, int limit);
 
   
-    public T find(Long id);    
+    public T find(String id);    
     public T find(T object);
 
     public void save(T object);
-    public void delete(Long id);
+    public void delete(String id);
     public long count();
     
     public Class<T> getClassType();

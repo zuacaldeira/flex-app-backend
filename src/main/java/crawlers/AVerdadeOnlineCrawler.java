@@ -81,7 +81,7 @@ public class AVerdadeOnlineCrawler extends FlexNewsCrawler {
                 return href;
             }
         }
-        return null;
+        throw new UrlNotFoundException();
     }
 
     /*
@@ -96,7 +96,7 @@ public class AVerdadeOnlineCrawler extends FlexNewsCrawler {
                 return text;
             }
         }
-        return null;
+        throw new TitleNotFoundException();
     }
 
     /*
@@ -111,7 +111,7 @@ public class AVerdadeOnlineCrawler extends FlexNewsCrawler {
                 return getFullImageUrl(src);
             }
         }
-        return null;
+        throw new ImageNotFoundException();
     }
 
     @Override
@@ -155,7 +155,8 @@ public class AVerdadeOnlineCrawler extends FlexNewsCrawler {
                 return text;
             }
         }
-        return null;
+        throw new ContentNotFoundException();
+
     }
 
     /*
@@ -173,7 +174,7 @@ public class AVerdadeOnlineCrawler extends FlexNewsCrawler {
                 return normalizeTime(result);
             }
         }
-        return null;
+        throw new TimeNotFoundException();
     }
     
     private String normalizeTime(String time) {

@@ -6,6 +6,7 @@
 package crawlers;
 
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 import services.NewsArticleService;
 import services.NewsSourceService;
 
@@ -13,7 +14,8 @@ import services.NewsSourceService;
  *
  * @author zua
  */
-public abstract class AbstractCrawlerTestIT {
+@Category(SlowTest.class)
+public abstract class AbstractCrawlerSlowTest {
     
     protected abstract FlexNewsCrawler getCrawler();
 

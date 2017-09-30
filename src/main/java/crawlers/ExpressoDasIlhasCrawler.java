@@ -54,27 +54,27 @@ public class ExpressoDasIlhasCrawler extends FlexNewsCrawler {
 
     @Override
     protected String getTitleValue(Document document) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        throw new TitleNotFoundException();
     }
 
     @Override
     protected String getImageUrlValue(Document document) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        throw new ImageNotFoundException();
     }
 
     @Override
     protected String getContentValue(Document document) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        throw new ContentNotFoundException();
     }
 
     @Override
     protected String getAuthorsValue(Document document) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        throw new AuthorsNotFoundException();
     }
 
     @Override
     protected String getTimeValue(Document document) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        throw new TimeNotFoundException();
     }
 
     @Schedule(hour="*", minute="*/30")
