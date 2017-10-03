@@ -22,7 +22,7 @@ public class TelaNonCrawler extends FlexNewsCrawler {
     public TelaNonCrawler() {
     }
 
-    @Schedule(hour="*", minute="*/10")
+    @Schedule(hour = "*", minute = "*/10")
     public void crawl() {
         crawlWebsite(getMySource().getUrl(), getMySource());
     }
@@ -35,57 +35,92 @@ public class TelaNonCrawler extends FlexNewsCrawler {
     }
 
     @Override
-    protected Elements getArticles(Document document) {
+    protected Elements getArticles(Document document) throws crawlers.ArticlesNotFoundException {
+        if (document == null) {
+            throw new IllegalArgumentException("Document cannot be null.");
+        }
         Elements articles = document.select("body div.blog-item-holder div.blog-content-wrapper");
-        getLogger().info("%s %d %s", "Found ", articles.size(), " articles");
-        return articles;
+        if (!articles.isEmpty()) {
+            getLogger().info("%s %d %s", "Found ", articles.size(), " articles");
+            return articles;
+        }
+        throw new ArticlesNotFoundException();
     }
 
     @Override
-    protected String getUrlValue(Element article) {
+    protected String getUrlValue(Element article) throws UrlNotFoundException {
+        if (article == null) {
+            throw new IllegalArgumentException("Article cannot be null");
+        }
         Elements urls = article.select("div > a");
-        String url = urls.attr("href");
-        getLogger().info("%s %s", "Found url: ", url);
-        return url;
+        if (!urls.isEmpty() && !urls.attr("href").isEmpty()) {
+            getLogger().info("%s %s", "Found url: ", urls.attr("href"));
+            return urls.attr("href");
+        }
+        throw new UrlNotFoundException();
     }
 
     @Override
-    protected String getTitleValue(Document document) {
+    protected String getTitleValue(Document document) throws TitleNotFoundException {
+        if (document == null) {
+            throw new IllegalArgumentException("Document cannot be null.");
+        }
         Elements titles = document.select("body h1 a");
-        String title = titles.first().text();
-        getLogger().info("%s %s", "Found title: ", title);
-        return title;
+        if (!titles.isEmpty() && titles.first() != null && !titles.first().text().isEmpty()) {
+            String title = titles.first().text();
+            getLogger().info("%s %s", "Found title: ", title);
+            return title;
+        }
+        throw new TitleNotFoundException();
     }
 
     @Override
-    protected String getImageUrlValue(Document document) {
+    protected String getImageUrlValue(Document document) throws ImageNotFoundException {
+        if (document == null) {
+            throw new IllegalArgumentException("Document cannot be null.");
+        }
         Elements images = document.select("body div.gdl-blog-full > div.blog-content > div.blog-media-wrapper.gdl-image > a > img");
-        String image = images.attr("src");
-        getLogger().info("%s %s", "Found image: ", image);
-        return image;
+        if (!images.isEmpty() && !images.attr("src").isEmpty()) {
+            String image = images.attr("src");
+            getLogger().info("%s %s", "Found image: ", image);
+            return image;
+        }
+        throw new ImageNotFoundException();
     }
 
     @Override
-    protected String getContentValue(Document document) {
+    protected String getContentValue(Document document) throws ContentNotFoundException {
+        if (document == null) {
+            throw new IllegalArgumentException("Document cannot be null.");
+        }
         Elements contents = document.select("body div.gdl-blog-full > div.blog-content > p");
-        String content = contents.first().text();
-        getLogger().info("%s %s", "Found content: ", content);
-        return content;
+        if (!contents.isEmpty() && contents.first() != null && !contents.first().text().isEmpty()) {
+            String content = contents.first().text();
+            getLogger().info("%s %s", "Found content: ", content);
+            return content;
+        }
+        throw new ContentNotFoundException();
     }
 
     @Override
-    protected String getAuthorsValue(Document document) {
-        return getMySource().getName();
+    protected String getAuthorsValue(Document document) throws AuthorsNotFoundException {
+        if (document == null) {
+            throw new IllegalArgumentException("Document cannot be null.");
+        }
+        throw new AuthorsNotFoundException();
     }
 
     @Override
-    protected String getTimeValue(Document document) {
+    protected String getTimeValue(Document document) throws TimeNotFoundException {
+        if (document == null) {
+            throw new IllegalArgumentException("Document cannot be null.");
+        }
         Elements paragraphs = document.select("body div.blog-date > a");
-        String time = paragraphs.first().text();
-        getLogger().info("%s %s", "Found time: ", time);
-        return time;
+        if (!paragraphs.isEmpty() && paragraphs.first() != null && !paragraphs.first().text().isEmpty()) {
+            String time = paragraphs.first().text();
+            getLogger().info("%s %s", "Found time: ", time);
+            return time;
+        }
+        throw new TimeNotFoundException();
     }
-
-    
-
 }

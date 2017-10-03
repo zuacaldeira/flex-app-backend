@@ -26,7 +26,8 @@ public class TheBugleZACrawler extends FlexNewsCrawler {
     private String getUrl() {
         return "http://thebugle.co.za/home.php";
     }
-   @Schedule(hour = "*", minute = "*/25")
+
+    @Schedule(hour = "*", minute = "*/25")
     public void crawl() {
         crawlWebsite(getUrl(), getMySource());
     }
@@ -51,59 +52,102 @@ public class TheBugleZACrawler extends FlexNewsCrawler {
     }
 
     @Override
-    protected Elements getArticles(Document document) {
-        return document.select("div.post");
-    }
-
-    @Override
-    protected String getUrlValue(Element article) {
-        Element link = article.select("a").first();
-        if (link != null) {
-            return link.absUrl("href");
+    protected Elements getArticles(Document document) throws ArticlesNotFoundException {
+        if (document == null) {
+            throw new IllegalArgumentException("Document cannot be null");
         }
-        return null;
+        Elements articles = document.select("div.post");
+        if (!articles.isEmpty()) {
+            return articles;
+        }
+        throw new ArticlesNotFoundException();
     }
 
     @Override
-    protected String getTitleValue(Document document) {
+    protected String getUrlValue(Element article) throws UrlNotFoundException {
+        if (article == null) {
+            throw new IllegalArgumentException("Article cannot be null.");
+        }
+        Elements links = article.select("a");
+        if (!links.isEmpty() && links.first() != null && !links.first().absUrl("href").isEmpty()) {
+            return links.first().absUrl("href");
+        }
+        throw new UrlNotFoundException();
+    }
+
+    @Override
+    protected String getTitleValue(Document document) throws TitleNotFoundException {
+        if (document == null) {
+            throw new IllegalArgumentException("Document cannot be null");
+        }
         Elements elements = document.select("body h1.title");
-        return elements.text().trim();
+        if(!elements.isEmpty() && !elements.text().isEmpty()) {
+            return elements.text();
+        }
+        throw new TitleNotFoundException();
     }
 
     @Override
-    protected String getImageUrlValue(Document document) {
-        Element image = document.select("div.top > div.image > a > img[src]").first();
-        if (image != null) {
-            getLogger().info("%s", "Found image " + image.absUrl("src"));
-            return image.absUrl("src");
+    protected String getImageUrlValue(Document document) throws ImageNotFoundException {
+        if (document == null) {
+            throw new IllegalArgumentException("Document cannot be null");
         }
-        return null;
+        Elements images = document.select("div.top > div.image > a > img[src]");
+        if (!images.isEmpty() && images.first() != null && !images.first().absUrl("src").isEmpty()) {
+            getLogger().info("%s", "Found image " + images.first().absUrl("src"));
+            return images.first().absUrl("src");
+        }
+        throw new ImageNotFoundException();
     }
 
     @Override
-    protected String getContentValue(Document document) {
-        Element content = document.select("div.body.wrap-text > p").first();
-        if (content != null) {
-            return content.text();
+    protected String getContentValue(Document document) throws ContentNotFoundException {
+        if (document == null) {
+            throw new IllegalArgumentException("Document cannot be null");
         }
-        return null;
+        Elements contents = document.select("div.body.wrap-text > p");
+        if(!contents.isEmpty() && contents.first() != null && !contents.first().text().isEmpty()) {
+            return contents.first().text();
+        }
+        throw new ContentNotFoundException();
     }
 
     @Override
-    protected String getAuthorsValue(Document document) {
-        Elements authors = document.select("div.info > b:nth-child(1)");
-        if (!authors.isEmpty() && !authors.text().isEmpty()) {
-            return authors.text();
+    protected String getAuthorsValue(Document document) throws AuthorsNotFoundException {
+        if (document == null) {
+            throw new IllegalArgumentException("Document cannot be null");
         }
-        return "The Bugle";
+        Elements times = document.select("div.info > b");
+        if (!times.isEmpty()) {
+            Element time = null;
+            if(times.size() == 2) {
+                time = times.get(0);
+            }
+            if(time != null && !time.text().isEmpty()) {
+                return time.text();
+            }
+        }
+        throw new AuthorsNotFoundException();
     }
 
     @Override
-    protected String getTimeValue(Document document) {
-        Elements time = document.select("div.info > b:nth-child(2)");
-        if (time != null) {
-            return time.text();
+    protected String getTimeValue(Document document) throws TimeNotFoundException {
+        if (document == null) {
+            throw new IllegalArgumentException("Document cannot be null");
         }
-        return null;
+        Elements times = document.select("div.info > b");
+        if (!times.isEmpty()) {
+            Element time = null;
+            if(times.size() == 1) {
+                time = times.get(0);
+            }
+            else{
+                time = times.get(1);
+            }
+            if(time != null && !time.text().isEmpty()) {
+                return time.text();
+            }
+        }
+        throw new TimeNotFoundException();
     }
 }

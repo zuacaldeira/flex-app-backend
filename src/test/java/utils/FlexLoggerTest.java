@@ -23,10 +23,9 @@ public class FlexLoggerTest {
     @Test
     public void testLog() {
         System.out.println("log");
-        FlexLogger instance = new FlexLogger(FlexLoggertest.class);
-        instance.log(format, values);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        FlexLogger logger = new FlexLogger(FlexLoggerTest.class);
+        logger.on();
+        logger.log("%s", "OK");
     }
 
     /**
@@ -35,12 +34,8 @@ public class FlexLoggerTest {
     @Test
     public void testInfo() {
         System.out.println("info");
-        String format = "";
-        Object[] values = null;
-        FlexLogger instance = null;
-        instance.info(format, values);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        FlexLogger logger = new FlexLogger(FlexLoggerTest.class);
+        logger.info("%s", "OK");
     }
 
     /**
@@ -49,12 +44,8 @@ public class FlexLoggerTest {
     @Test
     public void testError() {
         System.out.println("error");
-        String format = "";
-        Object[] values = null;
-        FlexLogger instance = null;
-        instance.error(format, values);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        FlexLogger logger = new FlexLogger(FlexLoggerTest.class);
+        logger.error("%s", "OK");
     }
 
     /**
@@ -63,10 +54,8 @@ public class FlexLoggerTest {
     @Test
     public void testOn() {
         System.out.println("on");
-        FlexLogger instance = null;
-        instance.on();
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        FlexLogger logger = new FlexLogger(FlexLoggerTest.class);
+        logger.on();
     }
 
     /**
@@ -75,10 +64,8 @@ public class FlexLoggerTest {
     @Test
     public void testOff() {
         System.out.println("off");
-        FlexLogger instance = null;
-        instance.off();
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        FlexLogger logger = new FlexLogger(FlexLoggerTest.class);
+        logger.off();
     }
 
     /**
@@ -87,12 +74,9 @@ public class FlexLoggerTest {
     @Test
     public void testIsOn() {
         System.out.println("isOn");
-        FlexLogger instance = null;
-        boolean expResult = false;
-        boolean result = instance.isOn();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        FlexLogger logger = new FlexLogger(FlexLoggerTest.class);
+        logger.on();
+        assertTrue(logger.isOn());
     }
     
 }

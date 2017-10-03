@@ -5,9 +5,8 @@
  */
 package elements;
 
+import crawlers.TimeNotFoundException;
 import java.util.Date;
-import java.util.Locale;
-import org.apache.commons.lang3.time.DateUtils;
 import utils.MyDateUtils;
 
 /**
@@ -23,22 +22,22 @@ public class TimeElement extends ArticleElement {
         this.language = language;
     }
 
-    public Date getDate() {
+    public Date getDate() throws TimeNotFoundException {
         try {
-            if(getValue() != null && !getValue().isEmpty()) {
-                if(language != null) {
-                    Locale locale = Locale.forLanguageTag(language);
-                    return DateUtils.parseDate(getValue(), locale, MyDateUtils.getParsePatterns());
-                }
-                else {
-                    return DateUtils.parseDate(getValue(), MyDateUtils.getParsePatterns());                
-                }
+            //System.out.println("LANGUAGE ================ " + (language!=null) );
+            //System.out.println("VALUE    ================ " + getValue());
+           
+            Date date = null;
+            try {
+                date = MyDateUtils.parseDate(getValue(), language);
+            } catch(Exception e) {
+                date = MyDateUtils.parseDate(getValue());                
             }
-            else {
-                return new Date();
-            }
+            //System.out.println("DATE    ================ " + date);
+            return date;
         } catch(Exception e) {
-            return new Date();
+            System.err.println(e.getMessage());
+            throw new TimeNotFoundException();
         }
     }
 

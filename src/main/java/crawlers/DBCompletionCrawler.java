@@ -30,12 +30,13 @@ public class DBCompletionCrawler {
     
     @Schedule(hour = "*", minute="*/10")
     public void crawl() {
-        List<NewsSource> sources = (List<NewsSource>) sourcesService.findSourcesWithoutLogo();
-        logger.info("FFFFFFFFFF Found %d sources without logo", sources.size());
+        List<NewsSource> sources = (List<NewsSource>) sourcesService.findAllSources();
+        logger.info("FFFFFFFFFF Found %d sources", sources.size());
         
         for(NewsSource s: sources) {
             if(s.getLogoUrl() == null || s.getLogoUrl().isEmpty()) {
-                logger.info("FFFFFFFFFF Found %s ", s);
+                logger.info("FFFFFFFFFF Found %s without logo", s.getSourceId());
+                s.setLogoUrl(Logos.getLogo(s.getSourceId()));
                 sourcesService.save(s);
             }
         }

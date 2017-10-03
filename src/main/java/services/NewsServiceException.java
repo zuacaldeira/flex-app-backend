@@ -11,16 +11,10 @@ import javax.ejb.ApplicationException;
  *
  * @author zua
  */
-@ApplicationException(rollback=false)
+@ApplicationException(rollback = false)
 public class NewsServiceException extends RuntimeException {
 
     public NewsServiceException(Throwable e) {
         super(e);
     }
-
-    public NewsServiceException() {
-    }
-    
-    
-    
 }

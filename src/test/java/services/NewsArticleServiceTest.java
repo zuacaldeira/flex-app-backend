@@ -46,6 +46,7 @@ public class NewsArticleServiceTest {
             {new NewsArticle("title", "description", "url", "imageUrl", new Date(), "sourceId", "language", "country".toUpperCase())}
         };
     }
+
     @DataProvider
     public static Object[][] searchData() {
         return new Object[][]{
@@ -66,7 +67,8 @@ public class NewsArticleServiceTest {
     public static Object[][] negativeSearchDataForUser() {
         return new Object[][]{
             {new NewsArticle("title", "description", "url", "imageUrl", new Date(), "sourceId", "language", "country".toUpperCase()), null, "title"},
-            {new NewsArticle("title", "description", "url", "imageUrl", new Date(), "sourceId", "language", "country".toUpperCase()), "", "description"}
+            {new NewsArticle("title", "description", "url", "imageUrl", new Date(), "sourceId", "language", "country".toUpperCase()), "", "description"},
+            {new NewsArticle("title", "description", "url", "imageUrl", new Date(), "sourceId", "language", "country".toUpperCase()), "", ""}
         };
     }
 
@@ -77,12 +79,12 @@ public class NewsArticleServiceTest {
             {new NewsArticle("title", "description", "url", "imageUrl", new Date(), "sourceId", "language", "country".toUpperCase()), ""}
         };
     }
-    
+
     @DataProvider
     public static Object[][] searchByCategoryData() {
         NewsArticle article = new NewsArticle("title", "description", "url", "imageUrl", new Date(), "sourceId", "language", "country".toUpperCase());
         article.addCategory("category");
-        
+
         return new Object[][]{
             {article, "category"}
         };
@@ -92,7 +94,7 @@ public class NewsArticleServiceTest {
     public static Object[][] searchBySourceData() {
         NewsArticle article = new NewsArticle("title", "description", "url", "imageUrl", new Date(), "sourceId", "language", "country".toUpperCase());
         article.setSourceId("sourceId");
-        
+
         return new Object[][]{
             {article, "sourceId"}
         };
@@ -102,7 +104,7 @@ public class NewsArticleServiceTest {
     public static Object[][] searchByLanguageData() {
         NewsArticle article = new NewsArticle("title", "description", "url", "imageUrl", new Date(), "sourceId", "language", "country".toUpperCase());
         article.setSourceId("sourceId");
-        
+
         return new Object[][]{
             {article, "language"}
         };
@@ -126,6 +128,23 @@ public class NewsArticleServiceTest {
 
     @Test
     @UseDataProvider("articlesData")
+    public void testFindAllUsername(NewsArticle article) {
+        System.out.println("\ttestFindAllUsername");
+        FlexUser user = new FlexUser(TEST_USERNAME, TEST_PASSWORD);
+        new FlexUserService().save(user);
+
+        NewsArticleService service = new NewsArticleService();
+        assertTrue(service.findAll(TEST_USERNAME).isEmpty());
+
+        service.save(article);
+
+        assertFalse(service.findAll(TEST_USERNAME).isEmpty());
+        service.markAsRead(TEST_USERNAME, article);
+        assertTrue(service.findAll(TEST_USERNAME).isEmpty());
+    }
+
+    @Test
+    @UseDataProvider("articlesData")
     public void testFindAllArticles(NewsArticle article) {
         System.out.println("\ttestFindAllUsers");
         NewsArticleService service = new NewsArticleService();
@@ -133,7 +152,7 @@ public class NewsArticleServiceTest {
         service.save(article);
         assertFalse(service.findAllArticles().isEmpty());
     }
-    
+
     @Test
     @UseDataProvider("articlesData")
     public void testDelete(NewsArticle article) {
@@ -155,10 +174,10 @@ public class NewsArticleServiceTest {
         assertTrue(service.findAllArticles().isEmpty());
         service.save(article);
         assertFalse(service.findAllArticles().isEmpty());
-        
+
         article = service.find(article);
         assertNotNull(article);
-        
+
         article = service.find(article.getTitle());
         assertNotNull(article);
     }
@@ -338,7 +357,7 @@ public class NewsArticleServiceTest {
     public void testFindAllDescPropertyUsernameLimit(NewsArticle article) {
         System.out.println("\ttestFindAllDesc");
         NewsArticleService service = new NewsArticleService();
-        assertTrue(service.findAllDesc("username","title", article.getTitle(), 10).isEmpty());
+        assertTrue(service.findAllDesc("username", "title", article.getTitle(), 10).isEmpty());
         service.save(article);
         assertTrue(service.findAllDesc("username", "title", article.getTitle(), 10).isEmpty());
     }
@@ -361,7 +380,7 @@ public class NewsArticleServiceTest {
         service.save(article);
         assertFalse(service.findArticlesWithText(searchString).isEmpty());
     }
-    
+
     @Test(expected = NewsServiceException.class)
     @UseDataProvider("negativeSearchData")
     public void testArticleWithTextShouldFail(NewsArticle article, String searchString) {
@@ -370,7 +389,6 @@ public class NewsArticleServiceTest {
         service.save(article);
         assertFalse(service.findArticlesWithText(searchString).isEmpty());
     }
-
 
     @Test
     @UseDataProvider("searchDataForUser")
@@ -381,8 +399,8 @@ public class NewsArticleServiceTest {
         assertFalse(service.findAllArticles().isEmpty());
         assertTrue(service.findArticlesWithText(username, searchString).isEmpty());
     }
- 
-    @Test(expected=NewsServiceException.class)
+
+    @Test(expected = NewsServiceException.class)
     @UseDataProvider("negativeSearchDataForUser")
     public void testArticleWithTextForUserShouldFail(NewsArticle article, String username, String searchString) {
         NewsArticleService service = new NewsArticleService();
@@ -471,20 +489,19 @@ public class NewsArticleServiceTest {
         assertFalse(service.findAllArticles().isEmpty());
         assertTrue(service.findArticlesWithCountry(TEST_USERNAME, country).isEmpty());
     }
-    
-    
+
     @Test
     @UseDataProvider("readData")
     public void testArticleRead(NewsArticle article) {
         NewsArticleService service = new NewsArticleService();
 
         assertTrue(service.findAllRead(TEST_USERNAME).isEmpty());
-        
+
         FlexUser user = new FlexUser(TEST_USERNAME, TEST_PASSWORD);
-        user.read(article);        
+        user.read(article);
         Neo4jSessionFactory.getInstance().getNeo4jSession().save(user);
         service.save(article);
-        
+
         assertFalse(service.findAllArticles().isEmpty());
         assertFalse(service.findAllRead(TEST_USERNAME).isEmpty());
     }
@@ -495,12 +512,12 @@ public class NewsArticleServiceTest {
         NewsArticleService service = new NewsArticleService();
 
         assertTrue(service.findAllFavorite(TEST_USERNAME).isEmpty());
-        
+
         FlexUser user = new FlexUser(TEST_USERNAME, TEST_PASSWORD);
-        user.favorite(article);        
+        user.favorite(article);
         Neo4jSessionFactory.getInstance().getNeo4jSession().save(user);
         service.save(article);
-        
+
         assertFalse(service.findAllArticles().isEmpty());
         assertFalse(service.findAllFavorite(TEST_USERNAME).isEmpty());
     }
@@ -511,17 +528,15 @@ public class NewsArticleServiceTest {
         NewsArticleService service = new NewsArticleService();
 
         assertTrue(service.findAllFake(TEST_USERNAME).isEmpty());
-        
+
         FlexUser user = new FlexUser(TEST_USERNAME, TEST_PASSWORD);
-        user.fake(article);        
+        user.fake(article);
         Neo4jSessionFactory.getInstance().getNeo4jSession().save(user);
         service.save(article);
-        
+
         assertFalse(service.findAllArticles().isEmpty());
         assertFalse(service.findAllFake(TEST_USERNAME).isEmpty());
     }
-
-
 
     @Test
     @UseDataProvider("readData")
@@ -529,13 +544,13 @@ public class NewsArticleServiceTest {
         NewsArticleService service = new NewsArticleService();
 
         assertTrue(service.findAllRead(TEST_USERNAME).isEmpty());
-        
+
         FlexUser user = new FlexUser(TEST_USERNAME, TEST_PASSWORD);
         Neo4jSessionFactory.getInstance().getNeo4jSession().save(user);
 
         service.save(article);
         service.markAsRead(TEST_USERNAME, article);
-        
+
         assertFalse(service.findAllArticles().isEmpty());
         assertFalse(service.findAllRead(TEST_USERNAME).isEmpty());
     }
@@ -546,34 +561,33 @@ public class NewsArticleServiceTest {
         NewsArticleService service = new NewsArticleService();
 
         assertTrue(service.findAllFavorite(TEST_USERNAME).isEmpty());
-        
+
         FlexUser user = new FlexUser(TEST_USERNAME, TEST_PASSWORD);
         Neo4jSessionFactory.getInstance().getNeo4jSession().save(user);
 
         service.save(article);
         service.markAsFavorite(TEST_USERNAME, article);
-        
+
         assertFalse(service.findAllArticles().isEmpty());
         assertFalse(service.findAllFavorite(TEST_USERNAME).isEmpty());
     }
-    
+
     @Test
     @UseDataProvider("readData")
     public void testArticleMarkAsFake(NewsArticle article) {
         NewsArticleService service = new NewsArticleService();
 
         assertTrue(service.findAllFavorite(TEST_USERNAME).isEmpty());
-        
+
         FlexUser user = new FlexUser(TEST_USERNAME, TEST_PASSWORD);
         Neo4jSessionFactory.getInstance().getNeo4jSession().save(user);
 
         service.save(article);
         service.markAsFake(TEST_USERNAME, article);
-        
+
         assertFalse(service.findAllArticles().isEmpty());
-        assertFalse(service.findAllFake (TEST_USERNAME).isEmpty());
+        assertFalse(service.findAllFake(TEST_USERNAME).isEmpty());
     }
-    
 
     @Test
     @UseDataProvider("readData")
@@ -581,13 +595,13 @@ public class NewsArticleServiceTest {
         NewsArticleService service = new NewsArticleService();
 
         assertTrue(service.findAllRead(TEST_USERNAME).isEmpty());
-        
+
         FlexUser user = new FlexUser(TEST_USERNAME, TEST_PASSWORD);
         Neo4jSessionFactory.getInstance().getNeo4jSession().save(user);
 
         service.save(article);
         service.markAsRead(TEST_USERNAME, article);
-        
+
         assertFalse(service.findAllArticles().isEmpty());
         assertFalse(service.findAllRead(TEST_USERNAME).isEmpty());
 
@@ -601,38 +615,38 @@ public class NewsArticleServiceTest {
         NewsArticleService service = new NewsArticleService();
 
         assertTrue(service.findAllFavorite(TEST_USERNAME).isEmpty());
-        
+
         FlexUser user = new FlexUser(TEST_USERNAME, TEST_PASSWORD);
         Neo4jSessionFactory.getInstance().getNeo4jSession().save(user);
 
         service.save(article);
         service.markAsFavorite(TEST_USERNAME, article);
-        
+
         assertFalse(service.findAllArticles().isEmpty());
         assertFalse(service.findAllFavorite(TEST_USERNAME).isEmpty());
 
         service.removeMarkAsFavorite(TEST_USERNAME, article);
         assertTrue(service.findAllFavorite(TEST_USERNAME).isEmpty());
     }
-    
+
     @Test
     @UseDataProvider("readData")
     public void testArticleUnmarkAsFake(NewsArticle article) {
         NewsArticleService service = new NewsArticleService();
 
         assertTrue(service.findAllFavorite(TEST_USERNAME).isEmpty());
-        
+
         FlexUser user = new FlexUser(TEST_USERNAME, TEST_PASSWORD);
         Neo4jSessionFactory.getInstance().getNeo4jSession().save(user);
 
         service.save(article);
         service.markAsFake(TEST_USERNAME, article);
-        
+
         assertFalse(service.findAllArticles().isEmpty());
-        assertFalse(service.findAllFake (TEST_USERNAME).isEmpty());
-        
+        assertFalse(service.findAllFake(TEST_USERNAME).isEmpty());
+
         service.removeMarkAsFake(TEST_USERNAME, article);
-        assertTrue(service.findAllFake(TEST_USERNAME).isEmpty());        
+        assertTrue(service.findAllFake(TEST_USERNAME).isEmpty());
     }
 
     @Test
@@ -658,7 +672,7 @@ public class NewsArticleServiceTest {
         service.save(article);
         assertFalse(service.findAllArticles().isEmpty());
         assertFalse(service.findLatest(TEST_USERNAME).isEmpty());
-        
+
         service.markAsRead(TEST_USERNAME, article);
         assertFalse(service.findAllArticles().isEmpty());
         assertTrue(service.findLatest(TEST_USERNAME).isEmpty());
@@ -687,19 +701,71 @@ public class NewsArticleServiceTest {
         service.save(article);
         assertFalse(service.findAllArticles().isEmpty());
         assertFalse(service.findOldest(TEST_USERNAME).isEmpty());
-        
+
         service.markAsRead(TEST_USERNAME, article);
         assertFalse(service.findAllArticles().isEmpty());
         assertTrue(service.findOldest(TEST_USERNAME).isEmpty());
     }
-    
-    
+
     @Test
     public void testGetSortOrder() {
         NewsArticleService service = new NewsArticleService();
         assertNotNull(service.getSortOrderAsc());
         assertNotNull(service.getSortOrderDesc());
         Assert.assertNotEquals(service.getSortOrderAsc(), service.getSortOrderDesc());
+    }
 
+    @Test(expected = IllegalArgumentException.class)
+    public void testFindFail() {
+        NewsArticleService service = new NewsArticleService();
+        service.find((String) null);
+    }
+
+    @Test
+    public void findAllWithUserAndLimit() {
+        FlexUser user = new FlexUser(TEST_USERNAME, TEST_PASSWORD);
+        new FlexUserService().save(user);
+
+        NewsArticleService service = new NewsArticleService();
+        assertNotNull(service.findAll(TEST_USERNAME, 10));
+
+        NewsArticle article = new NewsArticle("T", "D", "U", "I", new Date(), "Q", "L", "C");
+        service.save(article);
+        assertFalse(service.findAll(TEST_USERNAME, 10).isEmpty());
+
+        service.markAsFake(TEST_USERNAME, article);
+        assertTrue(service.findAll(TEST_USERNAME, 10).isEmpty());
+    }
+
+    @Test
+    public void findAllAscWithUserAndLimit() {
+        FlexUser user = new FlexUser(TEST_USERNAME, TEST_PASSWORD);
+        new FlexUserService().save(user);
+
+        NewsArticleService service = new NewsArticleService();
+        assertNotNull(service.findAllAsc(TEST_USERNAME, 10));
+
+        NewsArticle article = new NewsArticle("T", "D", "U", "I", new Date(), "Q", "L", "C");
+        service.save(article);
+        assertFalse(service.findAllAsc(TEST_USERNAME, 10).isEmpty());
+
+        service.markAsFake(TEST_USERNAME, article);
+        assertTrue(service.findAllAsc(TEST_USERNAME, 10).isEmpty());
+    }
+
+    @Test
+    public void findAllDescWithUserAndLimit() {
+        FlexUser user = new FlexUser(TEST_USERNAME, TEST_PASSWORD);
+        new FlexUserService().save(user);
+
+        NewsArticleService service = new NewsArticleService();
+        assertNotNull(service.findAllDesc(TEST_USERNAME, 10));
+
+        NewsArticle article = new NewsArticle("T", "D", "U", "I", new Date(), "Q", "L", "C");
+        service.save(article);
+        assertFalse(service.findAllDesc(TEST_USERNAME, 10).isEmpty());
+
+        service.markAsFake(TEST_USERNAME, article);
+        assertTrue(service.findAllDesc(TEST_USERNAME, 10).isEmpty());
     }
 }

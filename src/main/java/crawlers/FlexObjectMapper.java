@@ -18,9 +18,12 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.net.URL;
 import java.nio.charset.Charset;
+import java.text.ParseException;
 import javax.ejb.EJB;
 import javax.ejb.Schedule;
 import javax.ejb.Singleton;
+import json.SingleArticleResponse;
+import json.SingleSourceResponse;
 import services.NewsArticleServiceInterface;
 import services.NewsSourceServiceInterface;
 import utils.FlexLogger;
@@ -32,9 +35,9 @@ import utils.FlexLogger;
 @Singleton
 public class FlexObjectMapper {
 
-    private static final String API_KEY = "5b4e00f3046843138d8368211777a4f2";
-    private static final String SOURCES_URL = "http://newsapi.org/v1/sources?";
-    private static final String ARTICLES_URL = "http://newsapi.org/v1/articles?";
+    private String API_KEY = "5b4e00f3046843138d8368211777a4f2";
+    private String SOURCES_URL = "http://newsapi.org/v1/sources?";
+    private String ARTICLES_URL = "http://newsapi.org/v1/articles?";
 
     private ObjectMapper objectMapper;
     @EJB
@@ -103,74 +106,66 @@ public class FlexObjectMapper {
         return builder.toString();
     }
 
-    public String makeApiCall(String url) {
+    public String makeApiCall(String url) throws ApiCallException {
         try (InputStream is = new URL(url).openConnection().getInputStream()) {
             BufferedReader rd = new BufferedReader(new InputStreamReader(is, Charset.forName("UTF-8")));
             return readAllData(rd);
         } catch (Exception e) {
             logger.error("%s", "Error calling news api..." + e.getMessage());
-            throw new services.NewsServiceException(e);
+            throw new ApiCallException(url);
         }
     }
 
     @Schedule(hour = "*", minute = "7/10")
-    public void loadAllData() {
-        logger.info("%s", "Start loading data from " + SOURCES_URL);
-        try {
-            String result = makeApiCall(getSourcesQuery(null, null, null));
+    public void crawl() throws IOException, ApiCallException {
+        loadAllData();
+    }
 
-            MultipleSourcesResponse sourcesResponse = objectMapper.readValue(result, MultipleSourcesResponse.class);
-            if ("ok".equals(sourcesResponse.getStatus())) {
-                sourcesResponse.getSources().forEach(ssr -> {
-                    NewsSource source = ssr.convert2NewsSource();
+    protected void loadAllData() throws IOException, ApiCallException {
+        logger.info("%s", "Start loading data from " + SOURCES_URL);
+        String result = makeApiCall(getSourcesQuery(null, null, null));
+
+        MultipleSourcesResponse sourcesResponse = read(result);
+        if ("ok".equals(sourcesResponse.getStatus())) {
+            for(SingleSourceResponse ssr: sourcesResponse.getSources()) {
+                NewsSource source = ssr.convert2NewsSource();
                     loadAllArticles(source);
                     saveReturnSource(source);
-                });
             }
-        } catch (IOException ex) {
-            logger.error("%s", ex.getMessage());
         }
         logger.info("%s", "Finished: " + SOURCES_URL);
     }
 
-    public void loadAllArticles(NewsSource source) {
-        try {
-            String result = makeApiCall(getArticlesQuery(source.getSourceId()));
+    public void loadAllArticles(NewsSource source) throws ApiCallException, IOException {
+        String result = makeApiCall(getArticlesQuery(source.getSourceId()));
 
-            MultipleArticlesResponse articlesResponse = objectMapper.readValue(result, MultipleArticlesResponse.class);
-            if ("ok".equals(articlesResponse.getStatus())) {
-                logger.info("%s", "Processing source " + source.getName());
-                articlesResponse.getArticles().forEach(sar -> {
-                    NewsArticle article = sar.convert2NewsArticle(source);
-                    boolean shouldSave = article.getTitle() != null
-                            && !article.getTitle().isEmpty()
-                            && articlesService.findArticleWithTitle(article.getTitle()) == null;
-                    if (shouldSave) {
-                        logger.info("%s", "\tSaved new article " + article.getTitle());
-                        NewsAuthor author = sar.convert2NewsAuthor(source);
-                        author.addArticle(article);
-                        source.addCorrespondent(author);
-                    }
-                });
+        MultipleArticlesResponse articlesResponse = objectMapper.readValue(result, MultipleArticlesResponse.class);
+        if ("ok".equals(articlesResponse.getStatus())) {
+            logger.info("%s", "Processing source " + source.getName());
+            for(SingleArticleResponse sar: articlesResponse.getArticles()) {
+                NewsArticle article = sar.convert2NewsArticle(source);
+                boolean shouldSave = article.getTitle() != null
+                        && !article.getTitle().isEmpty()
+                        && articlesService.findArticleWithTitle(article.getTitle()) == null;
+                if (shouldSave) {
+                    logger.info("%s", "\tSaved new article " + article.getTitle());
+                    NewsAuthor author = sar.convert2NewsAuthor(source);
+                    author.addArticle(article);
+                    source.addCorrespondent(author);
+                }
             }
-        } catch (IOException ex) {
-            logger.error("%s", ex.getMessage());
         }
     }
 
-    protected void saveArticle(NewsArticle article) {
+    /*    protected void saveArticle(NewsArticle article) {
         if (articlesService != null) {
             articlesService.save(article);
         }
     }
-
+     */
     protected NewsSource saveReturnSource(NewsSource source) {
-        if (sourcesService != null) {
-            sourcesService.save(source);
-            return sourcesService.findSourceWithSourceId(source.getSourceId());
-        } else {
-            return source;
-        }
+        sourcesService.save(source);
+        return sourcesService.find(source);
     }
 
     private String readAllData(Reader rd) throws IOException {
@@ -184,6 +179,14 @@ public class FlexObjectMapper {
 
     void setNewsArticlesService(NewsArticleServiceInterface newsArticleService) {
         articlesService = newsArticleService;
+    }
+
+    void setNewsSourcesService(NewsSourceServiceInterface newsSourceService) {
+        sourcesService = newsSourceService;
+    }
+
+    protected MultipleSourcesResponse read(String result) throws IOException {
+        return objectMapper.readValue(result, MultipleSourcesResponse.class);
     }
 
 }

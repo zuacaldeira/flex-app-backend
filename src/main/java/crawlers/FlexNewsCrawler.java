@@ -38,6 +38,7 @@ public abstract class FlexNewsCrawler {
     @EJB private NewsArticleServiceInterface articlesService;
     @EJB private NewsSourceServiceInterface sourcesService;
 
+    
     private FlexLogger logger;
     
     public FlexNewsCrawler() {
@@ -62,7 +63,7 @@ public abstract class FlexNewsCrawler {
      * @param url A web address url, starting with http(s).
      * @return The top document representing the content of web address.
      */
-    protected Document openDocument(String url) {
+    protected Document openDocument(String url) throws DocumentNotFoundException {
         try {
             return Jsoup.connect(url).userAgent("Mozilla").get();
         } catch (Exception e) {
@@ -75,18 +76,18 @@ public abstract class FlexNewsCrawler {
         return getMySource();
     }
 
-    private void crawlUrl(Document document, final NewsSource source) {
+    private void crawlUrl(Document document, final NewsSource source) throws ArticlesNotFoundException {
         Elements articles = getArticles(document);
         for (Element article : articles) {   
             try {
                 importArticle(article, source);
-            } catch(JsoupElementNotFoundException e) {
+            } catch(Exception e) {
                 logger.error("%s", "Exception ", e.getClass().getSimpleName());
             }
         }
     }
 
-    protected void importArticle(Element article, NewsSource source) {
+    protected void importArticle(Element article, NewsSource source) throws UrlNotFoundException, TitleNotFoundException, ImageNotFoundException, ContentNotFoundException, AuthorsNotFoundException, DocumentNotFoundException, TimeNotFoundException {
         //prettyPrint(article);
         logger.log("Processing article: %s", article.text());
 
@@ -134,72 +135,67 @@ public abstract class FlexNewsCrawler {
 
     public abstract NewsSource getMySource();
 
-    protected abstract Elements getArticles(Document document);
+    protected abstract Elements getArticles(Document document) throws ArticlesNotFoundException;
 
-    public String getUrl(Element article) {
+    public final String getUrl(Element article) throws UrlNotFoundException {
         return getUrlElement(article).getValue();
     }
 
-    public UrlElement getUrlElement(Element article) {
+    public final UrlElement getUrlElement(Element article) throws UrlNotFoundException {
         return new UrlElement(getUrlValue(article));
     }
 
-    protected abstract String getUrlValue(Element article);
+    protected abstract String getUrlValue(Element article) throws UrlNotFoundException;
 
-    public String getTitle(Document document) {
+    public final String getTitle(Document document) throws TitleNotFoundException {
         return getTitleElement(document).getValue();
     }
 
-    public TitleElement getTitleElement(Document document) {
+    public final TitleElement getTitleElement(Document document) throws TitleNotFoundException {
         return new TitleElement(getTitleValue(document));
     }
 
-    protected abstract String getTitleValue(Document document);
+    protected abstract String getTitleValue(Document document) throws TitleNotFoundException ;
 
-    public String getImageUrl(Document document) {
+    public final String getImageUrl(Document document) throws ImageNotFoundException {
         return getImageUrlElement(document).getValue();
     }
 
-    public ImageUrlElement getImageUrlElement(Document document) {
+    public final ImageUrlElement getImageUrlElement(Document document) throws ImageNotFoundException {
         return new ImageUrlElement(getImageUrlValue(document));
     }
 
-    protected abstract String getImageUrlValue(Document document);
+    protected abstract String getImageUrlValue(Document document) throws ImageNotFoundException;
 
-    public String getContent(Document document) {
+    public final String getContent(Document document) throws ContentNotFoundException {
         return getContentElement(document).getValue();
     }
 
-    public ContentElement getContentElement(Document document) {
+    public final ContentElement getContentElement(Document document) throws ContentNotFoundException {
         return new ContentElement(getContentValue(document));
     }
 
-    protected abstract String getContentValue(Document document);
+    protected abstract String getContentValue(Document document) throws ContentNotFoundException;
 
-    public Set<String> getAuthors(Document document) {
-        AuthorsElement authorsElement = getAuthorsElement(document);
-        if (authorsElement != null && !authorsElement.getAuthors().isEmpty()) {
-            return authorsElement.getAuthors();
-        }
+    public final Set<String> getAuthors(Document document) {
+        try {
+            AuthorsElement authorsElement = getAuthorsElement(document);
+            if (authorsElement != null && !authorsElement.getAuthors().isEmpty()) {
+                return authorsElement.getAuthors();
+            }
+        } catch(AuthorsNotFoundException ex) {}
         Set<String> result = new HashSet<>();
         result.add(getSource().getName());
         return result;
     }
 
-    public AuthorsElement getAuthorsElement(Document document) {
+    public final AuthorsElement getAuthorsElement(Document document) throws AuthorsNotFoundException {
         return new AuthorsElement(getAuthorsValue(document));
     }
 
-    protected abstract String getAuthorsValue(Document document);
+    protected abstract String getAuthorsValue(Document document) throws AuthorsNotFoundException;
 
-    protected String getFullImageUrl(String src) {
-        if(!src.startsWith(getSource().getUrl())) {
-            return getSource().getUrl() + src;
-        }
-        return src;
-    }
-
-    private Set<NewsAuthor> getNewsAuthors(Set<String> names) {
+    protected Set<NewsAuthor> getNewsAuthors(Set<String> names) {
         Set<NewsAuthor> result = new HashSet<>();
         if(names.isEmpty()) {
             result.add(findAuthor(getMySource().getName()));
@@ -218,29 +214,17 @@ public abstract class FlexNewsCrawler {
         return new NewsAuthor(name);
     }
     
-    public Date getPublishedAt(Document document) {
+    public final Date getPublishedAt(Document document) throws TimeNotFoundException {
         TimeElement timeElement = getTimeElement(document);
         timeElement.setLanguage(getSource().getLanguage());
         return timeElement.getDate();
     }
 
-    public TimeElement getTimeElement(Document document) {
+    public final TimeElement getTimeElement(Document document) throws TimeNotFoundException {
         return new TimeElement(getTimeValue(document), getSource().getLanguage());
     }
 
-    protected abstract String getTimeValue(Document document);
-
-    protected String normalizeTime(String inputPattern, String dateString) {
-        try {
-            SimpleDateFormat format = new SimpleDateFormat(inputPattern, new Locale(getMySource().getLanguage()));
-            Date date = format.parse(dateString);
-            SimpleDateFormat format2 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ", new Locale(getMySource().getLanguage()));
-            return format2.format(date);
-        } catch (ParseException ex) {
-            logger.error("Parsing error during time normalization: ", ex.getMessage());
-        }
-        return null;
-    }
+    protected abstract String getTimeValue(Document document) throws TimeNotFoundException;
 
     public FlexLogger getLogger() {
         return logger;
@@ -254,15 +238,6 @@ public abstract class FlexNewsCrawler {
         this.sourcesService = sourcesService;
     }
 
-    public void crawl() {
-        if(canConnect()) {
-            crawlWebsite(getMySource().getUrl(), getMySource());
-        }
-    }
-
-    boolean canConnect() {
-        return openDocument(getMySource().getUrl()) != null;
-    }
-
+    public abstract void crawl();
 
 }

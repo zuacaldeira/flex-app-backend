@@ -61,7 +61,7 @@ public class NewsArticleService extends  AbstractDBService<NewsArticle> implemen
         query += " OR n.description CONTAINS " + DatabaseUtils.getInstance().wrapUp(value) + ") ";
         query += " RETURN n ";
         query += " ORDER BY n.publishedAt DESC LIMIT " + LIMIT;
-        System.out.println(query);
+        //System.out.println(query);
         return super.executeQuery(query);
     }
     

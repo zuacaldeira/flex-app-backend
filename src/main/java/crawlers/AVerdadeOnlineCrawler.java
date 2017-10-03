@@ -6,10 +6,6 @@
 package crawlers;
 
 import db.NewsSource;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
 import javax.ejb.Schedule;
 import javax.ejb.Singleton;
 import org.jsoup.nodes.Document;
@@ -27,25 +23,24 @@ public class AVerdadeOnlineCrawler extends FlexNewsCrawler {
         super();
     }
 
-
     private String getUrl() {
         return "http://www.verdade.co.mz";
     }
-    
+
     @Schedule(hour = "*", minute = "*/10")
     public void crawl() {
         crawlWebsite(getUrl(), getMySource());
-        crawlWebsite(getUrl()+ "/destaques", getMySource());
+        crawlWebsite(getUrl() + "/destaques", getMySource());
         crawlWebsite(getUrl() + "/destaques/africa", getMySource());
-        crawlWebsite(getUrl()+ "/destaques/democracia", getMySource());
-        crawlWebsite(getUrl()+ "/destaques/economia", getMySource());
-        crawlWebsite(getUrl()+ "/destaques/global-voices", getMySource());
+        crawlWebsite(getUrl() + "/destaques/democracia", getMySource());
+        crawlWebsite(getUrl() + "/destaques/economia", getMySource());
+        crawlWebsite(getUrl() + "/destaques/global-voices", getMySource());
         crawlWebsite(getUrl() + "/destaques/internacional", getMySource());
         crawlWebsite(getUrl() + "/destaques/nacional", getMySource());
         crawlWebsite(getUrl() + "/destaques/tecnologias", getMySource());
         crawlWebsite(getUrl() + "/destaques/tema-de-fundo", getMySource());
     }
-    
+
     @Override
     public NewsSource getMySource() {
         String sourceId = "verdade-online";
@@ -58,26 +53,34 @@ public class AVerdadeOnlineCrawler extends FlexNewsCrawler {
 
         NewsSource source = new NewsSource(sourceId, name, description, url, category, language, country);
         source.setLogoUrl(Logos.getLogo(sourceId));
-        
+
         return source;
     }
 
-    
     /*
     ""
-    */
+     */
     @Override
-    protected Elements getArticles(Document document) {
+    protected Elements getArticles(Document document) throws ArticlesNotFoundException {
+        if (document == null) {
+            throw new IllegalArgumentException("Document cannot be null");
+        }
         Elements articles = document.select("table + table");
-        return articles;
+        if(!articles.isEmpty()) {
+            return articles;
+        }
+        throw new ArticlesNotFoundException();
     }
 
     @Override
-    protected String getUrlValue(Element article) {
+    protected String getUrlValue(Element article) throws UrlNotFoundException {
+        if(article == null) {
+            throw new IllegalArgumentException("Article cannot be null.");
+        }
         Elements links = article.select("tbody > tr > td > a");
-        for(Element link: links) {
+        for (Element link : links) {
             String href = link.absUrl("href");
-            if(href != null && !href.isEmpty() && href.startsWith(getUrl())) {
+            if (href != null && !href.isEmpty() && href.startsWith(getUrl())) {
                 return href;
             }
         }
@@ -86,13 +89,16 @@ public class AVerdadeOnlineCrawler extends FlexNewsCrawler {
 
     /*
     "";
-    */
+     */
     @Override
-    protected String getTitleValue(Document document) {
+    protected String getTitleValue(Document document) throws TitleNotFoundException {
+        if (document == null) {
+            throw new IllegalArgumentException("Document cannot be null");
+        }
         Elements links = document.select("td.contentheading");
-        for(Element link: links) {
+        for (Element link : links) {
             String text = link.text();
-            if(text != null && !text.isEmpty()) {
+            if (text != null && !text.isEmpty()) {
                 return text;
             }
         }
@@ -101,57 +107,62 @@ public class AVerdadeOnlineCrawler extends FlexNewsCrawler {
 
     /*
     "#main_body > div > table > tbody > tr > td > p > img[src]"
-    */
+     */
     @Override
-    protected String getImageUrlValue(Document document) {
+    protected String getImageUrlValue(Document document) throws ImageNotFoundException {
+        if (document == null) {
+            throw new IllegalArgumentException("Document cannot be null");
+        }
         Elements images = document.select("p > img");
-        for(Element image: images) {
+        for (Element image : images) {
             String src = image.attr("src");
-            if(src != null && !src.isEmpty()) {
+            if (src != null && !src.isEmpty()) {
                 return getFullImageUrl(src);
             }
         }
         throw new ImageNotFoundException();
     }
 
-    @Override
     protected String getFullImageUrl(String src) {
-        if(!src.startsWith(getUrl())) {
+        if (!src.startsWith(getUrl())) {
             return getUrl() + src;
         }
         return src;
     }
 
-
-    
     /*
     "main > article > p.info-autor"
-    */
+     */
     @Override
-    protected String getAuthorsValue(Document document) {
-        String result = getMySource().getName();
-        Elements elements = document.select("td > span.small > a");
-        String text = elements.text().trim();
-        if(text != null && !text.isEmpty()) {
-            result = text;
-            if(result.contains("|")) {
-                int i = result.indexOf('|');
-                result = result.substring(0, i);
-            }
+    protected String getAuthorsValue(Document document) throws AuthorsNotFoundException {
+        if (document == null) {
+            throw new IllegalArgumentException("Document cannot be null");
         }
-        return result;
+        Elements elements = document.select("td > span.small > a");
+        if(!elements.isEmpty() && !elements.text().isEmpty()) {
+            String text = elements.text().trim();
+            /*if (text.contains("|")) {
+                int i = text.indexOf('|');
+                text = text.substring(0, i);
+            }*/
+            return text;
+        }
+        throw new AuthorsNotFoundException();
     }
 
     /*
      "#main_body > div > table:nth-child(4) > tbody > tr:nth-child(3) > td > p:nth-child(3)"
-    */
+     */
     @Override
-    protected String getContentValue(Document document) {
+    protected String getContentValue(Document document) throws ContentNotFoundException {
+        if (document == null) {
+            throw new IllegalArgumentException("Document cannot be null");
+        }
         Elements elements = document.select("tbody > tr > td > p");
         Element first = elements.first();
-        if(first != null) {
-            String text = first .text().trim();
-            if(text != null && !text.isEmpty()) {
+        if (first != null) {
+            String text = first.text().trim();
+            if (text != null && !text.isEmpty()) {
                 return text;
             }
         }
@@ -161,42 +172,24 @@ public class AVerdadeOnlineCrawler extends FlexNewsCrawler {
 
     /*
     "main > article > p > time"
-    */
+     */
     @Override
-    protected String getTimeValue(Document document) {
+    protected String getTimeValue(Document document) throws TimeNotFoundException {
+        if (document == null) {
+            throw new IllegalArgumentException("Document cannot be null");
+        }
         Elements elements = document.select("td > span.small");
-        String text = elements.first().ownText().trim();
-        if(text != null && !text.isEmpty()) {
-            String[] parts = text.split(" ");
-            int k = parts.length;
-            if(k >= 3) {
-                String result = parts[k-3] + " " + parts[k-2] + " " + parts[k-1];
-                return normalizeTime(result);
+        if(!elements.isEmpty()) {
+            String text = elements.first().ownText().trim();
+            if (text != null && !text.isEmpty()) {
+                String[] parts = text.split(" ");
+                int k = parts.length;
+                if (k >= 3) {
+                    String result = parts[k - 3] + " " + parts[k - 2] + " " + parts[k - 1];
+                    return result;
+                }
             }
         }
         throw new TimeNotFoundException();
     }
-    
-    private String normalizeTime(String time) {
-        try {
-            SimpleDateFormat format = new SimpleDateFormat("dd MMMM yyyy", new Locale(getMySource().getLanguage()));
-            Date d = format.parse(time);
-            Date now = new Date();
-            d.setHours(now.getHours());
-            d.setMinutes(now.getMinutes());
-            d.setSeconds(now.getSeconds());
-            //System.out.println("###### Parsed " + d);
-            SimpleDateFormat format2 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ", new Locale(getMySource().getLanguage()));
-            String result = format2.format(d);
-            //System.out.println("###### Reformated as " + result);
-            //Date d2 = format2.parse(result);
-            //System.out.println("###### Proof date " + d2);
-            return result;
-        } catch(ParseException px) {
-            System.out.println("###### Couldn't parse " + time);
-            return null;
-        }
-    }
-
-
 }

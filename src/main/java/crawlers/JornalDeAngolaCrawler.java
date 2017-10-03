@@ -52,7 +52,7 @@ public class JornalDeAngolaCrawler extends FlexNewsCrawler {
         String url = getUrl();
         String category = "geral";
         String language = "pt";
-        String country = "ao";
+        String country = "AO";
 
         NewsSource source = new NewsSource(sourceId, name, description, url, category, language, country);
         source.setLogoUrl(Logos.getLogo("jornal-de-angola"));
@@ -96,88 +96,102 @@ public class JornalDeAngolaCrawler extends FlexNewsCrawler {
     
 
     @Override
-    protected String getTimeValue(Document document) {
-        if(document != null) {
-            Element first = document.select(getTimeSelector()).first();
-            if(first!= null) {
-                String time = first.attr("datetime") ;
-                String normalized = normalizeTime("yyyy-MM-dd HH:mm:ss", time);
-                return normalized;
-            }
+    protected String getTimeValue(Document document) throws TimeNotFoundException {
+        if(document == null) {
+            throw new IllegalArgumentException("Document cannot be null.");
         }
-        return null;
+        Element first = document.select(getTimeSelector()).first();
+        if(first!= null) {
+            String time = first.attr("datetime") ;
+            return time;
+        }
+        throw new TimeNotFoundException();
     }
     
 
     @Override
-    protected String getUrlValue(Element article) {
+    protected String getUrlValue(Element article) throws UrlNotFoundException {
+        if(article == null) {
+            throw new IllegalArgumentException("Article cannot be null.");
+        }
         Element url = article.select(getUrlSelector()).first();
         if(url != null) {
             return url.absUrl("href");
         }
-        return null;
+        throw new UrlNotFoundException();
     }
 
     @Override
-    protected String getTitleValue(Document document) {
-        if(document != null) {
-            Element first = document.select(getTitleSelector()).first();
-            if(first != null) {
-                String text = first.text();
-                if(!text.isEmpty()) {
-                    return text;
-                }
+    protected String getTitleValue(Document document) throws TitleNotFoundException {
+        if(document == null) {
+            throw new IllegalArgumentException("Document cannot be null.");
+        }
+        Element first = document.select(getTitleSelector()).first();
+        if(first != null) {
+            String text = first.text();
+            if(!text.isEmpty()) {
+                return text;
             }
         }
-        return null;
+        throw new TitleNotFoundException();
     }
 
     @Override
-    protected String getImageUrlValue(Document document) {
-        if(document != null) {
-            Element first = document.select(getImageSelector()).first();
-            if(first != null) {
-                String value = first.attr("src");
-                if(value != null && value.startsWith("http://imgs")) {
-                    return value;
-                }
+    protected String getImageUrlValue(Document document) throws ImageNotFoundException {
+        if(document == null) {
+            throw new IllegalArgumentException("Document cannot be null.");
+        }
+        Element first = document.select(getImageSelector()).first();
+        if(first != null) {
+            String value = first.attr("src");
+            if(value != null && value.startsWith("http://imgs")) {
+                return value;
             }
         }
-        return null;
+        throw new ImageNotFoundException();
     }
 
     @Override
-    protected String getContentValue(Document document) {
-        if(document != null) {
-            Element first = document.select(getDescriptionSelector()).first();
-            if(first != null) {
-                String text = first.text().trim();
-                if(text != null && !text.isEmpty()) {
-                    return text;
-                }
-            }
+    protected String getContentValue(Document document) throws ContentNotFoundException {
+        if(document == null) {
+            throw new IllegalArgumentException("Document cannot be null.");
         }
-        return null;
-    }
-
-    @Override
-    protected String getAuthorsValue(Document document) {
-        String result = getMySource().getName();
-        if(document != null) {
-            Elements elements = document.select(getAuthorsSelector());
-            String text = elements.text().trim();
+        Element first = document.select(getDescriptionSelector()).first();
+        if(first != null) {
+            String text = first.text().trim();
             if(text != null && !text.isEmpty()) {
-                if(text.contains("|")) {
-                    int i = text.indexOf('|');
-                    result = text.substring(0, i);
-                }
+                return text;
             }
-        }        
-        return result;
+        }
+        throw new ContentNotFoundException();
     }
 
     @Override
-    protected Elements getArticles(Document document) {
-        return document.select(getArticleSelector());
+    protected String getAuthorsValue(Document document) throws AuthorsNotFoundException {
+        if(document == null) {
+            throw new IllegalArgumentException("Document cannot be null.");
+        }
+        Elements elements = document.select(getAuthorsSelector());
+        String text = elements.text().trim();
+        if(text != null && !text.isEmpty()) {
+            if(text.contains("|")) {
+                int i = text.indexOf('|');
+                text = text.substring(0, i);
+                return text;
+            }
+        }
+        throw new AuthorsNotFoundException();
+    }
+
+    @Override
+    protected Elements getArticles(Document document) throws ArticlesNotFoundException {
+        if(document == null) {
+            throw new IllegalArgumentException("Document cannot be null.");
+        }
+        Elements articles = document.select(getArticleSelector());
+        if(!articles.isEmpty()) {
+            return articles;
+        }
+        throw new ArticlesNotFoundException();
     }
 }

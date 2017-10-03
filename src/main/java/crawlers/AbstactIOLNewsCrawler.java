@@ -15,49 +15,65 @@ import org.jsoup.select.Elements;
  * @author zua
  */
 public abstract class AbstactIOLNewsCrawler extends FlexNewsCrawler {
-    
+
     protected abstract String getUrl();
-    
-    @Schedule(hour="*", minute="*/10")
+
+    @Schedule(hour = "*", minute = "*/10")
     @Override
     public void crawl() {
         crawlWebsite(getMySource().getUrl(), getMySource());
     }
-    
+
     @Override
-    protected Elements getArticles(Document document) {
-        Elements article = document.select("article");
-        if(article != null) {
-            getLogger().log("%s %d %s", "Found ", article.size(), " articles");
-            return article;
+    protected Elements getArticles(Document document) throws ArticlesNotFoundException {
+        if (document == null) {
+            throw new IllegalArgumentException("Document cannot be null");
+        }
+        Elements articles = document.select("article");
+        if (!articles.isEmpty()) {
+            getLogger().log("%s %d %s", "Found ", articles.size(), " articles");
+            return articles;
         }
         throw new ArticlesNotFoundException();
     }
 
     @Override
-    protected String getUrlValue(Element article) {
-        Element link = article.select("a").first();
-        if (link != null) {
-            getLogger().log("%s %s", "Found url ", link.absUrl("href"));
-            return link.absUrl("href");
+    protected String getUrlValue(Element article) throws UrlNotFoundException {
+        // Check argument
+        if (article == null) {
+            throw new IllegalArgumentException("Article cannot be null");
+        }
+        // Select links
+        Elements links = article.select("a");
+        if (!links.isEmpty() && links.first() != null && !links.first().absUrl("href").isEmpty()) {
+            getLogger().log("%s %s", "Found url ", links.first().absUrl("href"));
+            return links.first().absUrl("href");
         }
         throw new UrlNotFoundException();
     }
 
     @Override
-    protected String getTitleValue(Document document) {
-        Elements title = document.select("main  article  header h1");
-        if(title != null) {
-            getLogger().log("%s %s", "Found title ", title.text().trim());
-            return title.text().trim();
+    protected String getTitleValue(Document document) throws TitleNotFoundException {
+        if (document == null) {
+            throw new IllegalArgumentException("Document cannot be null");
+        }
+
+        Elements titles = document.select("main  article  header h1");
+        if (!titles.isEmpty() && !titles.text().isEmpty()) {
+            getLogger().log("%s %s", "Found title ", titles.text().trim());
+            return titles.text().trim();
         }
         throw new TitleNotFoundException();
     }
 
     @Override
-    protected String getImageUrlValue(Document document) {
+    protected String getImageUrlValue(Document document) throws ImageNotFoundException {
+        if (document == null) {
+            throw new IllegalArgumentException("Document cannot be null");
+        }
+
         Elements images = document.select("#top > main > div.wrapper.white-bg.main-article > article > div:nth-child(1) > div.article-body > figure > meta:nth-child(1)");
-        if (images != null) {
+        if (!images.isEmpty() && !images.attr("content").isEmpty()) {
             getLogger().log("%s %s", "Found image ", images.attr("content"));
             return images.attr("content");
         }
@@ -65,17 +81,23 @@ public abstract class AbstactIOLNewsCrawler extends FlexNewsCrawler {
     }
 
     @Override
-    protected String getContentValue(Document document) {
-        Elements content = document.select("#article-more-body > p:nth-child(1)");
-        if (content != null) {
-            getLogger().log("%s %s", "Found content ", content.text());
-            return content.text();
+    protected String getContentValue(Document document) throws ContentNotFoundException {
+        if (document == null) {
+            throw new IllegalArgumentException("Document cannot be null");
+        }
+        Elements contents = document.select("#article-more-body > p:nth-child(1)");
+        if (!contents.isEmpty() && !contents.text().isEmpty()) {
+            getLogger().log("%s %s", "Found content ", contents.text());
+            return contents.text();
         }
         throw new ContentNotFoundException();
     }
 
     @Override
-    protected String getAuthorsValue(Document document) {
+    protected String getAuthorsValue(Document document) throws AuthorsNotFoundException {
+        if (document == null) {
+            throw new IllegalArgumentException("Document cannot be null");
+        }
         Elements authors = document.select("main  article  header p.meta span strong");
         if (!authors.isEmpty() && !authors.text().isEmpty()) {
             getLogger().log("%s", "Found authors " + authors.text());
@@ -85,13 +107,15 @@ public abstract class AbstactIOLNewsCrawler extends FlexNewsCrawler {
     }
 
     @Override
-    protected String getTimeValue(Document document) {
-        Elements time = document.select("main  article  header p.meta span[itemprop=datePublished]");
-        if (time != null) {
-            getLogger().log("%s", "Found time " + time.attr("content"));
-            return time.attr("content");
+    protected String getTimeValue(Document document) throws TimeNotFoundException {
+        if (document == null) {
+            throw new IllegalArgumentException("Document cannot be null");
+        }
+        Elements times = document.select("main  article  header p.meta span[itemprop=datePublished]");
+        if (!times.isEmpty() && !times.attr("content").isEmpty()) {
+            getLogger().log("%s", "Found time " + times.attr("content"));
+            return times.attr("content");
         }
         throw new TimeNotFoundException();
-    }    
-
+    }
 }

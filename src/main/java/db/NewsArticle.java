@@ -158,7 +158,7 @@ public class NewsArticle extends GraphEntity implements Comparable<NewsArticle>{
         if (!Objects.equals(this.title, other.title)) {
             return false;
         }
-        return true;
+        return super.equals(obj);
     }
     
     @Override
@@ -172,21 +172,11 @@ public class NewsArticle extends GraphEntity implements Comparable<NewsArticle>{
     @Override
     public int compareTo(NewsArticle o) {
         if(this.title != null && o.title != null) {
-            int result =  this.title.compareTo(o.title);
-            if(result < 0) {
-                return -1;
-            }
-            if(result > 0) {
-                return 1;
-            }
-            else {
-                return 0;
-            }
+            return this.title.compareTo(o.title);
         }
         else if(this.title == null && o.title!= null) {
             return 1;
         }
-        
         else if(this.title != null && o.title == null) {
             return -1;
         } 

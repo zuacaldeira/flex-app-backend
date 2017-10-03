@@ -63,8 +63,10 @@ public class GraphEntityTest {
         instance.setId(Long.MIN_VALUE);
 
         Object[][] result = new Object[][]{
-            {new GraphEntityImpl(), new GraphEntityImpl()},
-            {instance, instance}
+            {new GraphEntityImpl(), new GraphEntityImpl(), true},
+            {instance, instance, true},
+            {instance, new GraphEntityImpl(), false},
+            {instance, "Please...", false}
         };
         return result;
     }
@@ -154,9 +156,9 @@ public class GraphEntityTest {
      */
     @Test
     @UseDataProvider("equalsData")
-    public void testEquals(GraphEntity entity, Object other) {
+    public void testEquals(GraphEntity entity, Object other, boolean expected) {
         System.out.println("equals");
-        assertEquals(entity, other);
+        assertEquals(expected, entity.equals(other));
     }
 
     /**
@@ -167,15 +169,20 @@ public class GraphEntityTest {
      */
     @Test
     @UseDataProvider("equalsData")
-    public void testHashCode(GraphEntity entity, Object other) {
+    public void testHashCode(GraphEntity entity, Object other, boolean value) {
         System.out.println("hashCode");
-        assertEquals(entity.hashCode(), other.hashCode());
+        if(value) {
+            assertEquals(entity.hashCode(), other.hashCode());
+        }
+        else {
+            assertNotEquals(entity.hashCode(), other.hashCode());
+        }
     }
 
     public static class GraphEntityImpl extends GraphEntity {
 
         public String getPropertyName() {
-            return null;
+            return "name";
         }
 
         public String getPropertyValue() {

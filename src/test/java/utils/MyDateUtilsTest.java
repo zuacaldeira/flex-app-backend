@@ -8,7 +8,11 @@ package utils;
 import com.tngtech.java.junit.dataprovider.DataProvider;
 import com.tngtech.java.junit.dataprovider.DataProviderRunner;
 import com.tngtech.java.junit.dataprovider.UseDataProvider;
+import java.text.ParseException;
+import java.util.Date;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -117,7 +121,6 @@ public class MyDateUtilsTest {
         assertEquals(country, MyDateUtils.getCountryNameFromPattern(localeString));
     }
 
-
     @Test
     @UseDataProvider("locale2LanguageNameData")
     public void testGetLanguage(String localeString, String language) {
@@ -148,4 +151,110 @@ public class MyDateUtilsTest {
         assertEquals(countryName, MyDateUtils.getCountry(countryCode));
     }
     
+    @DataProvider
+    public static Object[][] parseDateData() {
+        Date now = new Date();
+        return new Object[][]{
+            {"20 Jan 2017"},
+            {"20 Feb 2017"}
+        };
+    }
+    
+    @Test
+    @UseDataProvider("parseDateData")
+    public void testParseDate(String value) throws ParseException {
+        assertNotNull(MyDateUtils.parseDate(value));
+    }
+    
+    @DataProvider
+    public static Object[][] parseDateData2() {
+        Date now = new Date();
+        return new Object[][]{
+            {"20 Jan 2017", "en"},
+            {"20 Jan 2017", "pt"},
+            {"20 Fev 2017", "pt"}
+        };
+    }
+    
+    @Test
+    @UseDataProvider("parseDateData2")
+    public void testParseDate2(String value, String language) throws ParseException {
+        assertNotNull(MyDateUtils.parseDate(value, language));
+    }
+    
+
+    /* 
+    SART
+    */    
+    @Test
+    @UseDataProvider("locale2CountryNameFailData")
+    public void testGetCountryFail(String localeString) {
+        assertTrue(MyDateUtils.getCountryNameFromPattern(localeString).isEmpty());
+    }
+    
+    @DataProvider
+    public static Object[][] locale2CountryNameFailData() {
+        return new Object[][]{
+            {"ar_001"},
+            {"xx_XXX"},
+        };
+    }
+
+    /* 
+     * END
+     */ 
+    
+    @Test
+    @UseDataProvider("extractCountryData")
+    public void testExtractCountry(String localeString, String country) {
+        assertEquals(country, MyDateUtils.extractCountry(localeString));
+    }
+    
+    @DataProvider
+    public static Object[][] extractCountryData() {
+        return new Object[][]{
+            {"ar_001", "001"},
+            {"xx_XXX", "XXX"},
+            {"tet_TL", "TL"},
+        };
+    }
+    
+    @Test(expected=IllegalArgumentException.class)
+    @UseDataProvider("extractCountryFailData")
+    public void testExtractCountryFail(String localeString) {
+        MyDateUtils.extractCountry(localeString);
+    }
+    
+    @DataProvider
+    public static Object[][] extractCountryFailData() {
+        return new Object[][]{
+            {null, "001"},
+        };
+    }
+    
+    
+    @Test(expected = IllegalArgumentException.class)
+    public void testExtractLanguageFail() {
+        MyDateUtils.extractLanguage(null);
+    }
+
+    @Test
+    @UseDataProvider("extractLanguageData")
+    public void testExtractLanguage(String localeString, String language) {
+        assertEquals(language, MyDateUtils.extractLanguage(localeString));
+    }
+    
+    @DataProvider
+    public static Object[][] extractLanguageData() {
+        return new Object[][]{
+            {"ar_001", "ar"},
+            {"xx_XXX", "xx"},
+            {"tet_TL", "tet"},
+        };
+    }
+    
+    @Test
+    public void testConstructor() {
+        assertNotNull(new MyDateUtils());
+    }
 }

@@ -5,13 +5,16 @@
  */
 package services;
 
+import db.FlexUser;
 import db.Neo4jSessionFactory;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.Test;
+import org.neo4j.ogm.cypher.query.SortOrder;
 
 /**
  *
@@ -54,6 +57,9 @@ public class FlexUserServiceTest  {
         FlexUserService service = new FlexUserService();
         service.register(TEST_USERNAME, TEST_PASSWORD);
         assertNotNull(service.login(TEST_USERNAME, TEST_PASSWORD));
+        assertNull(service.login(TEST_USERNAME, "otherPassword"));
+        assertNull(service.login("otherUsername", TEST_PASSWORD));
+        assertNull(service.login("otherUsername", "otherPassword"));
     }
     
     @Test
@@ -62,5 +68,21 @@ public class FlexUserServiceTest  {
         assertNotNull(service.register(TEST_USERNAME, TEST_PASSWORD));
         assertNotNull(service.login(TEST_USERNAME, TEST_PASSWORD));
     }
- 
+    
+    @Test
+    public void testSortOrder() {
+        FlexUserService service = new FlexUserService();
+        assertEquals(service.getSortOrderAsc().toString(), new SortOrder().add(SortOrder.Direction.ASC, "username").toString());
+        assertEquals(service.getSortOrderDesc().toString(), new SortOrder().add(SortOrder.Direction.DESC, "username").toString());
+    }
+    
+    @Test
+    public void testDelete() {
+        FlexUserService service = new FlexUserService();
+        FlexUser user = new FlexUser(TEST_USERNAME, TEST_PASSWORD);
+        service.save(user);
+        assertNotNull(service.find(user));        
+        service.delete(user);
+        assertNull(service.find(user));        
+    }
 }

@@ -7,8 +7,11 @@ package utils;
 
 import com.neovisionaries.i18n.CountryCode;
 import com.neovisionaries.i18n.LanguageCode;
+import java.text.ParseException;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import org.apache.commons.lang3.time.DateUtils;
 
 /**
  *
@@ -18,30 +21,18 @@ public class MyDateUtils {
 
     public static String[] getParsePatterns() {
         return new String[]{
-            "dd-MM-yyyy",
-            "dd/MM/yyyy",
-            "dd MMM yyyy",
-            "dd MMMM yyyy",
-            "yyyy-MM-dd'T'HH:mm:ss.S'Z'",
-            "dd-MM-yyyy hh:mm a z",
-            "dd/MM/yyyy, hh:mm a z",
-            "dd MMM yyyy hh:mm a z",
-            "dd MMMM yyyy hh:mm a z",
-            "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'",
-            "yyyy-MM-dd'T'HH:mm:ss.SSSSSS'Z'",
-            "yyyy-MM-dd'T'HH:mm:ss.SZ",
-            "yyyy-MM-dd'T'HH:mm:ss.SSSZ",
-            "yyyy-MM-dd'T'HH:mm:ss.SSSSSSZ",
-            "dd/MM/yyyy HH:mm Z",
-            "yyyy-MM-dd",
-            "yyyy-MM-dd HH:mm:ss",
-            "yyyy-MM-dd HH:mm:ssZ",
-            "yyyy-MM-dd'T'HH:mm:ss",
-            "yyyy-MM-dd'T'HH:mm:ssZ",
-            "yyyy-MM-dd'T'HH:mm:ss.SZ",
-            "yyyy-MM-dd'T'HH:mm:ss.SSZ",
-            "yyyy-MM-dd'T'HH:mm:ssXXX",
-            "yyyy-MM-dd'T'HH:mm:ss.SSSXXX",
+            getTelaNonPattern(),
+            getANacaoCVPattern(),
+            getAVerdadeOnlinePattern(),
+            getGlobalVoicesPattern(),
+            getMakaAngolaPattern(),
+            getJornalDeAngolaPattern(),
+            getIOLNewsZAPattern(),
+            getTheBugleZAPattern(),
+            getNewsOrgApiPattern(),
+            getNewsOrgApiPattern2(),
+            getNewsOrgApiPattern3(),
+            getNewsOrgApiPattern4()
         };
     }
 
@@ -61,9 +52,8 @@ public class MyDateUtils {
             } else {
                 return parts[0].toUpperCase();
             }
-        } else {
-            throw new IllegalArgumentException("Expected data in format 'language_COUNTRY', but found " + localeString);
         }
+        throw new IllegalArgumentException("Expected data in format 'language_COUNTRY', but found " + localeString);
     }
 
     public static String getLanguageNameFromPattern(String localeString) {
@@ -108,5 +98,62 @@ public class MyDateUtils {
         CountryCode code = CountryCode.getByCodeIgnoreCase(countryCode);
         return code.getName();
     }
+
+    public static Date parseDate(String value, String language) throws ParseException {
+        Locale locale = Locale.forLanguageTag(language);
+        return DateUtils.parseDate(value, locale, getParsePatterns());
+    }
+
+    public static Date parseDate(String value) throws ParseException {
+        return DateUtils.parseDate(value, getParsePatterns());
+    }
+
+    private static String getTelaNonPattern() {
+        return "dd MMM yyyy";
+    }
     
+    private static String getANacaoCVPattern() {
+        return "dd MMMM, yyyy";
+    }
+
+    private static String getAVerdadeOnlinePattern() {
+        return "dd MMMM yyyy";
+    }
+
+    private static String getGlobalVoicesPattern() {
+        return "yyyy-MM-dd HH:mm";
+    }
+
+    private static String getMakaAngolaPattern() {
+        return "dd MMMM yyyy";
+    }
+
+    private static String getNewsOrgApiPattern() {
+        return "yyyy-MM-dd'T'HH:mm:ss'Z'";
+    }
+
+    private static String getNewsOrgApiPattern2() {
+        return "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
+    }
+
+    private static String getNewsOrgApiPattern3() {
+        return "yyyy-MM-dd'T'HH:mm:ss";
+    }
+
+    private static String getNewsOrgApiPattern4() {
+        return "yyyy-MM-dd'T'HH:mm:ssXXX";
+    }
+
+    private static String getIOLNewsZAPattern() {
+        return "yyyy-MM-dd'T'HH:mm";
+    }
+    
+    private static String getJornalDeAngolaPattern() {
+        return "yyyy-MM-dd HH:mm:ss";
+    }
+
+    private static String getTheBugleZAPattern() {
+        return "yyyy-MM-dd";
+    }
+
 }

@@ -11,8 +11,10 @@ import java.util.HashMap;
 import java.util.Set;
 import java.util.TreeSet;
 import javax.ejb.Stateless;
+import org.neo4j.ogm.cypher.BooleanOperator;
 import org.neo4j.ogm.cypher.ComparisonOperator;
 import org.neo4j.ogm.cypher.Filter;
+import org.neo4j.ogm.cypher.Filters;
 import org.neo4j.ogm.cypher.query.SortOrder;
 import utils.DatabaseUtils;
 
@@ -37,7 +39,10 @@ public class NewsSourceService extends AbstractDBService<NewsSource>  implements
     @Override
     public Collection<NewsSource> findSourcesWithoutLogo() {
         Filter nullLogoFilter = new Filter("logoUrl", ComparisonOperator.IS_NULL);
-        return getSession().loadAll(NewsSource.class, nullLogoFilter, 2);
+        Filter emptyLogoFilter = new Filter("logoUrl", ComparisonOperator.EQUALS, "");
+        emptyLogoFilter.setBooleanOperator(BooleanOperator.OR);
+        Filters filters = new Filters(nullLogoFilter, emptyLogoFilter);
+        return getSession().loadAll(NewsSource.class, filters, 2);
     }
 
     @Override

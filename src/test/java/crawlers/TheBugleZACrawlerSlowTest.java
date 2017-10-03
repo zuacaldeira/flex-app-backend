@@ -9,6 +9,13 @@ package crawlers;
  *
  * @author zua
  */
-public class JsoupElementNotFoundException extends Exception {
-    
+public class TheBugleZACrawlerSlowTest extends AbstractCrawlerSlowTest {
+
+    public TheBugleZACrawlerSlowTest() {
+    }
+
+    @Override
+    protected FlexNewsCrawler getCrawler() {
+        return new TheBugleZACrawler();
+    }
 }

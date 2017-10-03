@@ -101,6 +101,10 @@ public final class Logos {
     }
 
     public static String getLogo(String sourceId) {
+        if(sourceId == null) {
+            return null;
+        }
+        
         if(sourceId.startsWith("global-voices")) {
             return logos.get("global-voices");
         }

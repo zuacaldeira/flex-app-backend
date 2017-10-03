@@ -260,14 +260,18 @@ public class NewsArticleTest {
     @DataProvider
     public static Object[][] equalsProvider() {
         NewsArticle article = new NewsArticle();
-        article.setTitle("T");
+        article.setTitle("T1");
         
         NewsArticle other = new NewsArticle();
-        other.setTitle("T");
+        other.setTitle("T2");
         
         return new Object[][]{
-            {new NewsArticle(), new NewsArticle(), true},
-            {article, other, true}
+            {article, article, true},
+            {other, other, true},
+            {article, other, false},
+            {other, article, false},
+            {article, null, false},
+            {article, "Art", false}
         };
         
     }
@@ -276,7 +280,7 @@ public class NewsArticleTest {
      */
     @Test
     @UseDataProvider("equalsProvider")
-    public void testEquals(NewsArticle article, NewsArticle other, boolean expected) {
+    public void testEquals(NewsArticle article, Object other, boolean expected) {
         System.out.println("equals");
         assertEquals(expected, article.equals(other));
     }
@@ -298,13 +302,17 @@ public class NewsArticleTest {
         article.setTitle("T");
         
         NewsArticle other = new NewsArticle();
-        other.setTitle("T");
+        other.setTitle("T1");
+        
+        NewsArticle another = new NewsArticle();
+        another.setTitle("T2");
         
         return new Object[][]{
             {new NewsArticle(), new NewsArticle(), 0},
-            {article, other, 0},
+            {article, other, -1},
             {article, new NewsArticle(), -1},
-            {new NewsArticle(), article, 1}
+            {new NewsArticle(), article, 1},
+            {other, another, -1}
         };
         
     }

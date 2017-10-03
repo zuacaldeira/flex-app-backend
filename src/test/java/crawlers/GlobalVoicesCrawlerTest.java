@@ -10,6 +10,7 @@ import com.tngtech.java.junit.dataprovider.DataProviderRunner;
 import com.tngtech.java.junit.dataprovider.UseDataProvider;
 import db.NewsSource;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -20,18 +21,17 @@ import org.junit.runner.RunWith;
 @RunWith(DataProviderRunner.class)
 public class GlobalVoicesCrawlerTest extends AbstractCrawlerTest {
 
-
     @DataProvider
     public static Object[][] languageProvider() {
-        return new Object[][] {
+        return new Object[][]{
             {"en"},
             {"pt"}
         };
     }
-    
+
     @DataProvider
     public static Object[][] languageAndCountryProvider() {
-        return new Object[][] {
+        return new Object[][]{
             {"en", "GB"},
             {"pt", "PT"}
         };
@@ -54,7 +54,7 @@ public class GlobalVoicesCrawlerTest extends AbstractCrawlerTest {
         assertEquals("general", source.getCategory());
         assertEquals(Logos.getLogo("global-voices"), source.getLogoUrl());
     }
-    
+
     @Test
     @UseDataProvider("languageProvider")
     public void testGetMySource(String language) {
@@ -68,7 +68,7 @@ public class GlobalVoicesCrawlerTest extends AbstractCrawlerTest {
         assertEquals("general", source.getCategory());
         assertEquals(Logos.getLogo("global-voices"), source.getLogoUrl());
     }
-    
+
     @Test
     @UseDataProvider("languageAndCountryProvider")
     public void testGetMySource(String language, String country) {
@@ -84,8 +84,13 @@ public class GlobalVoicesCrawlerTest extends AbstractCrawlerTest {
     }
 
     @Override
-    protected FlexNewsCrawler getCrawler() {
+    protected GlobalVoicesCrawler getCrawler() {
         return new GlobalVoicesCrawler();
+    }
+    
+    @Test
+    public void extractDate() {
+        assertNull(getCrawler().extractDate(null));
     }
 
 }

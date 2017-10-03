@@ -30,5 +30,13 @@ public abstract class AbstractCrawlerSlowTest {
         crawler.setSourcesService(new NewsSourceService());
         crawler.crawl();
     }
+    
+    @Test
+    public void testCrawlWebsite() {
+        FlexNewsCrawler crawler = getCrawler();
+        crawler.setArticlesService(new NewsArticleService());
+        crawler.setSourcesService(new NewsSourceService());
+        crawler.crawlWebsite("", crawler.getMySource());
+    }
 
 }

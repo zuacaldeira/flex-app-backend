@@ -9,6 +9,10 @@ package crawlers;
  *
  * @author zua
  */
-public class JsoupElementNotFoundException extends Exception {
+public class ApiCallException extends Exception {
+
+    public ApiCallException(String url) {
+        super(url);
+    }
     
 }

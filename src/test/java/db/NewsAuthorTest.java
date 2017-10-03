@@ -84,9 +84,16 @@ public class NewsAuthorTest {
 
     @DataProvider
     public static Object[][] equalsProvider() {
+        NewsAuthor author1 = new NewsAuthor("name");
+        NewsAuthor author2 = new NewsAuthor();
         return new Object[][] {
-            {new NewsAuthor("name"), new NewsAuthor("name")},
-            {new NewsAuthor(), new NewsAuthor()}
+            {author1, author1, true},
+            {author2, author2, true},
+            {author1, author2, false},
+            {author2, author1, false},
+            {author1, null, false},
+            {author1, "Oh Yeah!", false}
+            
         };
     }
 
@@ -239,9 +246,9 @@ public class NewsAuthorTest {
      */
     @Test
     @UseDataProvider("equalsProvider")
-    public void testEquals(NewsAuthor author, NewsAuthor other) {
+    public void testEquals(NewsAuthor author, Object other, boolean expected) {
         System.out.println("equals");
-        assertTrue(author.equals(other));
+        assertEquals(expected, author.equals(other));
     }
 
     /**

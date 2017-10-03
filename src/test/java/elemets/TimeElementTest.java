@@ -9,6 +9,7 @@ import elements.TimeElement;
 import com.tngtech.java.junit.dataprovider.DataProvider;
 import com.tngtech.java.junit.dataprovider.DataProviderRunner;
 import com.tngtech.java.junit.dataprovider.UseDataProvider;
+import crawlers.TimeNotFoundException;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import org.junit.runner.RunWith;
@@ -25,11 +26,20 @@ public class TimeElementTest {
     @DataProvider
     public static Object[][] timeData() {
         Object[][] result = new Object[][]{
-            {null,null,null},
+            {"20 Jan 2017", "pt"},
+            {"20 Jan 2017", null},
         };
         return result;
     }
     
+    @DataProvider
+    public static Object[][] timeFailData() {
+        Object[][] result = new Object[][]{
+            {null, "pt"},
+        };
+        return result;
+    }
+
     public TimeElementTest() {
     }
 
@@ -38,10 +48,17 @@ public class TimeElementTest {
      */
     @Test
     @UseDataProvider("timeData")
-    public void testGetDate(String dateString, String language) {
+    public void testGetDate(String dateString, String language) throws TimeNotFoundException {
         System.out.println("getDate");
         TimeElement instance = new TimeElement(dateString, language);
         assertNotNull(instance.getDate());
     }
 
+    @Test(expected = TimeNotFoundException.class)
+    @UseDataProvider("timeFailData")
+    public void testGetDateFail(String dateString, String language) throws TimeNotFoundException {
+        System.out.println("getDate");
+        TimeElement instance = new TimeElement(dateString, language);
+        instance.getDate();
+    }
 }

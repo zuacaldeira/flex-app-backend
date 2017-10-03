@@ -40,14 +40,5 @@ public class TheBugleZACrawlerTest extends AbstractCrawlerTest {
         assertEquals(Logos.getLogo("the-bugle"), source.getLogoUrl());
     }
     
-    @Test
-    public void testGetTime() {
-        System.out.println("getTime");
-        FlexNewsCrawler crawler = getCrawler();
-        Document document = getArticleDocumentPage(crawler);
-        assertNotNull(document);
-        
-        String time = crawler.getTimeValue(document);
-    }
 
 }

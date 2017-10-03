@@ -8,10 +8,13 @@ package crawlers;
 import com.tngtech.java.junit.dataprovider.DataProvider;
 import com.tngtech.java.junit.dataprovider.DataProviderRunner;
 import com.tngtech.java.junit.dataprovider.UseDataProvider;
+import java.io.IOException;
+import java.text.ParseException;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import org.junit.runner.RunWith;
 import services.NewsArticleService;
+import services.NewsSourceService;
 
 /**
  *
@@ -56,6 +59,14 @@ public class FlexObjectMapperTest {
         };
     }
 
+    @DataProvider
+    public static Object[][] apiFailCalls() {
+        return new Object[][]{
+            {"http://newsapi.org/v1/"}, // all categories
+            {null}, // all categories
+        };
+    }
+
     @Test
     @UseDataProvider("sourceQueries")
     public void testGetSourceQuery(String category, String language2Letter, String country, String expected) {
@@ -79,25 +90,51 @@ public class FlexObjectMapperTest {
      */
     @Test
     @UseDataProvider("apiCalls")
-    public void testMakeApiCall(String apiCall) {
+    public void testMakeApiCall(String apiCall) throws ApiCallException {
         System.out.println("makeApiCall");
         FlexObjectMapper instance = new FlexObjectMapper();
         assertNotNull(instance.makeApiCall(apiCall));
     }
 
+    @Test(expected=ApiCallException.class)
+    @UseDataProvider("apiFailCalls")
+    public void testMakeApiCallFail(String apiCall) throws ApiCallException {
+        System.out.println("makeApiCall");
+        FlexObjectMapper instance = new FlexObjectMapper();
+        assertNotNull(instance.makeApiCall(apiCall));
+    }
 
     /**
      * Test of loadAllData method, of class FlexObjectMapper.
      */
     @Test
-    public void testLoadAllData() {
+    public void testLoadAllData() throws IOException, ApiCallException {
         System.out.println("loadAllData");
         FlexObjectMapper instance = new FlexObjectMapper();
         instance.setNewsArticlesService(new NewsArticleService());
+        instance.setNewsSourcesService(new NewsSourceService());
         instance.loadAllData();
         assertTrue(true);
     }
     
+    @Test(expected=IOException.class)
+    public void testLoadAllIOException() throws IOException, ApiCallException {
+        System.out.println("loadAllData");
+        FlexObjectMapper instance = new FlexObjectMapper();
+        instance.setNewsArticlesService(new NewsArticleService());
+        instance.setNewsSourcesService(new NewsSourceService());
+        instance.read("");
+    }
     
+
+
+    @Test
+    public void testCrawl() throws IOException, ApiCallException, ParseException {
+        System.out.println("loadAllData");
+        FlexObjectMapper instance = new FlexObjectMapper();
+        instance.setNewsArticlesService(new NewsArticleService());
+        instance.setNewsSourcesService(new NewsSourceService());
+        instance.crawl();
+    }
 
 }

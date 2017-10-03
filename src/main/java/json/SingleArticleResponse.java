@@ -10,7 +10,8 @@ import db.NewsAuthor;
 import db.NewsSource;
 import java.text.ParseException;
 import java.util.Date;
-import org.apache.commons.lang3.time.DateUtils;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import utils.MyDateUtils;
 
 /**
@@ -86,18 +87,12 @@ public class SingleArticleResponse {
     
 
     public NewsArticle convert2NewsArticle(NewsSource source) {
-        Date date = null;
-        if(publishedAt == null) {
+        Date date;
+        try {
+            date = MyDateUtils.parseDate(publishedAt, source.getLanguage());
+        } catch (Exception ex) {
+            Logger.getLogger(SingleArticleResponse.class.getName()).log(Level.SEVERE, null, ex);
             date = new Date();
-        }
-        else {
-            try {
-                if(publishedAt != null) {
-                    date = DateUtils.parseDate(publishedAt, MyDateUtils.getParsePatterns());
-                }
-            } catch (ParseException ex) {
-                System.err.println(ex.getMessage());
-            }
         }
         String sourceId = source.getSourceId();
         String language = source.getLanguage();

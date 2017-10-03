@@ -241,7 +241,7 @@ public abstract class AbstractDBService<T extends GraphEntity> implements DBServ
         }
         
         if(username != null) {
-            buffer.append("u.username= ");           
+            buffer.append("u.username=");           
             buffer.append(DatabaseUtils.getInstance().wrapUp(username));
             if(property != null && value != null) {
                 buffer.append(" AND ");           
@@ -257,10 +257,10 @@ public abstract class AbstractDBService<T extends GraphEntity> implements DBServ
         }
         
         if(username != null) {
-            buffer.append("AND NOT ( (u)-[:READ|FAVORITE|FAKE]->(n)) ");
+            buffer.append(" AND NOT ( (u)-[:READ|FAVORITE|FAKE]->(n)) ");
         }
         
-        buffer.append("RETURN n ");
+        buffer.append(" RETURN n ");
 
         if(order != null) {
             buffer.append(order.toString().replace("$", "n"));
@@ -268,7 +268,7 @@ public abstract class AbstractDBService<T extends GraphEntity> implements DBServ
         }
 
         if(limit > 0) {
-            buffer.append("LIMIT ");
+            buffer.append(" LIMIT ");
             buffer.append(limit);
         }
         

@@ -5,13 +5,18 @@
  */
 package crawlers;
 
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
 /**
@@ -26,109 +31,90 @@ public abstract class AbstractCrawlerTest {
     public abstract void testGetMySource();
 
     @Test
-    public void testGetArticles() {
+    public void testGetArticles() throws DocumentNotFoundException, ArticlesNotFoundException {
         System.out.println("getArticles");
         FlexNewsCrawler crawler = getCrawler();
-        if (crawler.canConnect()) {
-            Elements articles = getArticles(crawler);
-            assertNotNull(articles);
-        }
+        Elements articles = getArticles(crawler);
+        assertNotNull(articles);
     }
 
     @Test
-    public void testGetUrl() {
+    public void testGetUrl() throws DocumentNotFoundException, ArticlesNotFoundException {
         System.out.println("getUrl");
         FlexNewsCrawler crawler = getCrawler();
-        if (crawler.canConnect()) {
-            Elements articles = getArticles(crawler);
-            if(articles.size() > 0) {
-                String url = crawler.getUrl(articles.get(0));
-                assertNotNull(url);
+        Elements articles = getArticles(crawler);
+        articles.stream().forEach(article -> {
+            try {
+                assertNotNull(crawler.getUrl(article));
+            } catch (JsoupElementNotFoundException ex) {
             }
-        }
+        });
     }
 
     @Test
-    public void testGetTitle() {
+    public void testGetTitle() throws TitleNotFoundException, DocumentNotFoundException, ArticlesNotFoundException {
         System.out.println("getTitle");
         FlexNewsCrawler crawler = getCrawler();
-
-        if (crawler.canConnect()) {
-            Document document = getArticleDocumentPage(crawler);
-            if(document != null) {
-                String title = crawler.getTitle(document);
-                assertNotNull(title);
-                assertFalse(title.isEmpty());
-            }
-        }
+        Document document = getArticleDocumentPage(crawler);
+        String title = crawler.getTitle(document);
+        assertNotNull(title);
+        assertFalse(title.isEmpty());
     }
 
     @Test
-    public void testGetImageUrl() {
+    public void testGetImageUrl() throws DocumentNotFoundException, ArticlesNotFoundException {
         System.out.println("getImageUrl");
         FlexNewsCrawler crawler = getCrawler();
-        if (crawler.canConnect()) {
-            Document document = getArticleDocumentPage(crawler);
-            if(document != null) {
-                String image = crawler.getImageUrl(document);
-            }
-            /*assertNotNull(image);
-            assertFalse(image.isEmpty());*/
+        Document document = getArticleDocumentPage(crawler);
+        try {
+            crawler.getImageUrl(document);
+        } catch (ImageNotFoundException ex) {
+            Logger.getLogger(AbstractCrawlerTest.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
     @Test
-    public void testGetContent() {
+    public void testGetContent() throws ContentNotFoundException, DocumentNotFoundException, ArticlesNotFoundException {
         System.out.println("getContent");
         FlexNewsCrawler crawler = getCrawler();
-        if (crawler.canConnect()) {
-            Document document = getArticleDocumentPage(crawler);
-            if(document != null) {
-                assertNotNull(document);
-                String content = crawler.getContent(document);
-                assertNotNull(content);
-                //assertFalse(content.isEmpty());
-            }
+        Document document = getArticleDocumentPage(crawler);
+        assertNotNull(document);
+        try {
+            String content = crawler.getContent(document);
+            assertNotNull(content);
+        } catch (ContentNotFoundException ex) {
+            Logger.getLogger(AbstractCrawlerTest.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
     @Test
-    public void testGetAuthors() {
+    public void testGetAuthors() throws AuthorsNotFoundException, DocumentNotFoundException, ArticlesNotFoundException {
         System.out.println("getAuthors");
         FlexNewsCrawler crawler = getCrawler();
-        if (crawler.canConnect()) {
-            Document document = getArticleDocumentPage(crawler);
-            if(document != null) {
-                assertNotNull(document);
-                Set<String> authors = crawler.getAuthors(document);
-                assertNotNull(authors);
-                assertFalse(authors.isEmpty());    
-            }
-        }
+        Document document = getArticleDocumentPage(crawler);
+        Set<String> authors = crawler.getAuthors(document);
+        assertNotNull(authors);
+        assertFalse(authors.isEmpty());
     }
 
     @Test
-    public void testGetTime() {
+    public void testGetTime() throws TimeNotFoundException, DocumentNotFoundException, ArticlesNotFoundException {
         System.out.println("getTime");
         FlexNewsCrawler crawler = getCrawler();
-        if (crawler.canConnect()) {
-            Document document = getArticleDocumentPage(crawler);
-            if(document != null) {
-                String time = crawler.getTimeValue(document);
-                assertNotNull(time);
-                assertFalse(time.isEmpty());
-            }
-        }
+        Document document = getArticleDocumentPage(crawler);
+        String time = crawler.getTimeValue(document);
+        assertNotNull(time);
+        assertFalse(time.isEmpty());
     }
 
     @Test
-    public void openDocument() {
+    public void openDocument() throws DocumentNotFoundException {
         System.out.println("openDocument");
         Document document = getCrawler().openDocument(getCrawler().getMySource().getUrl());
     }
 
-    @Test(expected=DocumentNotFoundException.class)
-    public void openDocumentFail() {
+    @Test(expected = DocumentNotFoundException.class)
+    public void openDocumentFail() throws DocumentNotFoundException {
         System.out.println("openDocumentFail");
         Document document = getCrawler().openDocument("");
     }
@@ -140,44 +126,110 @@ public abstract class AbstractCrawlerTest {
     }
 
     @Test
-    public void testImportArticle() {
+    public void testImportArticle() throws DocumentNotFoundException, ArticlesNotFoundException {
         System.out.println("importArticle");
         FlexNewsCrawler crawler = getCrawler();
-        if (crawler.canConnect()) {
-            Document document = crawler.openDocument(crawler.getMySource().getUrl());
-            if(document != null) {
-                Elements articles = getCrawler().getArticles(document);
-                if(articles.size() > 0) {
-                    Element article = articles.get(0);
-                    crawler.importArticle(article, crawler.getMySource());
-                }
+        Document document = crawler.openDocument(crawler.getMySource().getUrl());
+        Elements articles = getCrawler().getArticles(document);
+        articles.stream().forEach(article -> {
+            try {
+                crawler.importArticle(article, crawler.getMySource());
+            } catch (JsoupElementNotFoundException e) {
             }
-        }
+        });
     }
 
-    protected Elements getArticles(FlexNewsCrawler crawler) {
-        if (crawler.canConnect()) {
-            Document document = crawler.openDocument(crawler.getMySource().getUrl());
-            if(document != null) {
-                return crawler.getArticles(document);
-            }
-        }
-        return null;
+    protected Elements getArticles(FlexNewsCrawler crawler) throws DocumentNotFoundException, ArticlesNotFoundException {
+        Document document = crawler.openDocument(crawler.getMySource().getUrl());
+        return crawler.getArticles(document);
     }
 
-    protected Document getArticleDocumentPage(FlexNewsCrawler crawler) {
-        if (crawler.canConnect()) {
-            Elements articles = getArticles(crawler);
-            if(articles.size() > 0) {
-                Element article = articles.get(0);
-                assertNotNull(article);
-                String url = crawler.getUrl(article);
-                assertNotNull(url);
-                Document document = crawler.openDocument(url);
-                return document;
+    protected Document getArticleDocumentPage(FlexNewsCrawler crawler) throws DocumentNotFoundException, ArticlesNotFoundException {
+        Elements articles = getArticles(crawler);
+        Iterator<Element> it = articles.iterator();
+        while (it.hasNext()) {
+            try {
+                String url = crawler.getUrl(it.next());
+                return crawler.openDocument(url);
+            } catch (JsoupElementNotFoundException e) {
             }
         }
-        return null;
+        throw new DocumentNotFoundException();
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testIllegalgetArticles() throws ArticlesNotFoundException {
+        getCrawler().getArticles(null);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testIllegalGetAuthorsValue() throws AuthorsNotFoundException {
+        getCrawler().getAuthorsValue(null);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testIllegalGetUrlValue() throws UrlNotFoundException {
+        getCrawler().getUrlValue(null);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testIllegalGetTitleValue() throws TitleNotFoundException {
+        getCrawler().getTitleValue(null);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testIllegalGetImageUrlValue() throws ImageNotFoundException {
+        getCrawler().getImageUrlValue(null);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testIllegalGetContentValue() throws ContentNotFoundException {
+        getCrawler().getContentValue(null);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testIllegalGetTimeValue() throws TimeNotFoundException {
+        getCrawler().getTimeValue(null);
+    }
+
+    @Test(expected = ArticlesNotFoundException.class)
+    public void testEmptygetArticles() throws ArticlesNotFoundException {
+        getCrawler().getArticles(new Document(""));
+    }
+
+    @Test(expected = AuthorsNotFoundException.class)
+    public void testEmptyGetAuthorsValue() throws AuthorsNotFoundException {
+        getCrawler().getAuthorsValue(new Document(""));
+    }
+
+    @Test(expected = UrlNotFoundException.class)
+    public void testEmptyGetUrlValue() throws UrlNotFoundException {
+        getCrawler().getUrlValue(new Element("div"));
+    }
+
+    @Test(expected = TitleNotFoundException.class)
+    public void testEmptyGetTitleValue() throws TitleNotFoundException {
+        getCrawler().getTitleValue(new Document(""));
+    }
+
+    @Test(expected = ImageNotFoundException.class)
+    public void testEmptyGetImageUrlValue() throws ImageNotFoundException {
+        getCrawler().getImageUrlValue(new Document(""));
+    }
+
+    @Test(expected = ContentNotFoundException.class)
+    public void testEmptyGetContentValue() throws ContentNotFoundException {
+        getCrawler().getContentValue(new Document(""));
+    }
+
+    @Test(expected = TimeNotFoundException.class)
+    public void testEmptyGetTimeValue() throws TimeNotFoundException {
+        getCrawler().getTimeValue(new Document(""));
+    }
+    
+    @Test
+    public void testGetNewsAuthors() {
+        assertTrue(getCrawler().getNewsAuthors(new HashSet<>()).size() == 1);
     }
 
 }

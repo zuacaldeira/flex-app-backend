@@ -15,28 +15,28 @@ import org.junit.Test;
  */
 public class ANacaoCVCrawlerTest extends AbstractCrawlerTest {
 
-
     public ANacaoCVCrawlerTest() {
     }
-    
+
     @Test
     @Override
     public void testGetMySource() {
         System.out.println("getMySource");
         FlexNewsCrawler crawler = getCrawler();
         NewsSource source = crawler.getMySource();
-        assertEquals("a-nacao", source.getSourceId());        
-        assertEquals("A Nação", source.getName());        
-        assertEquals("pt", source.getLanguage());        
-        assertEquals("CV", source.getCountry());        
-        assertEquals("http://anacao.cv/", source.getUrl());        
-        assertEquals("geral", source.getCategory());        
-        assertEquals(Logos.getLogo("a-nacao"), source.getLogoUrl());        
+        assertEquals("a-nacao", source.getSourceId());
+        assertEquals("A Nação", source.getName());
+        assertEquals("pt", source.getLanguage());
+        assertEquals("CV", source.getCountry());
+        assertEquals("http://anacao.cv/", source.getUrl());
+        assertEquals("geral", source.getCategory());
+        assertEquals(Logos.getLogo("a-nacao"), source.getLogoUrl());
     }
 
     @Override
     protected FlexNewsCrawler getCrawler() {
         return new ANacaoCVCrawler();
     }
+
 
 }

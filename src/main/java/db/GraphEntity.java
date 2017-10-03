@@ -8,11 +8,12 @@ import org.neo4j.ogm.annotation.GraphId;
  * Created by zua on 15/04/17.
  */
 public abstract class GraphEntity implements Serializable {
-    
+
     @GraphId
     private Long id;
-    
-    public GraphEntity() {}
+
+    public GraphEntity() {
+    }
 
     public Long getId() {
         return id;
@@ -21,29 +22,28 @@ public abstract class GraphEntity implements Serializable {
     public void setId(Long id) {
         this.id = id;
     }
-    
+
     public abstract String getPropertyName();
+
     public abstract String getPropertyValue();
+
     public abstract boolean hasUrl();
+
     public abstract String getUrl();
-    
+
     @Override
     public boolean equals(Object other) {
-        if(other instanceof GraphEntity) {
+        if (other instanceof GraphEntity) {
             GraphEntity otherEntity = (GraphEntity) other;
-            return Objects.equals(getPropertyName(), otherEntity.getPropertyName()) 
-                    && Objects.equals(getPropertyValue(), otherEntity.getPropertyValue());
+            return Objects.equals(id, otherEntity.id);
         }
-        else {
-            return false;
-        }
+        return false;
     }
 
     @Override
     public int hashCode() {
         int hash = 3;
-        hash = 37 * hash + Objects.hashCode(getPropertyName());
-        hash = 23 * hash + Objects.hashCode(getPropertyValue());
+        hash = 37 * hash + Objects.hashCode(id);
         return hash;
     }
 }

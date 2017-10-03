@@ -63,7 +63,7 @@ public class NamesUtils {
 
     public String extractNameFromUrl(String authorName) {
         if(authorName == null) {
-            return null;
+            throw new IllegalArgumentException();
         }
         if(authorName.contains("/")) {
             String name = authorName.trim();

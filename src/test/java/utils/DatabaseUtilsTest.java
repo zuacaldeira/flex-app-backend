@@ -28,7 +28,9 @@ public class DatabaseUtilsTest {
     public static Object[][] wrapUpData() {
         Object[][] result = {
             {null, null}, 
-            {"Hello!", "\"Hello!\""}
+            {"Hello!", "\"Hello!\""},
+            {"", ""},
+            {"\"A", "\"A\""}
         };
         return result;
     }
