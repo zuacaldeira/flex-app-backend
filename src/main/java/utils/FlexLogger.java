@@ -62,8 +62,16 @@ public class FlexLogger {
     }
 
     private void serr(String format, Object[] values) {
-        String result = "[" + aClass.getSimpleName() + "] ";
-        result += String.format(format, values);
-        System.out.println(result);
+        String newFormat = "[%s] %25s: " + format;
+        Object[] newValues = new Object[values.length + 2];
+        newValues[0] = DateUtils.formatDate(new Date(), "dd/MM/yyyy HH:mm:ss");
+        newValues[1] = aClass.getSimpleName();
+        int i = 2;
+        for (Object o : values) {
+            newValues[i] = o;
+            i++;
+        }
+        String result = String.format(newFormat, newValues);
+        System.err.println(result);
     }
 }

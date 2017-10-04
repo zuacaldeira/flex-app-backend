@@ -144,7 +144,7 @@ public class JornalDeAngolaCrawler extends FlexNewsCrawler {
         Element first = document.select(getImageSelector()).first();
         if(first != null) {
             String value = first.attr("src");
-            if(value != null && value.startsWith("http://imgs")) {
+            if(value != null && value.startsWith("http://imgs") && !value.endsWith(".pdf")) {
                 return value;
             }
         }

@@ -82,7 +82,7 @@ public abstract class FlexNewsCrawler {
             try {
                 importArticle(article, source);
             } catch(Exception e) {
-                logger.error("%s", "Exception ", e.getClass().getSimpleName());
+                logger.error("%s", e.getClass().getSimpleName());
             }
         }
     }

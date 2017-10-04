@@ -91,7 +91,6 @@ public class SingleArticleResponse {
         try {
             date = MyDateUtils.parseDate(publishedAt, source.getLanguage());
         } catch (Exception ex) {
-            Logger.getLogger(SingleArticleResponse.class.getName()).log(Level.SEVERE, null, ex);
             date = new Date();
         }
         String sourceId = source.getSourceId();

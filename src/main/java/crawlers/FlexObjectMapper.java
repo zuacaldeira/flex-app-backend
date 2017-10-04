@@ -19,6 +19,8 @@ import java.io.Reader;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.text.ParseException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ejb.Schedule;
 import javax.ejb.Singleton;
@@ -136,24 +138,28 @@ public class FlexObjectMapper {
         logger.info("%s", "Finished: " + SOURCES_URL);
     }
 
-    public void loadAllArticles(NewsSource source) throws ApiCallException, IOException {
-        String result = makeApiCall(getArticlesQuery(source.getSourceId()));
-
-        MultipleArticlesResponse articlesResponse = objectMapper.readValue(result, MultipleArticlesResponse.class);
-        if ("ok".equals(articlesResponse.getStatus())) {
-            logger.info("%s", "Processing source " + source.getName());
-            for(SingleArticleResponse sar: articlesResponse.getArticles()) {
-                NewsArticle article = sar.convert2NewsArticle(source);
-                boolean shouldSave = article.getTitle() != null
-                        && !article.getTitle().isEmpty()
-                        && articlesService.findArticleWithTitle(article.getTitle()) == null;
-                if (shouldSave) {
-                    logger.info("%s", "\tSaved new article " + article.getTitle());
-                    NewsAuthor author = sar.convert2NewsAuthor(source);
-                    author.addArticle(article);
-                    source.addCorrespondent(author);
+    public void loadAllArticles(NewsSource source) {
+        try {
+            String result = makeApiCall(getArticlesQuery(source.getSourceId()));
+            
+            MultipleArticlesResponse articlesResponse = objectMapper.readValue(result, MultipleArticlesResponse.class);
+            if ("ok".equals(articlesResponse.getStatus())) {
+                logger.info("%s", "Processing source " + source.getName());
+                for(SingleArticleResponse sar: articlesResponse.getArticles()) {
+                    NewsArticle article = sar.convert2NewsArticle(source);
+                    boolean shouldSave = article.getTitle() != null
+                            && !article.getTitle().isEmpty()
+                            && articlesService.findArticleWithTitle(article.getTitle()) == null;
+                    if (shouldSave) {
+                        logger.info("%s", "\tSaved new article " + article.getTitle());
+                        NewsAuthor author = sar.convert2NewsAuthor(source);
+                        author.addArticle(article);
+                        source.addCorrespondent(author);
+                    }
                 }
             }
+        } catch (ApiCallException | IOException ex) {
+                logger.error("%s", ex.getClass().getSimpleName());
         }
     }
 

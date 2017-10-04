@@ -39,16 +39,12 @@ public abstract class AbstractCrawlerTest {
     }
 
     @Test
-    public void testGetUrl() throws DocumentNotFoundException, ArticlesNotFoundException {
+    public void testGetUrl() throws DocumentNotFoundException, ArticlesNotFoundException, UrlNotFoundException {
         System.out.println("getUrl");
         FlexNewsCrawler crawler = getCrawler();
         Elements articles = getArticles(crawler);
-        articles.stream().forEach(article -> {
-            try {
-                assertNotNull(crawler.getUrl(article));
-            } catch (JsoupElementNotFoundException ex) {
-            }
-        });
+        Element article = articles.first();
+        assertNotNull(crawler.getUrl(article));
     }
 
     @Test
@@ -226,7 +222,7 @@ public abstract class AbstractCrawlerTest {
     public void testEmptyGetTimeValue() throws TimeNotFoundException {
         getCrawler().getTimeValue(new Document(""));
     }
-    
+
     @Test
     public void testGetNewsAuthors() {
         assertTrue(getCrawler().getNewsAuthors(new HashSet<>()).size() == 1);
