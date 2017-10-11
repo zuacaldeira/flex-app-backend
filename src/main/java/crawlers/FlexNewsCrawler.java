@@ -105,8 +105,8 @@ public abstract class FlexNewsCrawler {
         boolean shouldSave = 
                 title != null 
                 && !title.isEmpty() 
-                && articlesService != null 
-                && articlesService.findArticleWithTitle(title) == null;
+                && (articlesService != null) 
+                && (articlesService.findArticleWithTitle(title) == null);
         if(shouldSave) {
             NewsArticle newsArticle = new NewsArticle();
             newsArticle.setSourceId(source.getSourceId());
