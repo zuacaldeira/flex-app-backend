@@ -28,7 +28,9 @@ public class FlexLogger {
     }
 
     public void info(String format, Object... values) {
-        sout(format, values);
+        if(isOn) {
+            sout(format, values);
+        }
     }
 
     public void error(String format, Object... values) {
