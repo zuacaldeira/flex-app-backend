@@ -62,6 +62,7 @@ public abstract class FlexNewsCrawler {
      *
      * @param url A web address url, starting with http(s).
      * @return The top document representing the content of web address.
+     * @throws crawlers.DocumentNotFoundException If document is not found
      */
     protected Document openDocument(String url) throws DocumentNotFoundException {
         try {

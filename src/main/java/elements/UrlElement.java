@@ -15,8 +15,7 @@ public class UrlElement extends ArticleElement {
     /**
      * Initializes the url element with the given value.
      *
-     * @param value
-     * @todo Could throw a RuntimeException for invalid urls.
+     * @param value An url string.
      */
     public UrlElement(String value) {
         super(value);

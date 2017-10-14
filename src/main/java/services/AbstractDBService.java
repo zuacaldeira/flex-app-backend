@@ -19,7 +19,7 @@ import utils.DatabaseUtils;
 /**
  *
  * @author zua
- * @param <T>
+ * @param <T>   A graph entity subtype.
  */
 public abstract class AbstractDBService<T extends GraphEntity> implements DBService<T> {
 

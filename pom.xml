@@ -6,13 +6,25 @@
     <artifactId>flex-app-backend</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>ejb</packaging>
-
     <name>flex-app-backend</name>
+    <url>https://github.com/zuacaldeira/flex-app-backend</url>
+    <scm>
+        <connection>scm:git:https://github.com/zuacaldeira/flex-app-backend</connection>
+        <developerConnection>scm:git:https://github.com/zuacaldeira/flex-app-backend.git</developerConnection>
+        <url>https://github.com/zuacaldeira/flex-app-backend</url>
+    </scm>
 
     <properties>
         <endorsed.dir>${project.build.directory}/endorsed</endorsed.dir>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
+
+    <distributionManagement>
+        <snapshotRepository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotRepository>
+    </distributionManagement>
 
     <dependencies>
 
@@ -87,8 +99,12 @@
         </dependency>
     </dependencies>
 
+
+
     <build>
         <plugins>
+
+            <!-- MAVEN COMPILER PLUGIN -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -101,6 +117,8 @@
                     </compilerArguments>
                 </configuration>
             </plugin>
+
+            <!-- MAVEN EJB PLUGIN -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-ejb-plugin</artifactId>
@@ -109,6 +127,8 @@
                     <ejbVersion>3.1</ejbVersion>
                 </configuration>
             </plugin>
+
+            <!-- MAVEN DEPENDENCY PLUGIN -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
@@ -134,6 +154,8 @@
                     </execution>
                 </executions>
             </plugin>
+            
+            <!-- MAVEN FAILSAFE PLUGIN -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-failsafe-plugin</artifactId>
@@ -146,7 +168,9 @@
                         </goals>
                     </execution>
                 </executions>
-            </plugin>            <!-- JACOCO -->
+            </plugin>
+
+            <!-- MAVEN JACOCO PLUGIN -->
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
@@ -166,6 +190,66 @@
                     </execution>
                 </executions>
             </plugin>
+            
+            <!-- MAVEN NEXUS-STAGING PLUGIN -->
+            <plugin>
+                <groupId>org.sonatype.plugins</groupId>
+                <artifactId>nexus-staging-maven-plugin</artifactId>
+                <version>1.6.7</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <serverId>ossrh</serverId>
+                    <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+                    <autoReleaseAfterClose>true</autoReleaseAfterClose>
+                </configuration>
+            </plugin>  
+            
+            <!-- MAVEN SOURCE PLUGIN -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>2.2.1</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar-no-fork</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            
+            <!-- MAVEN JAVADOC PLUGIN -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>2.9.1</version>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>  
+            
+            <!-- MAVEN GPG PLUGIN -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-gpg-plugin</artifactId>
+                <version>1.5</version>
+                <executions>
+                    <execution>
+                        <id>sign-artifacts</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>sign</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+                                                                            
         </plugins>
     </build>
 
