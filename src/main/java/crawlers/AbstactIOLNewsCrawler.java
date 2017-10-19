@@ -21,7 +21,11 @@ public abstract class AbstactIOLNewsCrawler extends FlexNewsCrawler {
 
     @Override
     public void crawl() {
-        crawlWebsite(getMySource().getUrl(), getMySource());
+        try {
+            crawlWebsite(getMySource().getUrl(), getMySource());
+        } catch (Exception e) {
+            getLogger().error("Exception thrown %s", e.getMessage());
+        }
     }
 
     @Override

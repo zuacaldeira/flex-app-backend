@@ -28,7 +28,11 @@ public class TheBugleZACrawler extends FlexNewsCrawler {
 
     @Override
     public void crawl() {
-        crawlWebsite(getUrl(), getMySource());
+        try {
+            crawlWebsite(getUrl(), getMySource());
+        } catch(Exception e) {
+            getLogger().error("Exception thrown: %s", e.getMessage());
+        }
     }
 
     @Override

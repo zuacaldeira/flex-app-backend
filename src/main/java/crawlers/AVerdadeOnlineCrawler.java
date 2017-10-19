@@ -30,16 +30,21 @@ public class AVerdadeOnlineCrawler extends FlexNewsCrawler {
 
     @Override
     public void crawl() {
-        crawlWebsite(getUrl(), getMySource());
-        crawlWebsite(getUrl() + "/destaques", getMySource());
-        crawlWebsite(getUrl() + "/destaques/africa", getMySource());
-        crawlWebsite(getUrl() + "/destaques/democracia", getMySource());
-        crawlWebsite(getUrl() + "/destaques/economia", getMySource());
-        crawlWebsite(getUrl() + "/destaques/global-voices", getMySource());
-        crawlWebsite(getUrl() + "/destaques/internacional", getMySource());
-        crawlWebsite(getUrl() + "/destaques/nacional", getMySource());
-        crawlWebsite(getUrl() + "/destaques/tecnologias", getMySource());
-        crawlWebsite(getUrl() + "/destaques/tema-de-fundo", getMySource());
+        try {
+            crawlWebsite(getUrl(), getMySource());
+            crawlWebsite(getUrl() + "/destaques", getMySource());
+            crawlWebsite(getUrl() + "/destaques/africa", getMySource());
+            crawlWebsite(getUrl() + "/destaques/democracia", getMySource());
+            crawlWebsite(getUrl() + "/destaques/economia", getMySource());
+            crawlWebsite(getUrl() + "/destaques/global-voices", getMySource());
+            crawlWebsite(getUrl() + "/destaques/internacional", getMySource());
+            crawlWebsite(getUrl() + "/destaques/nacional", getMySource());
+            crawlWebsite(getUrl() + "/destaques/tecnologias", getMySource());
+            crawlWebsite(getUrl() + "/destaques/tema-de-fundo", getMySource());
+        } catch (Exception e) {
+            getLogger().error("Exception thrown %s", e.getMessage());
+        }
+
     }
 
     @Override
@@ -67,7 +72,7 @@ public class AVerdadeOnlineCrawler extends FlexNewsCrawler {
             throw new IllegalArgumentException("Document cannot be null");
         }
         Elements articles = document.select("table + table");
-        if(!articles.isEmpty()) {
+        if (!articles.isEmpty()) {
             return articles;
         }
         throw new ArticlesNotFoundException();
@@ -75,7 +80,7 @@ public class AVerdadeOnlineCrawler extends FlexNewsCrawler {
 
     @Override
     protected String getUrlValue(Element article) throws UrlNotFoundException {
-        if(article == null) {
+        if (article == null) {
             throw new IllegalArgumentException("Article cannot be null.");
         }
         Elements links = article.select("tbody > tr > td > a");
@@ -140,7 +145,7 @@ public class AVerdadeOnlineCrawler extends FlexNewsCrawler {
             throw new IllegalArgumentException("Document cannot be null");
         }
         Elements elements = document.select("td > span.small > a");
-        if(!elements.isEmpty() && !elements.text().isEmpty()) {
+        if (!elements.isEmpty() && !elements.text().isEmpty()) {
             String text = elements.text().trim();
             /*if (text.contains("|")) {
                 int i = text.indexOf('|');
@@ -180,7 +185,7 @@ public class AVerdadeOnlineCrawler extends FlexNewsCrawler {
             throw new IllegalArgumentException("Document cannot be null");
         }
         Elements elements = document.select("td > span.small");
-        if(!elements.isEmpty()) {
+        if (!elements.isEmpty()) {
             String text = elements.first().ownText().trim();
             if (text != null && !text.isEmpty()) {
                 String[] parts = text.split(" ");

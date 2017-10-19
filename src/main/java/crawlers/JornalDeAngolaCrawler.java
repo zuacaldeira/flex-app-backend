@@ -13,7 +13,6 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-
 /**
  *
  * @author zua
@@ -29,22 +28,26 @@ public class JornalDeAngolaCrawler extends FlexNewsCrawler {
         return "http://jornaldeangola.sapo.ao";
     }
 
-    
     @Override
     public void crawl() {
-        crawlWebsite(getUrl(), getMySource());
-        crawlWebsite(getUrl() + "/cultura", getMySource());
-        crawlWebsite(getUrl() + "/desporto", getMySource());
-        crawlWebsite(getUrl() + "/economia", getMySource());
-        crawlWebsite(getUrl() + "/gente", getMySource());
-        crawlWebsite(getUrl() + "/mundo", getMySource());
-        crawlWebsite(getUrl() + "/opiniao", getMySource());
-        crawlWebsite(getUrl() + "/politica", getMySource());
-        crawlWebsite(getUrl() + "/provincias", getMySource());
-        crawlWebsite(getUrl() + "/reportagem", getMySource());
-        crawlWebsite(getUrl() + "/sociedade", getMySource());
+        try {
+            crawlWebsite(getUrl(), getMySource());
+            crawlWebsite(getUrl() + "/cultura", getMySource());
+            crawlWebsite(getUrl() + "/desporto", getMySource());
+            crawlWebsite(getUrl() + "/economia", getMySource());
+            crawlWebsite(getUrl() + "/gente", getMySource());
+            crawlWebsite(getUrl() + "/mundo", getMySource());
+            crawlWebsite(getUrl() + "/opiniao", getMySource());
+            crawlWebsite(getUrl() + "/politica", getMySource());
+            crawlWebsite(getUrl() + "/provincias", getMySource());
+            crawlWebsite(getUrl() + "/reportagem", getMySource());
+            crawlWebsite(getUrl() + "/sociedade", getMySource());
+        } catch (Exception e) {
+            getLogger().error("Exception thrown %s", e.getMessage());
+        }
+
     }
-    
+
     @Override
     public NewsSource getMySource() {
         String sourceId = "jornal-de-angola";
@@ -57,66 +60,58 @@ public class JornalDeAngolaCrawler extends FlexNewsCrawler {
 
         NewsSource source = new NewsSource(sourceId, name, description, url, category, language, country);
         source.setLogoUrl(Logos.getLogo("jornal-de-angola"));
-        
+
         return source;
     }
 
-    
-    
     private String getArticleSelector() {
         return "div.highlight-wrapper article";
     }
-    
+
     private String getUrlSelector() {
         return "a";
-    }  
-    
+    }
+
     private String getTitleSelector() {
         return "main  article  h1";
     }
-    
+
     private String getImageSelector() {
         return "main article img";
     }
 
-    
-
     private String getDescriptionSelector() {
         return "main article p.lead ~ p";
     }
-    
-    
+
     private String getTimeSelector() {
         return "main  article  p > time.date-time";
     }
-    
+
     private String getAuthorsSelector() {
         return "main article p.info-autor";
     }
 
-    
-
     @Override
     protected String getTimeValue(Document document) throws TimeNotFoundException {
-        if(document == null) {
+        if (document == null) {
             throw new IllegalArgumentException("Document cannot be null.");
         }
         Element first = document.select(getTimeSelector()).first();
-        if(first!= null) {
-            String time = first.attr("datetime") ;
+        if (first != null) {
+            String time = first.attr("datetime");
             return time;
         }
         throw new TimeNotFoundException();
     }
-    
 
     @Override
     protected String getUrlValue(Element article) throws UrlNotFoundException {
-        if(article == null) {
+        if (article == null) {
             throw new IllegalArgumentException("Article cannot be null.");
         }
         Element url = article.select(getUrlSelector()).first();
-        if(url != null) {
+        if (url != null) {
             return url.absUrl("href");
         }
         throw new UrlNotFoundException();
@@ -124,13 +119,13 @@ public class JornalDeAngolaCrawler extends FlexNewsCrawler {
 
     @Override
     protected String getTitleValue(Document document) throws TitleNotFoundException {
-        if(document == null) {
+        if (document == null) {
             throw new IllegalArgumentException("Document cannot be null.");
         }
         Element first = document.select(getTitleSelector()).first();
-        if(first != null) {
+        if (first != null) {
             String text = first.text();
-            if(!text.isEmpty()) {
+            if (!text.isEmpty()) {
                 return text;
             }
         }
@@ -139,13 +134,13 @@ public class JornalDeAngolaCrawler extends FlexNewsCrawler {
 
     @Override
     protected String getImageUrlValue(Document document) throws ImageNotFoundException {
-        if(document == null) {
+        if (document == null) {
             throw new IllegalArgumentException("Document cannot be null.");
         }
         Element first = document.select(getImageSelector()).first();
-        if(first != null) {
+        if (first != null) {
             String value = first.attr("src");
-            if(value != null && value.startsWith("http://imgs") && !value.endsWith(".pdf")) {
+            if (value != null && value.startsWith("http://imgs") && !value.endsWith(".pdf")) {
                 return value;
             }
         }
@@ -154,13 +149,13 @@ public class JornalDeAngolaCrawler extends FlexNewsCrawler {
 
     @Override
     protected String getContentValue(Document document) throws ContentNotFoundException {
-        if(document == null) {
+        if (document == null) {
             throw new IllegalArgumentException("Document cannot be null.");
         }
         Element first = document.select(getDescriptionSelector()).first();
-        if(first != null) {
+        if (first != null) {
             String text = first.text().trim();
-            if(text != null && !text.isEmpty()) {
+            if (text != null && !text.isEmpty()) {
                 return text;
             }
         }
@@ -169,13 +164,13 @@ public class JornalDeAngolaCrawler extends FlexNewsCrawler {
 
     @Override
     protected String getAuthorsValue(Document document) throws AuthorsNotFoundException {
-        if(document == null) {
+        if (document == null) {
             throw new IllegalArgumentException("Document cannot be null.");
         }
         Elements elements = document.select(getAuthorsSelector());
         String text = elements.text().trim();
-        if(text != null && !text.isEmpty()) {
-            if(text.contains("|")) {
+        if (text != null && !text.isEmpty()) {
+            if (text.contains("|")) {
                 int i = text.indexOf('|');
                 text = text.substring(0, i);
                 return text;
@@ -186,11 +181,11 @@ public class JornalDeAngolaCrawler extends FlexNewsCrawler {
 
     @Override
     protected Elements getArticles(Document document) throws ArticlesNotFoundException {
-        if(document == null) {
+        if (document == null) {
             throw new IllegalArgumentException("Document cannot be null.");
         }
         Elements articles = document.select(getArticleSelector());
-        if(!articles.isEmpty()) {
+        if (!articles.isEmpty()) {
             return articles;
         }
         throw new ArticlesNotFoundException();

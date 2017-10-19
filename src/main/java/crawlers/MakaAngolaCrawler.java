@@ -21,14 +21,18 @@ public class MakaAngolaCrawler extends FlexNewsCrawler {
     public MakaAngolaCrawler() {
         super();
     }
-    
+
     private String getUrl() {
         return "https://www.makaangola.org";
     }
-    
+
     @Override
     public void crawl() {
-        crawlWebsite(getUrl(), getMySource());
+        try {
+            crawlWebsite(getUrl(), getMySource());
+        } catch (Exception e) {
+            getLogger().error("Exception thrown %s", e.getMessage());
+        }
     }
 
     @Override
@@ -43,17 +47,17 @@ public class MakaAngolaCrawler extends FlexNewsCrawler {
 
         NewsSource source = new NewsSource(sourceId, name, description, url, category, language, country);
         source.setLogoUrl(Logos.getLogo("maka-angola"));
-        
+
         return source;
     }
 
     @Override
     protected Elements getArticles(Document document) throws ArticlesNotFoundException {
-        if(document == null) {
+        if (document == null) {
             throw new IllegalArgumentException("Document cannot be null");
         }
         Elements articles = document.select("article");
-        if(!articles.isEmpty()) {
+        if (!articles.isEmpty()) {
             return articles;
         }
         throw new ArticlesNotFoundException();
@@ -61,23 +65,23 @@ public class MakaAngolaCrawler extends FlexNewsCrawler {
 
     @Override
     protected String getUrlValue(Element article) throws UrlNotFoundException {
-        if(article == null) {
+        if (article == null) {
             throw new IllegalArgumentException("Article cannot be null.");
         }
         Elements links = article.select("a");
-        if(!links.isEmpty() && links.first() != null && !links.first().absUrl("href").isEmpty()) {
-            return links.first().absUrl("href");            
+        if (!links.isEmpty() && links.first() != null && !links.first().absUrl("href").isEmpty()) {
+            return links.first().absUrl("href");
         }
         throw new UrlNotFoundException();
     }
 
     @Override
     protected String getTitleValue(Document document) throws TitleNotFoundException {
-        if(document == null) {
+        if (document == null) {
             throw new IllegalArgumentException("Document cannot be null");
         }
         Elements elements = document.select(".post-title");
-        if(!elements.isEmpty() && !elements.text().isEmpty()) {
+        if (!elements.isEmpty() && !elements.text().isEmpty()) {
             return elements.text();
         }
         throw new TitleNotFoundException();
@@ -85,11 +89,11 @@ public class MakaAngolaCrawler extends FlexNewsCrawler {
 
     @Override
     protected String getImageUrlValue(Document document) throws ImageNotFoundException {
-        if(document == null) {
+        if (document == null) {
             throw new IllegalArgumentException("Document cannot be null");
         }
         Elements images = document.select("section.primary > article > img");
-        if(!images.isEmpty()) {
+        if (!images.isEmpty()) {
             Element image = images.first();
             if (image != null && !image.attr("src").isEmpty()) {
                 return image.attr("src");
@@ -100,11 +104,11 @@ public class MakaAngolaCrawler extends FlexNewsCrawler {
 
     @Override
     protected String getContentValue(Document document) throws ContentNotFoundException {
-        if(document == null) {
+        if (document == null) {
             throw new IllegalArgumentException("Document cannot be null");
         }
         Elements contents = document.select("div.entry.clearfix > p:nth-child(1)");
-        if(!contents.isEmpty()) {
+        if (!contents.isEmpty()) {
             Element content = contents.first();
             if (content != null && !content.text().isEmpty()) {
                 return content.text();
@@ -115,11 +119,11 @@ public class MakaAngolaCrawler extends FlexNewsCrawler {
 
     @Override
     protected String getAuthorsValue(Document document) throws AuthorsNotFoundException {
-        if(document == null) {
+        if (document == null) {
             throw new IllegalArgumentException("Document cannot be null");
         }
         Elements authors = document.select(".author");
-        if(!authors.isEmpty() &&  !authors.text().isEmpty()) {
+        if (!authors.isEmpty() && !authors.text().isEmpty()) {
             return authors.text();
         }
         throw new AuthorsNotFoundException();
@@ -127,11 +131,11 @@ public class MakaAngolaCrawler extends FlexNewsCrawler {
 
     @Override
     protected String getTimeValue(Document document) throws TimeNotFoundException {
-        if(document == null) {
+        if (document == null) {
             throw new IllegalArgumentException("Document cannot be null");
         }
         Elements times = document.select("time");
-        if(!times.isEmpty()) {
+        if (!times.isEmpty()) {
             Element time = times.first();
             if (time != null && !time.attr("datetime").isEmpty()) {
                 return time.attr("datetime");
