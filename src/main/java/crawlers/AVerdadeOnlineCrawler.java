@@ -28,9 +28,7 @@ public class AVerdadeOnlineCrawler extends FlexNewsCrawler {
         return "http://www.verdade.co.mz";
     }
 
-    @Schedule(hour = "*", minute = "*/20", persistent = false)
     @Override
-    @Asynchronous
     public void crawl() {
         crawlWebsite(getUrl(), getMySource());
         crawlWebsite(getUrl() + "/destaques", getMySource());

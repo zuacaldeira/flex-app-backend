@@ -31,8 +31,6 @@ public class JornalDeAngolaCrawler extends FlexNewsCrawler {
 
     
     @Override
-    @Schedule(hour = "*", minute = "4/10", persistent = false)
-    @Asynchronous
     public void crawl() {
         crawlWebsite(getUrl(), getMySource());
         crawlWebsite(getUrl() + "/cultura", getMySource());

@@ -22,7 +22,6 @@ public class ANacaoCVCrawler extends FlexNewsCrawler {
     public ANacaoCVCrawler() {
     }
 
-    @Schedule(hour = "*", minute = "*/20", persistent = false)
     @Override
     public void crawl() {
         crawlWebsite(getMySource().getUrl(), getMySource());

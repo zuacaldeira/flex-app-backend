@@ -17,7 +17,9 @@ import db.NewsSource;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
+import javax.ejb.Asynchronous;
 import javax.ejb.EJB;
+import javax.ejb.Schedule;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -239,6 +241,8 @@ public abstract class FlexNewsCrawler {
         this.sourcesService = sourcesService;
     }
 
+    @Schedule(hour = "*", minute = "*/20", persistent = false)
+    @Asynchronous
     public abstract void crawl();
 
 }

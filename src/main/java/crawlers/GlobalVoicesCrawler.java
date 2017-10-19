@@ -20,8 +20,6 @@ public class GlobalVoicesCrawler extends GlobalVoicesAbstractCrawler {
     public GlobalVoicesCrawler() {
     }
 
-    @Schedule(hour = "*", minute = "*/20", persistent = false)
-    @Asynchronous
     @Override
     public void crawl() {
         //getLogger().on();

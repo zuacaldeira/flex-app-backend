@@ -6,8 +6,6 @@
 package crawlers;
 
 import db.NewsSource;
-import javax.ejb.Asynchronous;
-import javax.ejb.Schedule;
 import javax.ejb.Singleton;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -28,8 +26,7 @@ public class MakaAngolaCrawler extends FlexNewsCrawler {
         return "https://www.makaangola.org";
     }
     
-    @Schedule(hour = "*", minute = "*/20", persistent = false)
-    @Asynchronous
+    @Override
     public void crawl() {
         crawlWebsite(getUrl(), getMySource());
     }

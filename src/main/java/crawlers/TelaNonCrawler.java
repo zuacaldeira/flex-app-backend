@@ -6,8 +6,6 @@
 package crawlers;
 
 import db.NewsSource;
-import javax.ejb.Asynchronous;
-import javax.ejb.Schedule;
 import javax.ejb.Singleton;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -23,8 +21,7 @@ public class TelaNonCrawler extends FlexNewsCrawler {
     public TelaNonCrawler() {
     }
 
-    @Schedule(hour = "*", minute = "*/20", persistent = false)
-    @Asynchronous
+    @Override
     public void crawl() {
         crawlWebsite(getMySource().getUrl(), getMySource());
     }
