@@ -14,11 +14,8 @@ import elements.ImageUrlElement;
 import db.NewsArticle;
 import db.NewsAuthor;
 import db.NewsSource;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashSet;
-import java.util.Locale;
 import java.util.Set;
 import javax.ejb.EJB;
 import org.jsoup.Jsoup;
@@ -35,17 +32,18 @@ import utils.FlexLogger;
  */
 public abstract class FlexNewsCrawler {
 
-    @EJB private NewsArticleServiceInterface articlesService;
-    @EJB private NewsSourceServiceInterface sourcesService;
+    @EJB
+    private NewsArticleServiceInterface articlesService;
+    @EJB
+    private NewsSourceServiceInterface sourcesService;
 
-    
     private FlexLogger logger;
-    
+
     public FlexNewsCrawler() {
         logger = new FlexLogger(getClass());
     }
-    
-    public void crawlWebsite(String url, NewsSource source) {
+
+    protected void crawlWebsite(String url, NewsSource source) {
         try {
             logger.info("Loading articles from: %s", url);
             Document document = openDocument(url);
@@ -79,10 +77,10 @@ public abstract class FlexNewsCrawler {
 
     private void crawlUrl(Document document, final NewsSource source) throws ArticlesNotFoundException {
         Elements articles = getArticles(document);
-        for (Element article : articles) {   
+        for (Element article : articles) {
             try {
                 importArticle(article, source);
-            } catch(Exception e) {
+            } catch (Exception e) {
                 logger.error("%s", e.getClass().getSimpleName());
             }
         }
@@ -101,36 +99,38 @@ public abstract class FlexNewsCrawler {
         Set<NewsAuthor> authors = getNewsAuthors(getAuthors(document));
         saveArticle(articleUrl, title, imageUrl, description, date, authors, source);
     }
-    
+
     private void saveArticle(String articleUrl, String title, String imageUrl, String description, Date date, Set<NewsAuthor> authors, NewsSource source) {
-        boolean shouldSave = 
-                title != null 
-                && !title.isEmpty() 
-                && (articlesService != null) 
-                && (articlesService.findArticleWithTitle(title) == null);
-        if(shouldSave) {
-            NewsArticle newsArticle = new NewsArticle();
-            newsArticle.setSourceId(source.getSourceId());
-            newsArticle.setLanguage(source.getLanguage());
-            newsArticle.setCountry(source.getCountry());
-            newsArticle.getCategories().add(source.getCategory());
+        try {
+            boolean shouldSave = (title != null
+                    && !title.isEmpty()
+                    && (articlesService != null)
+                    && (articlesService.findArticleWithTitle(title) == null));
+            if (shouldSave) {
+                NewsArticle newsArticle = new NewsArticle();
+                newsArticle.setSourceId(source.getSourceId());
+                newsArticle.setLanguage(source.getLanguage());
+                newsArticle.setCountry(source.getCountry());
+                newsArticle.getCategories().add(source.getCategory());
 
-            newsArticle.setTitle(title);
-            newsArticle.setUrl(articleUrl);
+                newsArticle.setTitle(title);
+                newsArticle.setUrl(articleUrl);
 
-            newsArticle.setImageUrl(imageUrl);
-            newsArticle.setPublishedAt(date);
-            newsArticle.setDescription(description);
+                newsArticle.setImageUrl(imageUrl);
+                newsArticle.setPublishedAt(date);
+                newsArticle.setDescription(description);
 
-            newsArticle.setAuthors(authors);
-            source.setCorrespondents(authors);
+                newsArticle.setAuthors(authors);
+                source.setCorrespondents(authors);
 
-            articlesService.save(newsArticle);
-            logger.info("\tSaved new article: %s", newsArticle.getTitle());
-        } 
-        
-        else {
-            logger.log("\tIgnored old article: %s", title);
+                articlesService.save(newsArticle);
+                logger.info("\tSaved new article: %s", newsArticle.getTitle());
+            } else {
+                logger.log("\tIgnored old article: %s", title);
+            }
+
+        } catch (Exception e) {
+            logger.error("Found exception %s", e.getMessage());
         }
     }
 
@@ -156,7 +156,7 @@ public abstract class FlexNewsCrawler {
         return new TitleElement(getTitleValue(document));
     }
 
-    protected abstract String getTitleValue(Document document) throws TitleNotFoundException ;
+    protected abstract String getTitleValue(Document document) throws TitleNotFoundException;
 
     public final String getImageUrl(Document document) throws ImageNotFoundException {
         return getImageUrlElement(document).getValue();
@@ -184,7 +184,8 @@ public abstract class FlexNewsCrawler {
             if (authorsElement != null && !authorsElement.getAuthors().isEmpty()) {
                 return authorsElement.getAuthors();
             }
-        } catch(AuthorsNotFoundException ex) {}
+        } catch (AuthorsNotFoundException ex) {
+        }
         Set<String> result = new HashSet<>();
         result.add(getSource().getName());
         return result;
@@ -198,12 +199,11 @@ public abstract class FlexNewsCrawler {
 
     protected Set<NewsAuthor> getNewsAuthors(Set<String> names) {
         Set<NewsAuthor> result = new HashSet<>();
-        if(names.isEmpty()) {
+        if (names.isEmpty()) {
             result.add(findAuthor(getMySource().getName()));
-        }
-        else {
-            for(String name: names) {
-                if(name != null && !name.isEmpty()) {
+        } else {
+            for (String name : names) {
+                if (name != null && !name.isEmpty()) {
                     result.add(findAuthor(name));
                 }
             }
@@ -214,7 +214,7 @@ public abstract class FlexNewsCrawler {
     private NewsAuthor findAuthor(String name) {
         return new NewsAuthor(name);
     }
-    
+
     public final Date getPublishedAt(Document document) throws TimeNotFoundException {
         TimeElement timeElement = getTimeElement(document);
         timeElement.setLanguage(getSource().getLanguage());

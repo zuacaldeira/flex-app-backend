@@ -5,6 +5,7 @@
  */
 package crawlers;
 
+import javax.ejb.Asynchronous;
 import javax.ejb.Schedule;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -18,7 +19,8 @@ public abstract class AbstactIOLNewsCrawler extends FlexNewsCrawler {
 
     protected abstract String getUrl();
 
-    @Schedule(hour = "*", minute = "*/10")
+    @Schedule(hour = "*", minute = "*/20", persistent = false)
+    @Asynchronous
     @Override
     public void crawl() {
         crawlWebsite(getMySource().getUrl(), getMySource());

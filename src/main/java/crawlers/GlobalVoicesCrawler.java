@@ -6,6 +6,7 @@
 package crawlers;
 
 import db.NewsSource;
+import javax.ejb.Asynchronous;
 import javax.ejb.Schedule;
 import javax.ejb.Singleton;
 
@@ -19,7 +20,9 @@ public class GlobalVoicesCrawler extends GlobalVoicesAbstractCrawler {
     public GlobalVoicesCrawler() {
     }
 
-    @Schedule(hour = "*", minute = "3/10")
+    @Schedule(hour = "*", minute = "*/20", persistent = false)
+    @Asynchronous
+    @Override
     public void crawl() {
         //getLogger().on();
         crawlWebsite(getUrl("am"), getMySource("am", "ET"));

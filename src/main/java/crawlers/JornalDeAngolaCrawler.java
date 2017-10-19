@@ -6,6 +6,7 @@
 package crawlers;
 
 import db.NewsSource;
+import javax.ejb.Asynchronous;
 import javax.ejb.Schedule;
 import javax.ejb.Singleton;
 import org.jsoup.nodes.Document;
@@ -29,7 +30,9 @@ public class JornalDeAngolaCrawler extends FlexNewsCrawler {
     }
 
     
+    @Override
     @Schedule(hour = "*", minute = "4/10", persistent = false)
+    @Asynchronous
     public void crawl() {
         crawlWebsite(getUrl(), getMySource());
         crawlWebsite(getUrl() + "/cultura", getMySource());

@@ -7,6 +7,7 @@ package crawlers;
 
 import db.NewsSource;
 import java.util.List;
+import javax.ejb.Asynchronous;
 import javax.ejb.EJB;
 import javax.ejb.Schedule;
 import javax.ejb.Singleton;
@@ -28,7 +29,8 @@ public class DBCompletionCrawler {
     // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")
     
-    @Schedule(hour = "*", minute="*/10")
+    @Schedule(hour = "*", minute = "*/20", persistent = false)
+    @Asynchronous
     public void crawl() {
         List<NewsSource> sources = (List<NewsSource>) sourcesService.findAllSources();
         logger.info("FFFFFFFFFF Found %d sources", sources.size());

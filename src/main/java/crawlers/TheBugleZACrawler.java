@@ -6,6 +6,7 @@
 package crawlers;
 
 import db.NewsSource;
+import javax.ejb.Asynchronous;
 import javax.ejb.Schedule;
 import javax.ejb.Singleton;
 import org.jsoup.nodes.Document;
@@ -27,7 +28,9 @@ public class TheBugleZACrawler extends FlexNewsCrawler {
         return "http://thebugle.co.za/home.php";
     }
 
-    @Schedule(hour = "*", minute = "*/25")
+    @Schedule(hour = "*", minute = "*/20", persistent = false)
+    @Override
+    @Asynchronous
     public void crawl() {
         crawlWebsite(getUrl(), getMySource());
     }

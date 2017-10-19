@@ -18,9 +18,7 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.net.URL;
 import java.nio.charset.Charset;
-import java.text.ParseException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import javax.ejb.Asynchronous;
 import javax.ejb.EJB;
 import javax.ejb.Schedule;
 import javax.ejb.Singleton;
@@ -37,9 +35,9 @@ import utils.FlexLogger;
 @Singleton
 public class FlexObjectMapper {
 
-    private String API_KEY = "5b4e00f3046843138d8368211777a4f2";
-    private String SOURCES_URL = "http://newsapi.org/v1/sources?";
-    private String ARTICLES_URL = "http://newsapi.org/v1/articles?";
+    private final String API_KEY = "5b4e00f3046843138d8368211777a4f2";
+    private final String SOURCES_URL = "http://newsapi.org/v1/sources?";
+    private final String ARTICLES_URL = "http://newsapi.org/v1/articles?";
 
     private ObjectMapper objectMapper;
     @EJB
@@ -118,9 +116,14 @@ public class FlexObjectMapper {
         }
     }
 
-    @Schedule(hour = "*", minute = "7/10")
-    public void crawl() throws IOException, ApiCallException {
-        loadAllData();
+    @Schedule(hour = "*", minute = "*/20", persistent = false)
+    @Asynchronous
+    public void crawl() {
+        try {
+            loadAllData();
+        } catch(final Exception e) {
+            logger.error("Found exception %s", e.getMessage());
+        }
     }
 
     protected void loadAllData() throws IOException, ApiCallException {

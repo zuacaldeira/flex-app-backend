@@ -32,7 +32,9 @@ public class FlexLogger {
     }
 
     public void error(String format, Object... values) {
-        serr(format, values);
+        if(isOn) {
+            serr(format, values);
+        }
     }
 
     public void on() {
