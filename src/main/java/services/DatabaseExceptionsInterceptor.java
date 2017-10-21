@@ -20,10 +20,15 @@ public class DatabaseExceptionsInterceptor {
 
     private static final Logger LOG = Logger.getLogger(DatabaseExceptionsInterceptor.class.getName());
 
-    
     @AroundInvoke
-    public void interceptCalls(InvocationContext ctx) {
+    public Object interceptCalls(InvocationContext ctx) throws Exception {
         LOG.log(Level.INFO, "Using interceptor: {0}", getClass().getSimpleName());
+        try {
+            return ctx.proceed();
+        } catch(DBException e) {
+            LOG.log(Level.WARNING, "Using interceptor: {0}", getClass().getSimpleName());
+            return null;
+        }
     }
 
 }

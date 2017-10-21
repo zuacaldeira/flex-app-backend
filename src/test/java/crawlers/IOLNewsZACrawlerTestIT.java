@@ -9,9 +9,9 @@ package crawlers;
  *
  * @author zua
  */
-public class IOLNewsZACrawlerSlowTest extends AbstractCrawlerTestIT {
+public class IOLNewsZACrawlerTestIT extends AbstractCrawlerTestIT {
 
-    public IOLNewsZACrawlerSlowTest() {
+    public IOLNewsZACrawlerTestIT() {
     }
 
     @Override

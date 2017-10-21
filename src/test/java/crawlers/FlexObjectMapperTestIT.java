@@ -21,9 +21,9 @@ import services.NewsSourceService;
  * @author zua
  */
 @RunWith(DataProviderRunner.class)
-public class FlexObjectMapperTest {
+public class FlexObjectMapperTestIT {
 
-    public FlexObjectMapperTest() {
+    public FlexObjectMapperTestIT() {
     }
 
     @DataProvider
