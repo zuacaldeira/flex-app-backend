@@ -22,11 +22,10 @@ public class DatabaseExceptionsInterceptor {
 
     @AroundInvoke
     public Object interceptCalls(InvocationContext ctx) throws Exception {
-        LOG.log(Level.INFO, "Using interceptor: {0}", getClass().getSimpleName());
         try {
             return ctx.proceed();
         } catch(DBException e) {
-            LOG.log(Level.WARNING, "Using interceptor: {0}", getClass().getSimpleName());
+            LOG.log(Level.WARNING, "Interceptor found exception: {0}", e.getMessage());
             return null;
         }
     }

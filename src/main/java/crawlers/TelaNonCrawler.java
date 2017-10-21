@@ -44,7 +44,7 @@ public class TelaNonCrawler extends FlexNewsCrawler {
         }
         Elements articles = document.select("body div.blog-item-holder div.blog-content-wrapper");
         if (!articles.isEmpty()) {
-            getLogger().info("%s %d %s", "Found ", articles.size(), " articles");
+            getLogger().log("%s %d %s", "Found ", articles.size(), " articles");
             return articles;
         }
         throw new ArticlesNotFoundException();
@@ -57,7 +57,7 @@ public class TelaNonCrawler extends FlexNewsCrawler {
         }
         Elements urls = article.select("div > a");
         if (!urls.isEmpty() && !urls.attr("href").isEmpty()) {
-            getLogger().info("%s %s", "Found url: ", urls.attr("href"));
+            getLogger().log("%s %s", "Found url: ", urls.attr("href"));
             return urls.attr("href");
         }
         throw new UrlNotFoundException();
@@ -71,7 +71,7 @@ public class TelaNonCrawler extends FlexNewsCrawler {
         Elements titles = document.select("body h1 a");
         if (!titles.isEmpty() && titles.first() != null && !titles.first().text().isEmpty()) {
             String title = titles.first().text();
-            getLogger().info("%s %s", "Found title: ", title);
+            getLogger().log("%s %s", "Found title: ", title);
             return title;
         }
         throw new TitleNotFoundException();
@@ -85,7 +85,7 @@ public class TelaNonCrawler extends FlexNewsCrawler {
         Elements images = document.select("body div.gdl-blog-full > div.blog-content > div.blog-media-wrapper.gdl-image > a > img");
         if (!images.isEmpty() && !images.attr("src").isEmpty()) {
             String image = images.attr("src");
-            getLogger().info("%s %s", "Found image: ", image);
+            getLogger().log("%s %s", "Found image: ", image);
             return image;
         }
         throw new ImageNotFoundException();
@@ -99,7 +99,7 @@ public class TelaNonCrawler extends FlexNewsCrawler {
         Elements contents = document.select("body div.gdl-blog-full > div.blog-content > p");
         if (!contents.isEmpty() && contents.first() != null && !contents.first().text().isEmpty()) {
             String content = contents.first().text();
-            getLogger().info("%s %s", "Found content: ", content);
+            getLogger().log("%s %s", "Found content: ", content);
             return content;
         }
         throw new ContentNotFoundException();
@@ -121,7 +121,7 @@ public class TelaNonCrawler extends FlexNewsCrawler {
         Elements paragraphs = document.select("body div.blog-date > a");
         if (!paragraphs.isEmpty() && paragraphs.first() != null && !paragraphs.first().text().isEmpty()) {
             String time = paragraphs.first().text();
-            getLogger().info("%s %s", "Found time: ", time);
+            getLogger().log("%s %s", "Found time: ", time);
             return time;
         }
         throw new TimeNotFoundException();
