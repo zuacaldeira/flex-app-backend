@@ -6,8 +6,6 @@
 package crawlers;
 
 import db.NewsSource;
-import javax.ejb.Asynchronous;
-import javax.ejb.Schedule;
 import javax.ejb.Singleton;
 
 /**

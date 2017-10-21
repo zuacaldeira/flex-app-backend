@@ -27,7 +27,7 @@ public class NewsArticleService extends  AbstractDBService<NewsArticle> implemen
     
     @Override
     public NewsArticle findArticleWithTitle(String title) {
-        return getSession().load(NewsArticle.class, title, 2);
+        return find(title);
     }
 
     @Override
