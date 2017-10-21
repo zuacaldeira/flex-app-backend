@@ -10,6 +10,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import javax.ejb.Stateless;
+import javax.interceptor.Interceptors;
 import org.neo4j.ogm.cypher.BooleanOperator;
 import org.neo4j.ogm.cypher.ComparisonOperator;
 import org.neo4j.ogm.cypher.Filter;
@@ -22,6 +23,7 @@ import utils.DatabaseUtils;
  * @author zua
  */
 @Stateless
+@Interceptors(DatabaseExceptionsInterceptor.class)
 public class NewsArticleService extends  AbstractDBService<NewsArticle> implements NewsArticleServiceInterface {
     
     
