@@ -9,13 +9,13 @@ package crawlers;
  *
  * @author zua
  */
-public class AVerdadeOnlineCrawlerSlowTest extends AbstractCrawlerSlowTest {
+public class TelaNonCrawlerTestIT extends AbstractCrawlerTestIT {
 
-    public AVerdadeOnlineCrawlerSlowTest() {
+    public TelaNonCrawlerTestIT() {
     }
 
     @Override
     protected FlexNewsCrawler getCrawler() {
-        return new AVerdadeOnlineCrawler();
+        return new TelaNonCrawler();
     }
 }

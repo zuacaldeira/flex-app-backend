@@ -9,9 +9,9 @@ package crawlers;
  *
  * @author zua
  */
-public class TheBugleZACrawlerSlowTest extends AbstractCrawlerSlowTest {
+public class TheBugleZACrawlerTestIT extends AbstractCrawlerTestIT {
 
-    public TheBugleZACrawlerSlowTest() {
+    public TheBugleZACrawlerTestIT() {
     }
 
     @Override

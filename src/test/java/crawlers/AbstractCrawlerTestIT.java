@@ -15,7 +15,7 @@ import services.NewsSourceService;
  * @author zua
  */
 @Category(SlowTest.class)
-public abstract class AbstractCrawlerSlowTest {
+public abstract class AbstractCrawlerTestIT {
     
     protected abstract FlexNewsCrawler getCrawler();
 
