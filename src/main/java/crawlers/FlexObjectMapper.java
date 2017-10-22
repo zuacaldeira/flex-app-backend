@@ -19,11 +19,17 @@ import java.io.Reader;
 import java.net.URL;
 import java.nio.charset.Charset;
 import javax.ejb.Asynchronous;
+import javax.ejb.ConcurrencyManagement;
+import static javax.ejb.ConcurrencyManagementType.CONTAINER;
 import javax.ejb.EJB;
+import javax.ejb.Lock;
+import javax.ejb.LockType;
 import javax.ejb.Schedule;
 import javax.ejb.Singleton;
+import javax.interceptor.Interceptors;
 import json.SingleArticleResponse;
 import json.SingleSourceResponse;
+import services.DatabaseExceptionsInterceptor;
 import services.NewsArticleServiceInterface;
 import services.NewsSourceServiceInterface;
 import utils.FlexLogger;
@@ -33,6 +39,9 @@ import utils.FlexLogger;
  * @author zua
  */
 @Singleton
+@Interceptors(DatabaseExceptionsInterceptor.class)
+@ConcurrencyManagement(CONTAINER)
+@Lock(LockType.WRITE)
 public class FlexObjectMapper {
 
     private final String API_KEY = "5b4e00f3046843138d8368211777a4f2";

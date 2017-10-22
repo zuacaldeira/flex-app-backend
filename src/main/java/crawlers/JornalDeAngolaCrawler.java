@@ -6,18 +6,25 @@
 package crawlers;
 
 import db.NewsSource;
-import javax.ejb.Asynchronous;
-import javax.ejb.Schedule;
+import javax.ejb.ConcurrencyManagement;
+import static javax.ejb.ConcurrencyManagementType.CONTAINER;
+import javax.ejb.Lock;
+import javax.ejb.LockType;
 import javax.ejb.Singleton;
+import javax.interceptor.Interceptors;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import services.DatabaseExceptionsInterceptor;
 
 /**
  *
  * @author zua
  */
 @Singleton
+@Interceptors(DatabaseExceptionsInterceptor.class)
+@ConcurrencyManagement(CONTAINER)
+@Lock(LockType.WRITE)
 public class JornalDeAngolaCrawler extends FlexNewsCrawler {
 
     public JornalDeAngolaCrawler() {

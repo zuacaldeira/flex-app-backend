@@ -5,8 +5,6 @@
  */
 package crawlers;
 
-import javax.ejb.Asynchronous;
-import javax.ejb.Schedule;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;

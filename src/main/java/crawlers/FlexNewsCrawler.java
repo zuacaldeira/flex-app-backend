@@ -20,12 +20,10 @@ import java.util.Set;
 import javax.ejb.Asynchronous;
 import javax.ejb.EJB;
 import javax.ejb.Schedule;
-import javax.interceptor.Interceptors;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import services.DatabaseExceptionsInterceptor;
 import services.NewsArticleServiceInterface;
 import services.NewsSourceServiceInterface;
 import utils.FlexLogger;
@@ -34,7 +32,6 @@ import utils.FlexLogger;
  *
  * @author zua
  */
-@Interceptors(DatabaseExceptionsInterceptor.class)
 public abstract class FlexNewsCrawler {
 
     @EJB
