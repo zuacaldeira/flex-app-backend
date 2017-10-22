@@ -11,6 +11,8 @@ import javax.ejb.Asynchronous;
 import javax.ejb.EJB;
 import javax.ejb.Schedule;
 import javax.ejb.Singleton;
+import javax.interceptor.Interceptors;
+import services.DatabaseExceptionsInterceptor;
 import services.NewsSourceServiceInterface;
 import utils.FlexLogger;
 
@@ -19,6 +21,7 @@ import utils.FlexLogger;
  * @author zua
  */
 @Singleton
+@Interceptors(DatabaseExceptionsInterceptor.class)
 public class DBCompletionCrawler {
     
     private FlexLogger logger = new FlexLogger(DBCompletionCrawler.class);

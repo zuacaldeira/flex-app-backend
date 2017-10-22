@@ -16,7 +16,7 @@ import org.neo4j.ogm.annotation.NodeEntity;
  */
 @NodeEntity
 public class FlexUser extends GraphEntity {
-
+    
     @Index(unique = true, primary = true)
     private String username;
     private String password;
