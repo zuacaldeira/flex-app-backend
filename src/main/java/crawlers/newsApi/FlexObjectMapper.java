@@ -19,10 +19,8 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.net.URL;
 import java.nio.charset.Charset;
-import javax.ejb.Asynchronous;
 import javax.ejb.EJB;
-import javax.ejb.Schedule;
-import javax.ejb.Singleton;
+import javax.ejb.Stateless;
 import javax.interceptor.Interceptors;
 import json.SingleArticleResponse;
 import json.SingleSourceResponse;
@@ -35,7 +33,7 @@ import utils.FlexLogger;
  *
  * @author zua
  */
-@Singleton
+@Stateless
 @Interceptors(DatabaseExceptionsInterceptor.class)
 public class FlexObjectMapper {
 
@@ -121,9 +119,6 @@ public class FlexObjectMapper {
             throw new ApiCallException(url);
         }
     }
-
-    @Schedule(hour = "*", minute = "*/20", persistent = false)
-    @Asynchronous
 
     public void crawl() {
         try {

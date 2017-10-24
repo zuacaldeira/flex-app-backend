@@ -15,12 +15,7 @@ import crawlers.exceptions.TimeNotFoundException;
 import crawlers.exceptions.TitleNotFoundException;
 import crawlers.exceptions.UrlNotFoundException;
 import db.NewsSource;
-import javax.ejb.ConcurrencyManagement;
-import static javax.ejb.ConcurrencyManagementType.CONTAINER;
-import javax.ejb.Lock;
-import javax.ejb.LockType;
-import javax.ejb.Schedule;
-import javax.ejb.Singleton;
+import javax.ejb.Stateless;
 import javax.interceptor.Interceptors;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -31,7 +26,7 @@ import services.DatabaseExceptionsInterceptor;
  *
  * @author zua
  */
-@Singleton
+@Stateless
 @Interceptors(DatabaseExceptionsInterceptor.class)
 public class AVerdadeOnlineCrawler extends FlexNewsCrawler {
 
@@ -44,7 +39,6 @@ public class AVerdadeOnlineCrawler extends FlexNewsCrawler {
     }
 
     @Override
-    @Schedule(hour = "*", minute = "*/15", persistent = false)    
     public void crawl() {
         try {
             crawlWebsite(getUrl(), getMySource());

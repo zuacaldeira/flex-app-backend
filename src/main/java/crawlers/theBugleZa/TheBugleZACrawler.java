@@ -15,8 +15,7 @@ import crawlers.exceptions.AuthorsNotFoundException;
 import crawlers.exceptions.ContentNotFoundException;
 import crawlers.exceptions.ArticlesNotFoundException;
 import db.NewsSource;
-import javax.ejb.Schedule;
-import javax.ejb.Singleton;
+import javax.ejb.Stateless;
 import javax.interceptor.Interceptors;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -27,7 +26,7 @@ import services.DatabaseExceptionsInterceptor;
  *
  * @author zua
  */
-@Singleton
+@Stateless
 @Interceptors(DatabaseExceptionsInterceptor.class)
 public class TheBugleZACrawler extends FlexNewsCrawler {
 
@@ -40,7 +39,6 @@ public class TheBugleZACrawler extends FlexNewsCrawler {
     }
 
     @Override
-    @Schedule(hour = "*", minute = "*/15", persistent = false)    
     public void crawl() {
         try {
             crawlWebsite(getUrl(), getMySource());

@@ -16,7 +16,7 @@ import crawlers.exceptions.TitleNotFoundException;
 import crawlers.exceptions.UrlNotFoundException;
 import db.NewsSource;
 import javax.ejb.Schedule;
-import javax.ejb.Singleton;
+import javax.ejb.Stateless;
 import javax.interceptor.Interceptors;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -27,7 +27,7 @@ import services.DatabaseExceptionsInterceptor;
  *
  * @author zua
  */
-@Singleton
+@Stateless
 @Interceptors(DatabaseExceptionsInterceptor.class)
 public class ANacaoCVCrawler extends FlexNewsCrawler {
 
@@ -35,7 +35,6 @@ public class ANacaoCVCrawler extends FlexNewsCrawler {
     }
 
     @Override
-    @Schedule(hour = "*", minute = "*/15", persistent = false)    
     public void crawl() {
         try {
             crawlWebsite(getMySource().getUrl(), getMySource());

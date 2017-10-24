@@ -7,8 +7,7 @@ package crawlers.globalVoices;
 
 import crawlers.Logos;
 import db.NewsSource;
-import javax.ejb.Schedule;
-import javax.ejb.Singleton;
+import javax.ejb.Stateless;
 import javax.interceptor.Interceptors;
 import services.DatabaseExceptionsInterceptor;
 
@@ -16,7 +15,7 @@ import services.DatabaseExceptionsInterceptor;
  *
  * @author zua
  */
-@Singleton
+@Stateless
 @Interceptors(DatabaseExceptionsInterceptor.class)
 public class GlobalVoicesCrawler extends GlobalVoicesAbstractCrawler {
 
@@ -24,7 +23,6 @@ public class GlobalVoicesCrawler extends GlobalVoicesAbstractCrawler {
     }
 
     @Override
-    @Schedule(hour = "*", minute = "*/15", persistent = false)    
     public void crawl() {
         try {
             crawlWebsite(getUrl("am"), getMySource("am", "ET"));

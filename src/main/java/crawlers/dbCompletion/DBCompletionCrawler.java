@@ -10,7 +10,7 @@ import db.NewsSource;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Schedule;
-import javax.ejb.Singleton;
+import javax.ejb.Stateless;
 import javax.interceptor.Interceptors;
 import services.DatabaseExceptionsInterceptor;
 import services.NewsSourceServiceInterface;
@@ -20,7 +20,7 @@ import utils.FlexLogger;
  *
  * @author zua
  */
-@Singleton
+@Stateless
 @Interceptors(DatabaseExceptionsInterceptor.class)
 public class DBCompletionCrawler {
 
@@ -31,7 +31,7 @@ public class DBCompletionCrawler {
 
     // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")
-    @Schedule(hour = "*", minute = "*/15", persistent = false)    
+        
     public void crawl() {
         List<NewsSource> sources = (List<NewsSource>) sourcesService.findAllSources();
         logger.info("FFFFFFFFFF Found %d sources", sources.size());

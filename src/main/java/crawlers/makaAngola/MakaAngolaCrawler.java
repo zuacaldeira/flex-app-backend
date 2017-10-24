@@ -15,7 +15,7 @@ import crawlers.exceptions.AuthorsNotFoundException;
 import crawlers.exceptions.ContentNotFoundException;
 import crawlers.exceptions.ArticlesNotFoundException;
 import db.NewsSource;
-import javax.ejb.Singleton;
+import javax.ejb.Stateless;
 import javax.interceptor.Interceptors;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -26,7 +26,7 @@ import services.DatabaseExceptionsInterceptor;
  *
  * @author zua
  */
-@Singleton
+@Stateless
 @Interceptors(DatabaseExceptionsInterceptor.class)
 public class MakaAngolaCrawler extends FlexNewsCrawler {
 
@@ -39,7 +39,6 @@ public class MakaAngolaCrawler extends FlexNewsCrawler {
     }
 
     @Override
-    
     public void crawl() {
         try {
             crawlWebsite(getUrl(), getMySource());
