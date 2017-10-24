@@ -24,7 +24,7 @@ public class DatabaseExceptionsInterceptor {
     public Object interceptCalls(InvocationContext ctx) throws Exception {
         try {
             return ctx.proceed();
-        } catch(DBException e) {
+        } catch(Throwable e) {
             LOG.log(Level.WARNING, "Interceptor found exception: {0}", e.getMessage());
             return null;
         }

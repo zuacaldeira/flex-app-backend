@@ -5,7 +5,7 @@
  */
 package elements;
 
-import crawlers.TimeNotFoundException;
+import crawlers.exceptions.TimeNotFoundException;
 import java.util.Date;
 import utils.MyDateUtils;
 

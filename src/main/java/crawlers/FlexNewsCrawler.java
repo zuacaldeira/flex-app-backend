@@ -5,6 +5,14 @@
  */
 package crawlers;
 
+import crawlers.exceptions.TimeNotFoundException;
+import crawlers.exceptions.TitleNotFoundException;
+import crawlers.exceptions.DocumentNotFoundException;
+import crawlers.exceptions.ImageNotFoundException;
+import crawlers.exceptions.UrlNotFoundException;
+import crawlers.exceptions.ContentNotFoundException;
+import crawlers.exceptions.ArticlesNotFoundException;
+import crawlers.exceptions.AuthorsNotFoundException;
 import elements.TitleElement;
 import elements.UrlElement;
 import elements.AuthorsElement;
@@ -17,9 +25,7 @@ import db.NewsSource;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
-import javax.ejb.Asynchronous;
 import javax.ejb.EJB;
-import javax.ejb.Schedule;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -45,6 +51,8 @@ public abstract class FlexNewsCrawler {
         logger = new FlexLogger(getClass());
     }
 
+    public abstract void crawl();
+
     protected void crawlWebsite(String url, NewsSource source) {
         try {
             logger.info("Loading articles from: %s", url);
@@ -52,7 +60,7 @@ public abstract class FlexNewsCrawler {
             crawlUrl(document, source);
             sourcesService.save(source);
             logger.info("Finished: %s", url);
-        } catch (Exception e) {
+        } catch (Throwable e) {
             logger.error("Exception loading %s %s", url, e.getClass().getSimpleName());
         }
     }
@@ -240,9 +248,5 @@ public abstract class FlexNewsCrawler {
     public void setSourcesService(NewsSourceServiceInterface sourcesService) {
         this.sourcesService = sourcesService;
     }
-
-    @Schedule(hour = "*", minute = "*/20", persistent = false)
-    @Asynchronous
-    public abstract void crawl();
 
 }

@@ -5,6 +5,15 @@
  */
 package crawlers;
 
+import crawlers.exceptions.DocumentNotFoundException;
+import crawlers.exceptions.UrlNotFoundException;
+import crawlers.exceptions.JsoupElementNotFoundException;
+import crawlers.exceptions.TimeNotFoundException;
+import crawlers.exceptions.TitleNotFoundException;
+import crawlers.exceptions.ImageNotFoundException;
+import crawlers.exceptions.ContentNotFoundException;
+import crawlers.exceptions.ArticlesNotFoundException;
+import crawlers.exceptions.AuthorsNotFoundException;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
