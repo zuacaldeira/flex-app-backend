@@ -5,7 +5,6 @@
  */
 package crawlers.dbCompletion;
 
-import crawlers.dbCompletion.DBCompletionCrawler;
 import db.NewsSource;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;

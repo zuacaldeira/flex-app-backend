@@ -23,7 +23,6 @@ import utils.DatabaseUtils;
  * @author zua
  */
 @Stateless
-@Interceptors(DatabaseExceptionsInterceptor.class)
 public class NewsArticleService extends  AbstractDBService<NewsArticle> implements NewsArticleServiceInterface {
     
     

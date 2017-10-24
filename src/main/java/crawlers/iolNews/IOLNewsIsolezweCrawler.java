@@ -8,15 +8,12 @@ package crawlers.iolNews;
 import crawlers.Logos;
 import db.NewsSource;
 import javax.ejb.Stateless;
-import javax.interceptor.Interceptors;
-import services.DatabaseExceptionsInterceptor;
 
 /**
  *
  * @author zua
  */
 @Stateless
-@Interceptors(DatabaseExceptionsInterceptor.class)
 public class IOLNewsIsolezweCrawler extends AbstactIOLNewsCrawler {
 
     public IOLNewsIsolezweCrawler() {

@@ -21,10 +21,8 @@ import java.net.URL;
 import java.nio.charset.Charset;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
-import javax.interceptor.Interceptors;
 import json.SingleArticleResponse;
 import json.SingleSourceResponse;
-import services.DatabaseExceptionsInterceptor;
 import services.NewsArticleServiceInterface;
 import services.NewsSourceServiceInterface;
 import utils.FlexLogger;
@@ -34,7 +32,6 @@ import utils.FlexLogger;
  * @author zua
  */
 @Stateless
-@Interceptors(DatabaseExceptionsInterceptor.class)
 public class FlexObjectMapper {
 
     private final String API_KEY = "5b4e00f3046843138d8368211777a4f2";

@@ -9,10 +9,7 @@ import crawlers.Logos;
 import db.NewsSource;
 import java.util.List;
 import javax.ejb.EJB;
-import javax.ejb.Schedule;
 import javax.ejb.Stateless;
-import javax.interceptor.Interceptors;
-import services.DatabaseExceptionsInterceptor;
 import services.NewsSourceServiceInterface;
 import utils.FlexLogger;
 
@@ -21,7 +18,6 @@ import utils.FlexLogger;
  * @author zua
  */
 @Stateless
-@Interceptors(DatabaseExceptionsInterceptor.class)
 public class DBCompletionCrawler {
 
     private FlexLogger logger = new FlexLogger(DBCompletionCrawler.class);
@@ -31,7 +27,6 @@ public class DBCompletionCrawler {
 
     // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")
-        
     public void crawl() {
         List<NewsSource> sources = (List<NewsSource>) sourcesService.findAllSources();
         logger.info("FFFFFFFFFF Found %d sources", sources.size());
@@ -40,11 +35,7 @@ public class DBCompletionCrawler {
             if (s.getLogoUrl() == null || s.getLogoUrl().isEmpty()) {
                 logger.info("FFFFFFFFFF Found %s without logo", s.getSourceId());
                 s.setLogoUrl(Logos.getLogo(s.getSourceId()));
-                try {
-                    sourcesService.save(s);
-                } catch (Throwable ex) {
-                    logger.error("Found error: %s", ex.getMessage());
-                }
+                sourcesService.save(s);
             }
         }
     }

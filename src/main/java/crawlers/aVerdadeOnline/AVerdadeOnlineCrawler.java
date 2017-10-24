@@ -20,14 +20,12 @@ import javax.interceptor.Interceptors;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import services.DatabaseExceptionsInterceptor;
 
 /**
  *
  * @author zua
  */
 @Stateless
-@Interceptors(DatabaseExceptionsInterceptor.class)
 public class AVerdadeOnlineCrawler extends FlexNewsCrawler {
 
     public AVerdadeOnlineCrawler() {

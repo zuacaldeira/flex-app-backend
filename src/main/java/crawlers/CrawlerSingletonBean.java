@@ -65,12 +65,11 @@ public class CrawlerSingletonBean {
     // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")
 
-    @Schedule(hour = "*", minute = "*/15", persistent = false)    
+    @Schedule(hour = "*", minute = "*/15")    
     public void crawl() {
         aNacaoCVCrawler.crawl();
         aVerdadeOnlineCrawler.crawl();
-        dBCompletionCrawler.crawl();
-        globalVoicesCrawler.crawl();
+        //globalVoicesCrawler.crawl();
         iOLNewsIsolezweCrawler.crawl();
         iOLNewsZACrawler.crawl();
         jornalDeAngolaCrawler.crawl();
@@ -78,6 +77,7 @@ public class CrawlerSingletonBean {
         flexObjectMapper.crawl();
         telaNonCrawler.crawl();
         theBugleZACrawler.crawl();
+        dBCompletionCrawler.crawl();
     }
     
     
