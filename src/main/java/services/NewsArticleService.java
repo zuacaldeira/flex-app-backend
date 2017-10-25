@@ -33,7 +33,10 @@ public class NewsArticleService extends  AbstractDBService<NewsArticle> implemen
     
     @Override
     public NewsArticle findArticleWithTitle(String title) {
-        return find(title);
+        String query = "MATCH (n:NewsArticle) ";
+        query += "WHERE n.title=" + DatabaseUtils.getInstance().wrapUp(title) + " ";
+        query += "  RETURN n ";
+        return getSession().queryForObject(getClassType(), query, new HashMap<String, Object>());
     }
 
     @Override

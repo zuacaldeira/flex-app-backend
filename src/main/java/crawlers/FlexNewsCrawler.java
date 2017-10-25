@@ -112,7 +112,7 @@ public abstract class FlexNewsCrawler {
     }
 
     private void saveArticle(String articleUrl, String title, String imageUrl, String description, Date date, Set<NewsAuthor> authors, NewsSource source) {
-        if (title != null && !title.isEmpty() && articlesService.find(title) == null) {
+        if (title != null && !title.isEmpty() && articlesService.findArticleWithTitle(title) == null) {
             NewsArticle newsArticle = new NewsArticle();
             newsArticle.setSourceId(source.getSourceId());
             newsArticle.setLanguage(source.getLanguage());
