@@ -25,12 +25,13 @@ import java.io.IOException;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
-import javax.ejb.EJB;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import services.NewsArticleService;
 import services.NewsArticleServiceInterface;
+import services.NewsSourceService;
 import services.NewsSourceServiceInterface;
 import utils.FlexLogger;
 
@@ -40,10 +41,8 @@ import utils.FlexLogger;
  */
 public abstract class FlexNewsCrawler {
 
-    @EJB
-    private NewsArticleServiceInterface articlesService;
-    @EJB
-    private NewsSourceServiceInterface sourcesService;
+    private NewsArticleServiceInterface articlesService = new NewsArticleService();
+    private NewsSourceServiceInterface sourcesService = new NewsSourceService();
 
     private FlexLogger logger;
 

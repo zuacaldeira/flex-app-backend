@@ -14,9 +14,10 @@ import javax.ejb.ApplicationException;
 @ApplicationException
 public class DBException extends RuntimeException {
 
+    private static final long serialVersionUID = -260086311866408764L;
+
     public DBException(String message) {
         super(message);
     }
 
-    
 }

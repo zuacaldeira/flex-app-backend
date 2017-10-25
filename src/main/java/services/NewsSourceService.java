@@ -11,6 +11,10 @@ import java.util.HashMap;
 import java.util.Set;
 import java.util.TreeSet;
 import javax.ejb.Stateless;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
+import javax.ejb.TransactionManagement;
+import javax.ejb.TransactionManagementType;
 import org.neo4j.ogm.cypher.BooleanOperator;
 import org.neo4j.ogm.cypher.ComparisonOperator;
 import org.neo4j.ogm.cypher.Filter;
@@ -23,6 +27,8 @@ import utils.DatabaseUtils;
  * @author zua
  */
 @Stateless
+@TransactionManagement(TransactionManagementType.CONTAINER)
+@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
 public class NewsSourceService extends AbstractDBService<NewsSource>  implements NewsSourceServiceInterface {
 
     @Override
