@@ -8,7 +8,9 @@ package crawlers.telaNon;
 import crawlers.AbstractCrawlerTest;
 import crawlers.FlexNewsCrawler;
 import crawlers.Logos;
-import crawlers.telaNon.TelaNonCrawler;
+import crawlers.exceptions.ArticlesNotFoundException;
+import crawlers.exceptions.AuthorsNotFoundException;
+import crawlers.exceptions.DocumentNotFoundException;
 import db.NewsSource;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
@@ -41,5 +43,13 @@ public class TelaNonCrawlerTest extends AbstractCrawlerTest {
     protected FlexNewsCrawler getCrawler() {
         return new TelaNonCrawler();
     }
+
+    @Override
+    @Test(expected = AuthorsNotFoundException.class)
+    public void testGetAuthors() throws AuthorsNotFoundException, DocumentNotFoundException, ArticlesNotFoundException {
+        super.testGetAuthors();
+    }
+    
+    
 
 }

@@ -7,7 +7,6 @@ package crawlers.aNacaoCv;
 
 import crawlers.AbstractCrawlerTestIT;
 import crawlers.FlexNewsCrawler;
-import crawlers.aNacaoCv.ANacaoCVCrawler;
 
 /**
  *

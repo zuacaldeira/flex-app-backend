@@ -153,9 +153,6 @@ public abstract class AbstractDBService<T extends GraphEntity> implements DBServ
     
     @Override
     public final T find(String id) {
-        if(id == null) {
-            throw new IllegalArgumentException("Graph entity ID cannot be null");
-        }
         Session session = Neo4jSessionFactory.getInstance().getNeo4jSession();
         return session.load(getClassType(), id, 2);
     }

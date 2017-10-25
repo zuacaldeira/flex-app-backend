@@ -131,15 +131,15 @@ public abstract class AbstractCrawlerTest {
     }
 
     @Test
-    public void testImportArticle() throws DocumentNotFoundException, ArticlesNotFoundException {
+    public void testImportArticle() {
         System.out.println("importArticle");
         FlexNewsCrawler crawler = getCrawler();
         Document document = crawler.openDocument(crawler.getMySource().getUrl());
-        Elements articles = getCrawler().getArticles(document);
+        Elements articles = crawler.getArticles(document);
         articles.stream().forEach(article -> {
             try {
                 crawler.importArticle(article, crawler.getMySource());
-            } catch (JsoupElementNotFoundException e) {
+            } catch (Exception e) {
             }
         });
     }

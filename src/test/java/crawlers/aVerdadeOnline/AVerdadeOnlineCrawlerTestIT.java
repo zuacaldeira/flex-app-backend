@@ -7,7 +7,6 @@ package crawlers.aVerdadeOnline;
 
 import crawlers.AbstractCrawlerTestIT;
 import crawlers.FlexNewsCrawler;
-import crawlers.aVerdadeOnline.AVerdadeOnlineCrawler;
 
 /**
  *

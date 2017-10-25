@@ -715,7 +715,7 @@ public class NewsArticleServiceTest {
         Assert.assertNotEquals(service.getSortOrderAsc(), service.getSortOrderDesc());
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = NullPointerException.class)
     public void testFindFail() {
         NewsArticleService service = new NewsArticleService();
         service.find((String) null);

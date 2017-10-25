@@ -5,10 +5,15 @@
  */
 package crawlers.exceptions;
 
+import javax.ejb.ApplicationException;
+
 /**
  *
  * @author zua
  */
-public class JsoupElementNotFoundException extends Exception {
+@ApplicationException()
+public class JsoupElementNotFoundException extends RuntimeException {
+    
+    private static final long serialVersionUID = 356756979576692047L;
     
 }

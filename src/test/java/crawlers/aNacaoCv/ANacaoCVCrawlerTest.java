@@ -8,7 +8,6 @@ package crawlers.aNacaoCv;
 import crawlers.AbstractCrawlerTest;
 import crawlers.FlexNewsCrawler;
 import crawlers.Logos;
-import crawlers.aNacaoCv.ANacaoCVCrawler;
 import db.NewsSource;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;

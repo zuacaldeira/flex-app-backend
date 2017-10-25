@@ -46,7 +46,7 @@ public interface DBService<T> {
     public T find(String id);    
     public T find(T object);
 
-    public void save(T object) throws DBException;
+    public void save(T object);
     public void delete(String id);
     public long count();
     

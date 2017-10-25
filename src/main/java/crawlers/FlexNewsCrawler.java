@@ -12,7 +12,6 @@ import crawlers.exceptions.ImageNotFoundException;
 import crawlers.exceptions.UrlNotFoundException;
 import crawlers.exceptions.ContentNotFoundException;
 import crawlers.exceptions.ArticlesNotFoundException;
-import crawlers.exceptions.AuthorsNotFoundException;
 import elements.TitleElement;
 import elements.UrlElement;
 import elements.AuthorsElement;
@@ -22,6 +21,7 @@ import elements.ImageUrlElement;
 import db.NewsArticle;
 import db.NewsAuthor;
 import db.NewsSource;
+import java.io.IOException;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -54,15 +54,11 @@ public abstract class FlexNewsCrawler {
     public abstract void crawl();
 
     protected void crawlWebsite(String url, NewsSource source) {
-        try {
-            logger.info("Loading articles from: %s", url);
-            Document document = openDocument(url);
-            crawlUrl(document, source);
-            sourcesService.save(source);
-            logger.info("Finished: %s", url);
-        } catch (Throwable e) {
-            logger.error("Exception loading %s %s", url, e.getClass().getSimpleName());
-        }
+        logger.info("Loading articles from: %s", url);
+        Document document = openDocument(url);
+        crawlUrl(document, source);
+        sourcesService.save(source);
+        logger.info("Finished: %s", url);
     }
 
     /**
@@ -70,13 +66,14 @@ public abstract class FlexNewsCrawler {
      *
      * @param url A web address url, starting with http(s).
      * @return The top document representing the content of web address.
-     * @throws crawlers.DocumentNotFoundException If document is not found
+     * @throws crawlers.exceptions.DocumentNotFoundException It no corresponding
+     * document exists for the given url.
      */
-    protected Document openDocument(String url) throws DocumentNotFoundException {
+    protected Document openDocument(String url) {
         try {
             return Jsoup.connect(url).userAgent("Mozilla").get();
-        } catch (Exception e) {
-            logger.error("%s %s: %s", "\tERROR - Couldn't open document ", url, e.getMessage());
+        } catch (IOException | NullPointerException | IllegalArgumentException e) {
+            logger.error("Could not open url %s: ", url);
             throw new DocumentNotFoundException();
         }
     }
@@ -85,18 +82,14 @@ public abstract class FlexNewsCrawler {
         return getMySource();
     }
 
-    private void crawlUrl(Document document, final NewsSource source) throws ArticlesNotFoundException {
+    private void crawlUrl(Document document, final NewsSource source) {
         Elements articles = getArticles(document);
-        for (Element article : articles) {
-            try {
-                importArticle(article, source);
-            } catch (Exception e) {
-                logger.error("%s", e.getClass().getSimpleName());
-            }
-        }
+        articles.forEach((article) -> {
+            importArticle(article, source);
+        });
     }
 
-    protected void importArticle(Element article, NewsSource source) throws UrlNotFoundException, TitleNotFoundException, ImageNotFoundException, ContentNotFoundException, AuthorsNotFoundException, DocumentNotFoundException, TimeNotFoundException {
+    protected void importArticle(Element article, NewsSource source) {
         //prettyPrint(article);
         logger.log("Processing article: %s", article.text());
 
@@ -111,36 +104,27 @@ public abstract class FlexNewsCrawler {
     }
 
     private void saveArticle(String articleUrl, String title, String imageUrl, String description, Date date, Set<NewsAuthor> authors, NewsSource source) {
-        try {
-            boolean shouldSave = (title != null
-                    && !title.isEmpty()
-                    && (articlesService != null)
-                    && (articlesService.find(title) == null));
-            if (shouldSave) {
-                NewsArticle newsArticle = new NewsArticle();
-                newsArticle.setSourceId(source.getSourceId());
-                newsArticle.setLanguage(source.getLanguage());
-                newsArticle.setCountry(source.getCountry());
-                newsArticle.getCategories().add(source.getCategory());
+        if (articlesService != null && articlesService.find(title) == null) {
+            NewsArticle newsArticle = new NewsArticle();
+            newsArticle.setSourceId(source.getSourceId());
+            newsArticle.setLanguage(source.getLanguage());
+            newsArticle.setCountry(source.getCountry());
+            newsArticle.getCategories().add(source.getCategory());
 
-                newsArticle.setTitle(title);
-                newsArticle.setUrl(articleUrl);
+            newsArticle.setTitle(title);
+            newsArticle.setUrl(articleUrl);
 
-                newsArticle.setImageUrl(imageUrl);
-                newsArticle.setPublishedAt(date);
-                newsArticle.setDescription(description);
+            newsArticle.setImageUrl(imageUrl);
+            newsArticle.setPublishedAt(date);
+            newsArticle.setDescription(description);
 
-                newsArticle.setAuthors(authors);
-                source.setCorrespondents(authors);
+            newsArticle.setAuthors(authors);
+            source.setCorrespondents(authors);
 
-                articlesService.save(newsArticle);
-                logger.info("\tSaved new article: %s", newsArticle.getTitle());
-            } else {
-                logger.log("\tIgnored old article: %s", title);
-            }
-
-        } catch (Exception e) {
-            logger.error("Found exception %s", e.getMessage());
+            articlesService.save(newsArticle);
+            logger.info("\tSaved new article: %s", newsArticle.getTitle());
+        } else {
+            logger.log("\tIgnored old article: %s", title);
         }
     }
 
@@ -189,34 +173,29 @@ public abstract class FlexNewsCrawler {
     protected abstract String getContentValue(Document document) throws ContentNotFoundException;
 
     public final Set<String> getAuthors(Document document) {
-        try {
-            AuthorsElement authorsElement = getAuthorsElement(document);
-            if (authorsElement != null && !authorsElement.getAuthors().isEmpty()) {
-                return authorsElement.getAuthors();
-            }
-        } catch (AuthorsNotFoundException ex) {
+        AuthorsElement authorsElement = getAuthorsElement(document);
+        if (authorsElement != null && !authorsElement.getAuthors().isEmpty()) {
+            return authorsElement.getAuthors();
         }
         Set<String> result = new HashSet<>();
         result.add(getSource().getName());
         return result;
     }
 
-    public final AuthorsElement getAuthorsElement(Document document) throws AuthorsNotFoundException {
+    public final AuthorsElement getAuthorsElement(Document document) {
         return new AuthorsElement(getAuthorsValue(document));
     }
 
-    protected abstract String getAuthorsValue(Document document) throws AuthorsNotFoundException;
+    protected abstract String getAuthorsValue(Document document);
 
     protected Set<NewsAuthor> getNewsAuthors(Set<String> names) {
         Set<NewsAuthor> result = new HashSet<>();
         if (names.isEmpty()) {
             result.add(findAuthor(getMySource().getName()));
         } else {
-            for (String name : names) {
-                if (name != null && !name.isEmpty()) {
-                    result.add(findAuthor(name));
-                }
-            }
+            names.stream().filter((name) -> (name != null && !name.isEmpty())).forEachOrdered((name) -> {
+                result.add(findAuthor(name));
+            });
         }
         return result;
     }

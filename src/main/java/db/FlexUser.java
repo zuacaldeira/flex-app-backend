@@ -16,6 +16,8 @@ import org.neo4j.ogm.annotation.NodeEntity;
  */
 @NodeEntity
 public class FlexUser extends GraphEntity {
+
+    private static final long serialVersionUID = -5822981670795508682L;
     
     @Index(unique = true, primary = true)
     private String username;

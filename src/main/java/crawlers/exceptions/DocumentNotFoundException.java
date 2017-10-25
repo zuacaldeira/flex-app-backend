@@ -11,6 +11,8 @@ package crawlers.exceptions;
  */
 public class DocumentNotFoundException extends JsoupElementNotFoundException {
 
+    private static final long serialVersionUID = 4907429999251047982L;
+
     public DocumentNotFoundException() {
     }
     

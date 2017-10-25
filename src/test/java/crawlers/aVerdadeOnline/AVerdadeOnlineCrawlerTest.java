@@ -11,7 +11,6 @@ import crawlers.Logos;
 import crawlers.exceptions.ImageNotFoundException;
 import crawlers.exceptions.UrlNotFoundException;
 import crawlers.exceptions.TitleNotFoundException;
-import crawlers.aVerdadeOnline.AVerdadeOnlineCrawler;
 import db.NewsSource;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
