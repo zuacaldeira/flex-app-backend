@@ -28,7 +28,7 @@ import utils.DatabaseUtils;
  */
 @Stateless
 @TransactionManagement(TransactionManagementType.CONTAINER)
-@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
+
 public class NewsSourceService extends AbstractDBService<NewsSource>  implements NewsSourceServiceInterface {
 
     @Override

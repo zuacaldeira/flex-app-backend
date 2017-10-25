@@ -27,7 +27,6 @@ import utils.DatabaseUtils;
  */
 @Stateless
 @TransactionManagement(TransactionManagementType.CONTAINER)
-@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
 public class NewsArticleService extends  AbstractDBService<NewsArticle> implements NewsArticleServiceInterface {
     
     

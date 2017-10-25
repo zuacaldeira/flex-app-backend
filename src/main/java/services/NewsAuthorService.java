@@ -19,7 +19,7 @@ import org.neo4j.ogm.cypher.query.SortOrder;
  */
 @Stateless
 @TransactionManagement(TransactionManagementType.CONTAINER)
-@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
+
 public class NewsAuthorService extends AbstractDBService<NewsAuthor>  implements NewsAuthorServiceInterface {
 
     @Override

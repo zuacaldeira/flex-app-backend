@@ -24,7 +24,7 @@ import utils.FlexLogger;
  */
 @Stateless
 @TransactionManagement(TransactionManagementType.CONTAINER)
-@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
+
 public class DBCompletionCrawler {
 
     private final FlexLogger logger = new FlexLogger(DBCompletionCrawler.class);
