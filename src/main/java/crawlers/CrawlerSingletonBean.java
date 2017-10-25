@@ -18,7 +18,6 @@ import crawlers.telaNon.TelaNonCrawler;
 import crawlers.theBugleZa.TheBugleZACrawler;
 import javax.ejb.EJB;
 import javax.ejb.Singleton;
-import javax.ejb.LocalBean;
 import javax.ejb.Schedule;
 
 /**
@@ -26,7 +25,6 @@ import javax.ejb.Schedule;
  * @author zua
  */
 @Singleton
-@LocalBean
 public class CrawlerSingletonBean {
 
     @EJB
@@ -69,7 +67,7 @@ public class CrawlerSingletonBean {
     public void crawl() {
         aNacaoCVCrawler.crawl();
         aVerdadeOnlineCrawler.crawl();
-        //globalVoicesCrawler.crawl();
+        globalVoicesCrawler.crawl();
         iOLNewsIsolezweCrawler.crawl();
         iOLNewsZACrawler.crawl();
         jornalDeAngolaCrawler.crawl();

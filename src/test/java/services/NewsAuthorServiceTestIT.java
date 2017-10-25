@@ -14,9 +14,9 @@ import org.neo4j.ogm.cypher.query.SortOrder;
  *
  * @author zua
  */
-public class NewsAuthorServiceTest {
+public class NewsAuthorServiceTestIT {
 
-    public NewsAuthorServiceTest() {
+    public NewsAuthorServiceTestIT() {
     }
 
     /**

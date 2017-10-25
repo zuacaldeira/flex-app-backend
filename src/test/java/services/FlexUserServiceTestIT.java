@@ -20,12 +20,12 @@ import org.neo4j.ogm.cypher.query.SortOrder;
  *
  * @author zua
  */
-public class FlexUserServiceTest  {
+public class FlexUserServiceTestIT  {
 
     private String TEST_USERNAME = "test:username";
     private String TEST_PASSWORD = "test:password";
 
-    public FlexUserServiceTest() {
+    public FlexUserServiceTestIT() {
         super();
     }
 

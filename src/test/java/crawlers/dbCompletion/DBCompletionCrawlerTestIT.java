@@ -16,10 +16,10 @@ import services.NewsSourceService;
  *
  * @author zua
  */
-public class DBCompletionCrawlerTest {
+public class DBCompletionCrawlerTestIT {
 
 
-    public DBCompletionCrawlerTest() {
+    public DBCompletionCrawlerTestIT() {
     }
     
     /**

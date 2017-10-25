@@ -42,11 +42,15 @@ public class DBCompletionCrawler {
                 if (s.getLogoUrl() == null || s.getLogoUrl().isEmpty()) {
                     logger.info("FFFFFFFFFF Found %s without logo", s.getSourceId());
                     s.setLogoUrl(Logos.getLogo(s.getSourceId()));
-                    sourcesService.save(s);
+                    try {
+                        sourcesService.save(s);
+                    } catch (Exception e) {
+                        logger.error("Found Exception %s", e);
+                    }
                 }
             }
-        } catch(Exception e) {
-            throw new DBException("Problem whilesetting logos");
+        } catch (Exception e) {
+            logger.error("Found Exception %s", e);
         }
     }
 

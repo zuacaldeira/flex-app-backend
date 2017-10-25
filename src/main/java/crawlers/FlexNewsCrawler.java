@@ -25,13 +25,12 @@ import java.io.IOException;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
+import javax.ejb.EJB;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import services.NewsArticleService;
 import services.NewsArticleServiceInterface;
-import services.NewsSourceService;
 import services.NewsSourceServiceInterface;
 import utils.FlexLogger;
 
@@ -41,8 +40,10 @@ import utils.FlexLogger;
  */
 public abstract class FlexNewsCrawler {
 
-    private NewsArticleServiceInterface articlesService = new NewsArticleService();
-    private NewsSourceServiceInterface sourcesService = new NewsSourceService();
+    @EJB
+    private NewsArticleServiceInterface articlesService;
+    @EJB
+    private NewsSourceServiceInterface sourcesService;
 
     private FlexLogger logger;
 
@@ -53,11 +54,15 @@ public abstract class FlexNewsCrawler {
     public abstract void crawl();
 
     protected void crawlWebsite(String url, NewsSource source) {
-        logger.info("Loading articles from: %s", url);
-        Document document = openDocument(url);
-        crawlUrl(document, source);
-        sourcesService.save(source);
-        logger.info("Finished: %s", url);
+        try {
+            logger.info("Processing source %s", source.getName());
+            Document document = openDocument(url);
+            crawlUrl(document, source);
+            sourcesService.save(source);
+            logger.info("Finished: %s", source.getName());
+        } catch (Exception e) {
+            logger.info("Finished with error: %s - %s", e.getMessage(), source.getName());
+        }
     }
 
     /**
@@ -84,7 +89,11 @@ public abstract class FlexNewsCrawler {
     private void crawlUrl(Document document, final NewsSource source) {
         Elements articles = getArticles(document);
         articles.forEach((article) -> {
-            importArticle(article, source);
+            try {
+                importArticle(article, source);
+            } catch (Exception e) {
+                logger.error("Found exception: %s -- %s", e.getMessage(), article.text());
+            }
         });
     }
 
@@ -103,7 +112,7 @@ public abstract class FlexNewsCrawler {
     }
 
     private void saveArticle(String articleUrl, String title, String imageUrl, String description, Date date, Set<NewsAuthor> authors, NewsSource source) {
-        if (articlesService != null && articlesService.find(title) == null) {
+        if (title != null && !title.isEmpty() && articlesService.find(title) == null) {
             NewsArticle newsArticle = new NewsArticle();
             newsArticle.setSourceId(source.getSourceId());
             newsArticle.setLanguage(source.getLanguage());

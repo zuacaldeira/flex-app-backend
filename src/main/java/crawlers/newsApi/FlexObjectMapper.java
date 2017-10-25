@@ -121,7 +121,7 @@ public class FlexObjectMapper {
         try {
             loadAllData();
         } catch (final Exception e) {
-            logger.error("Found exception %s", e.getMessage());
+            logger.error("Found exception %s", e);
         }
     }
 
@@ -151,7 +151,7 @@ public class FlexObjectMapper {
                     NewsArticle article = sar.convert2NewsArticle(source);
                     boolean shouldSave = article.getTitle() != null
                             && !article.getTitle().isEmpty()
-                            && articlesService.findArticleWithTitle(article.getTitle()) == null;
+                            && articlesService.find(article.getTitle()) == null;
                     if (shouldSave) {
                         logger.info("%s", "\tSaved new article " + article.getTitle());
                         NewsAuthor author = sar.convert2NewsAuthor(source);

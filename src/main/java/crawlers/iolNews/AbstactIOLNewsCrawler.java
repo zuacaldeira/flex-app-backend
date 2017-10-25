@@ -13,7 +13,6 @@ import crawlers.exceptions.UrlNotFoundException;
 import crawlers.exceptions.AuthorsNotFoundException;
 import crawlers.exceptions.ContentNotFoundException;
 import crawlers.exceptions.ArticlesNotFoundException;
-import javax.ejb.Schedule;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;

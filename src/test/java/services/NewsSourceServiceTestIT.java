@@ -24,12 +24,12 @@ import org.junit.runner.RunWith;
  * @author zua
  */
 @RunWith(DataProviderRunner.class)
-public class NewsSourceServiceTest {
+public class NewsSourceServiceTestIT {
 
     private static String TEST_USERNAME = "test:username";
     private static String TEST_PASSWORD = "test:password";
 
-    public NewsSourceServiceTest() {
+    public NewsSourceServiceTestIT() {
         super();
     }
 
