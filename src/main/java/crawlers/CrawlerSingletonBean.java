@@ -16,9 +16,13 @@ import crawlers.makaAngola.MakaAngolaCrawler;
 import crawlers.newsApi.FlexObjectMapper;
 import crawlers.telaNon.TelaNonCrawler;
 import crawlers.theBugleZa.TheBugleZACrawler;
+import java.util.LinkedList;
+import java.util.List;
+import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.ejb.Singleton;
 import javax.ejb.Schedule;
+import org.apache.commons.lang3.RandomUtils;
 
 /**
  *
@@ -62,20 +66,27 @@ public class CrawlerSingletonBean {
 
     // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")
+    
+    private List<FlexNewsCrawler> crawlersList;
+    
+    @PostConstruct
+    public void initialize() {
+        crawlersList = new LinkedList<>();
+        crawlersList.add(aNacaoCVCrawler);
+        crawlersList.add(aVerdadeOnlineCrawler);
+        crawlersList.add(globalVoicesCrawler);
+        crawlersList.add(iOLNewsIsolezweCrawler);
+        crawlersList.add(iOLNewsZACrawler);
+        crawlersList.add(jornalDeAngolaCrawler);
+        crawlersList.add(makaAngolaCrawler);
+        crawlersList.add(telaNonCrawler);
+        crawlersList.add(theBugleZACrawler);        
+    }
 
-    @Schedule(hour = "*", minute = "*/15")    
+    @Schedule(hour = "*", minute = "*/5")    
     public void crawl() {
-        aNacaoCVCrawler.crawl();
-        aVerdadeOnlineCrawler.crawl();
-        globalVoicesCrawler.crawl();
-        iOLNewsIsolezweCrawler.crawl();
-        iOLNewsZACrawler.crawl();
-        jornalDeAngolaCrawler.crawl();
-        makaAngolaCrawler.crawl();
-        flexObjectMapper.crawl();
-        telaNonCrawler.crawl();
-        theBugleZACrawler.crawl();
-        dBCompletionCrawler.crawl();
+        int i = RandomUtils.nextInt(0, crawlersList.size());
+        crawlersList.get(i).crawl();
     }
     
     
