@@ -15,7 +15,7 @@ import crawlers.exceptions.ContentNotFoundException;
 import crawlers.exceptions.AuthorsNotFoundException;
 import crawlers.exceptions.ArticlesNotFoundException;
 import db.NewsSource;
-import javax.ejb.Stateless;
+import javax.ejb.Singleton;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -24,7 +24,7 @@ import org.jsoup.select.Elements;
  *
  * @author zua
  */
-@Stateless
+@Singleton
 public class TelaNonCrawler extends FlexNewsCrawler {
 
     public TelaNonCrawler() {

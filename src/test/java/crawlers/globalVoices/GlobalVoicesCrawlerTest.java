@@ -5,7 +5,6 @@
  */
 package crawlers.globalVoices;
 
-import crawlers.globalVoices.GlobalVoicesCrawler;
 import com.tngtech.java.junit.dataprovider.DataProvider;
 import com.tngtech.java.junit.dataprovider.DataProviderRunner;
 import com.tngtech.java.junit.dataprovider.UseDataProvider;
@@ -28,16 +27,14 @@ public class GlobalVoicesCrawlerTest extends AbstractCrawlerTest {
     @DataProvider
     public static Object[][] languageProvider() {
         return new Object[][]{
-            {"en"},
-            {"pt"}
+            {"en"}
         };
     }
 
     @DataProvider
     public static Object[][] languageAndCountryProvider() {
         return new Object[][]{
-            {"en", "GB"},
-            {"pt", "PT"}
+            {"en", "GB"}
         };
     }
 
@@ -50,11 +47,11 @@ public class GlobalVoicesCrawlerTest extends AbstractCrawlerTest {
         System.out.println("getMySource");
         FlexNewsCrawler crawler = getCrawler();
         NewsSource source = crawler.getMySource();
-        assertEquals("global-voices", source.getSourceId());
-        assertEquals("Global Voices", source.getName());
+        assertEquals("global-voices-en", source.getSourceId());
+        assertEquals("Global Voices (EN)", source.getName());
         assertEquals("en", source.getLanguage());
         assertEquals("GB", source.getCountry());
-        assertEquals("https://globalvoices.org", source.getUrl());
+        assertEquals("https://en.globalvoices.org", source.getUrl());
         assertEquals("general", source.getCategory());
         assertEquals(Logos.getLogo("global-voices"), source.getLogoUrl());
     }
@@ -62,12 +59,11 @@ public class GlobalVoicesCrawlerTest extends AbstractCrawlerTest {
     @Test
     @UseDataProvider("languageProvider")
     public void testGetMySource(String language) {
-        GlobalVoicesCrawler crawler = (GlobalVoicesCrawler) getCrawler();
-        NewsSource source = crawler.getMySource(language);
+        GlobalVoicesCrawlerEN crawler = (GlobalVoicesCrawlerEN) getCrawler();
+        NewsSource source = crawler.getMySource();
         assertEquals("global-voices-" + language, source.getSourceId());
-        assertEquals("Global Voices (" + language + ")", source.getName());
+        assertEquals("Global Voices (" + language.toUpperCase() + ")", source.getName());
         assertEquals(language, source.getLanguage());
-        assertEquals(language.toUpperCase(), source.getCountry());
         assertEquals("https://" + language + ".globalvoices.org", source.getUrl());
         assertEquals("general", source.getCategory());
         assertEquals(Logos.getLogo("global-voices"), source.getLogoUrl());
@@ -76,10 +72,10 @@ public class GlobalVoicesCrawlerTest extends AbstractCrawlerTest {
     @Test
     @UseDataProvider("languageAndCountryProvider")
     public void testGetMySource(String language, String country) {
-        GlobalVoicesCrawler crawler = (GlobalVoicesCrawler) getCrawler();
-        NewsSource source = crawler.getMySource(language, country);
+        GlobalVoicesCrawlerEN crawler = (GlobalVoicesCrawlerEN) getCrawler();
+        NewsSource source = crawler.getMySource();
         assertEquals("global-voices-" + language, source.getSourceId());
-        assertEquals("Global Voices (" + language + ")", source.getName());
+        assertEquals("Global Voices (" + language.toUpperCase() + ")", source.getName());
         assertEquals(language, source.getLanguage());
         assertEquals(country, source.getCountry());
         assertEquals("https://" + language + ".globalvoices.org", source.getUrl());
@@ -88,10 +84,10 @@ public class GlobalVoicesCrawlerTest extends AbstractCrawlerTest {
     }
 
     @Override
-    protected GlobalVoicesCrawler getCrawler() {
-        return new GlobalVoicesCrawler();
+    protected GlobalVoicesCrawlerEN getCrawler() {
+        return new GlobalVoicesCrawlerEN();
     }
-    
+
     @Test
     public void extractDate() {
         assertNull(getCrawler().extractDate(null));

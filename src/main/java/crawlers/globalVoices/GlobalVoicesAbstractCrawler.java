@@ -28,6 +28,15 @@ public abstract class GlobalVoicesAbstractCrawler extends FlexNewsCrawler {
     }
 
     @Override
+    public void crawl() {
+        try {
+            crawlWebsite(getMySource().getUrl(), getMySource());
+        } catch (Exception e) {
+            getLogger().error("Exception thrown %s", e.getMessage());
+        }
+    }
+
+    @Override
     protected Elements getArticles(Document document) throws ArticlesNotFoundException {
         if (document == null) {
             throw new IllegalArgumentException("Document cannot be null");
@@ -118,7 +127,7 @@ public abstract class GlobalVoicesAbstractCrawler extends FlexNewsCrawler {
             Element dayElement = elements.first();
             if (dayElement != null) {
                 String dayString = extractDate(dayElement.select("a").attr("title")).trim();
-                if(dayString != null && !dayString.isEmpty()) {
+                if (dayString != null && !dayString.isEmpty()) {
                     Element timeElement = dayElement.select("span.post-time").first();
                     String timeString = timeElement.text().replace("GMT", "").trim();
                     timeString = timeString.substring(0, timeString.length() - 1);

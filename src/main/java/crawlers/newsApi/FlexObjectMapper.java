@@ -20,7 +20,7 @@ import java.io.Reader;
 import java.net.URL;
 import java.nio.charset.Charset;
 import javax.ejb.EJB;
-import javax.ejb.Stateless;
+import javax.ejb.Singleton;
 import json.SingleArticleResponse;
 import json.SingleSourceResponse;
 import services.NewsArticleServiceInterface;
@@ -31,7 +31,7 @@ import utils.FlexLogger;
  *
  * @author zua
  */
-@Stateless
+@Singleton
 public class FlexObjectMapper {
 
     private final String API_KEY = "5b4e00f3046843138d8368211777a4f2";

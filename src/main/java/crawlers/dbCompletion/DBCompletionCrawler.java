@@ -8,7 +8,7 @@ package crawlers.dbCompletion;
 import crawlers.Logos;
 import db.NewsSource;
 import java.util.List;
-import javax.ejb.Stateless;
+import javax.ejb.Singleton;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.ejb.TransactionManagement;
@@ -22,7 +22,7 @@ import utils.FlexLogger;
  *
  * @author zua
  */
-@Stateless
+@Singleton
 @TransactionManagement(TransactionManagementType.CONTAINER)
 
 public class DBCompletionCrawler {

@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package crawlers.iolNews;
+package crawlers.globalVoices;
 
 import crawlers.Logos;
 import db.NewsSource;
@@ -14,32 +14,25 @@ import javax.ejb.Singleton;
  * @author zua
  */
 @Singleton
-public class IOLNewsZACrawler extends AbstactIOLNewsCrawler {
+public class GlobalVoicesCrawlerAYM extends GlobalVoicesAbstractCrawler {
 
-    public IOLNewsZACrawler() {
-        super();
+    public GlobalVoicesCrawlerAYM() {
     }
 
-    @Override
-    protected String getUrl() {
-        return "https://www.iol.co.za/news";
-    }
-    
     @Override
     public NewsSource getMySource() {
-        String sourceId = "iol-news-za";
-        String name = "IOL News South Africa";
+        String sourceId = "global-voices-aym";
+        String name = "Global Voices (AYM)";
         String description = "";
-        String url = getUrl();
-        String category = "General";
-        String language = "en";
-        String country = "ZA";
+        String url = "https://aym.globalvoices.org";
+        String category = "general";
+        String language = "aym";
+        String country = "PE";
 
         NewsSource source = new NewsSource(sourceId, name, description, url, category, language, country);
-        source.setLogoUrl(Logos.getLogo(sourceId));
+        source.setLogoUrl(Logos.getLogo("global-voices"));
 
         return source;
     }
-    
 
 }

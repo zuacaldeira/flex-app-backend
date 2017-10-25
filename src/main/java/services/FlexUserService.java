@@ -7,7 +7,7 @@ package services;
 
 import db.FlexUser;
 import java.util.Collection;
-import javax.ejb.Stateless;
+import javax.ejb.Singleton;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.ejb.TransactionManagement;
@@ -18,7 +18,7 @@ import org.neo4j.ogm.cypher.query.SortOrder;
  *
  * @author zua
  */
-@Stateless
+@Singleton
 @TransactionManagement(TransactionManagementType.CONTAINER)
 
 public class FlexUserService extends AbstractDBService<FlexUser> implements FlexUserServiceInterface {

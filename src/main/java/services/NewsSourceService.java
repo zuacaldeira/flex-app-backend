@@ -10,7 +10,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Set;
 import java.util.TreeSet;
-import javax.ejb.Stateless;
+import javax.ejb.Singleton;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.ejb.TransactionManagement;
@@ -26,7 +26,7 @@ import utils.DatabaseUtils;
  *
  * @author zua
  */
-@Stateless
+@Singleton
 @TransactionManagement(TransactionManagementType.CONTAINER)
 
 public class NewsSourceService extends AbstractDBService<NewsSource>  implements NewsSourceServiceInterface {

@@ -7,7 +7,6 @@ package crawlers.globalVoices;
 
 import crawlers.AbstractCrawlerTestIT;
 import crawlers.FlexNewsCrawler;
-import crawlers.globalVoices.GlobalVoicesCrawler;
 
 /**
  *
@@ -20,6 +19,6 @@ public class GlobalVoicesCrawlerTestIT extends AbstractCrawlerTestIT {
 
     @Override
     protected FlexNewsCrawler getCrawler() {
-        return new GlobalVoicesCrawler();
+        return new GlobalVoicesCrawlerEN();
     }
 }

@@ -10,7 +10,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import javax.ejb.Stateless;
+import javax.ejb.Singleton;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
 import org.neo4j.ogm.cypher.BooleanOperator;
@@ -24,7 +24,7 @@ import utils.DatabaseUtils;
  *
  * @author zua
  */
-@Stateless
+@Singleton
 @TransactionManagement(TransactionManagementType.CONTAINER)
 public class NewsArticleService extends AbstractDBService<NewsArticle> implements NewsArticleServiceInterface {
 
