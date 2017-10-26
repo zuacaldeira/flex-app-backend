@@ -7,6 +7,7 @@ package crawlers.globalVoices;
 
 import crawlers.Logos;
 import db.NewsSource;
+import javax.ejb.Schedule;
 import javax.ejb.Singleton;
 
 /**
@@ -35,4 +36,9 @@ public class GlobalVoicesCrawlerKM extends GlobalVoicesAbstractCrawler {
         return source;
     }
 
+    @Override
+    @Schedule(hour="*", minute="*/10")
+    public void crawl() {
+        super.crawl(); //To change body of generated methods, choose Tools | Templates.
+    }
 }

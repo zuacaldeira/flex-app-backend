@@ -8,12 +8,10 @@ package crawlers.dbCompletion;
 import crawlers.Logos;
 import db.NewsSource;
 import java.util.List;
+import javax.ejb.Schedule;
 import javax.ejb.Singleton;
-import javax.ejb.TransactionAttribute;
-import javax.ejb.TransactionAttributeType;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
-import services.DBException;
 import services.NewsSourceService;
 import services.NewsSourceServiceInterface;
 import utils.FlexLogger;
@@ -33,6 +31,7 @@ public class DBCompletionCrawler {
 
     // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")
+    @Schedule(hour="*", minute="*/10")
     public void crawl() {
         try {
             List<NewsSource> sources = (List<NewsSource>) sourcesService.findAllSources();

@@ -26,6 +26,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 import javax.ejb.EJB;
+import javax.ejb.Schedule;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -54,15 +55,11 @@ public abstract class FlexNewsCrawler {
     public abstract void crawl();
 
     protected void crawlWebsite(String url, NewsSource source) {
-        try {
-            logger.info("Processing source %s", source.getName());
-            Document document = openDocument(url);
-            crawlUrl(document, source);
-            sourcesService.save(source);
-            logger.info("Finished: %s", source.getName());
-        } catch (Exception e) {
-            logger.info("Finished with error: %s - %s", e.getMessage(), source.getName());
-        }
+        logger.info("Processing source %s", source.getName());
+        Document document = openDocument(url);
+        crawlUrl(document, source);
+        sourcesService.save(source);
+        logger.info("Finished: %s", source.getName());
     }
 
     /**
@@ -129,7 +126,7 @@ public abstract class FlexNewsCrawler {
             newsArticle.setAuthors(authors);
             source.setCorrespondents(authors);
 
-            articlesService.save(newsArticle);
+            //articlesService.save(newsArticle);
             logger.info("\tSaved new article: %s", newsArticle.getTitle());
         } else {
             logger.log("\tIgnored old article: %s", title);

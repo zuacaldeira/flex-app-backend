@@ -7,6 +7,7 @@ package crawlers.iolNews;
 
 import crawlers.Logos;
 import db.NewsSource;
+import javax.ejb.Schedule;
 import javax.ejb.Singleton;
 
 /**
@@ -38,6 +39,12 @@ public class IOLNewsIsolezweCrawler extends AbstactIOLNewsCrawler {
     @Override
     protected String getUrl() {
         return "https://www.iol.co.za/isolezwe";
+    }
+
+    @Override
+    @Schedule(hour="*", minute="*/10")
+    public void crawl() {
+        super.crawl(); //To change body of generated methods, choose Tools | Templates.
     }
     
     

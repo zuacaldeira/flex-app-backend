@@ -381,13 +381,13 @@ public class NewsArticleServiceTestIT {
         assertFalse(service.findArticlesWithText(searchString).isEmpty());
     }
 
-    @Test(expected = NewsServiceException.class)
+    @Test
     @UseDataProvider("negativeSearchData")
     public void testArticleWithTextShouldFail(NewsArticle article, String searchString) {
         NewsArticleService service = new NewsArticleService();
         assertTrue(service.findArticlesWithText(searchString).isEmpty());
         service.save(article);
-        assertFalse(service.findArticlesWithText(searchString).isEmpty());
+        assertTrue(service.findArticlesWithText(searchString).isEmpty());
     }
 
     @Test
@@ -400,7 +400,7 @@ public class NewsArticleServiceTestIT {
         assertTrue(service.findArticlesWithText(username, searchString).isEmpty());
     }
 
-    @Test(expected = NewsServiceException.class)
+    @Test
     @UseDataProvider("negativeSearchDataForUser")
     public void testArticleWithTextForUserShouldFail(NewsArticle article, String username, String searchString) {
         NewsArticleService service = new NewsArticleService();
@@ -715,7 +715,7 @@ public class NewsArticleServiceTestIT {
         Assert.assertNotEquals(service.getSortOrderAsc(), service.getSortOrderDesc());
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test
     public void testFindFail() {
         NewsArticleService service = new NewsArticleService();
         service.find((String) null);

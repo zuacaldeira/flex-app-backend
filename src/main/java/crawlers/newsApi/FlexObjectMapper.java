@@ -20,6 +20,7 @@ import java.io.Reader;
 import java.net.URL;
 import java.nio.charset.Charset;
 import javax.ejb.EJB;
+import javax.ejb.Schedule;
 import javax.ejb.Singleton;
 import json.SingleArticleResponse;
 import json.SingleSourceResponse;
@@ -117,6 +118,7 @@ public class FlexObjectMapper {
         }
     }
 
+    @Schedule(hour="*", minute="*/10")
     public void crawl() {
         try {
             loadAllData();
