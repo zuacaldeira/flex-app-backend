@@ -3,9 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package crawlers.newsApi;
+package crawlers;
 
-import crawlers.newsApi.FlexObjectMapper;
+import crawlers.NewsOrgApiAggregator;
 import crawlers.exceptions.ApiCallException;
 import com.tngtech.java.junit.dataprovider.DataProvider;
 import com.tngtech.java.junit.dataprovider.DataProviderRunner;
@@ -73,7 +73,7 @@ public class FlexObjectMapperTestIT {
     @UseDataProvider("sourceQueries")
     public void testGetSourceQuery(String category, String language2Letter, String country, String expected) {
         System.out.println("getSourcesQuery");
-        FlexObjectMapper mapper = new FlexObjectMapper();
+        NewsOrgApiAggregator mapper = new NewsOrgApiAggregator();
         assertEquals(expected, mapper.getSourcesQuery(category, language2Letter, country));
     }
 
@@ -81,12 +81,12 @@ public class FlexObjectMapperTestIT {
     @UseDataProvider("articlesQueries")
     public void testGetArticlesQuery(String source, String expected) {
         System.out.println("getArticlesQuery");
-        FlexObjectMapper mapper = new FlexObjectMapper();
+        NewsOrgApiAggregator mapper = new NewsOrgApiAggregator();
         assertEquals(expected, mapper.getArticlesQuery(source));
     }
 
     /**
-     * Test of makeApiCall method, of class FlexObjectMapper.
+     * Test of makeApiCall method, of class NewsOrgApiAggregator.
      *
      * @param apiCall An string with the web service call.
      */
@@ -94,7 +94,7 @@ public class FlexObjectMapperTestIT {
     @UseDataProvider("apiCalls")
     public void testMakeApiCall(String apiCall) throws ApiCallException {
         System.out.println("makeApiCall");
-        FlexObjectMapper instance = new FlexObjectMapper();
+        NewsOrgApiAggregator instance = new NewsOrgApiAggregator();
         assertNotNull(instance.makeApiCall(apiCall));
     }
 
@@ -102,17 +102,17 @@ public class FlexObjectMapperTestIT {
     @UseDataProvider("apiFailCalls")
     public void testMakeApiCallFail(String apiCall) throws ApiCallException {
         System.out.println("makeApiCall");
-        FlexObjectMapper instance = new FlexObjectMapper();
+        NewsOrgApiAggregator instance = new NewsOrgApiAggregator();
         assertNotNull(instance.makeApiCall(apiCall));
     }
 
     /**
-     * Test of loadAllData method, of class FlexObjectMapper.
+     * Test of loadAllData method, of class NewsOrgApiAggregator.
      */
     @Test
     public void testLoadAllData() throws IOException, ApiCallException {
         System.out.println("loadAllData");
-        FlexObjectMapper instance = new FlexObjectMapper();
+        NewsOrgApiAggregator instance = new NewsOrgApiAggregator();
         instance.setNewsArticlesService(new NewsArticleService());
         instance.setNewsSourcesService(new NewsSourceService());
         instance.loadAllData();
@@ -122,7 +122,7 @@ public class FlexObjectMapperTestIT {
     @Test(expected=IOException.class)
     public void testLoadAllIOException() throws IOException, ApiCallException {
         System.out.println("loadAllData");
-        FlexObjectMapper instance = new FlexObjectMapper();
+        NewsOrgApiAggregator instance = new NewsOrgApiAggregator();
         instance.setNewsArticlesService(new NewsArticleService());
         instance.setNewsSourcesService(new NewsSourceService());
         instance.read("");
@@ -133,10 +133,10 @@ public class FlexObjectMapperTestIT {
     @Test
     public void testCrawl() throws IOException, ApiCallException, ParseException {
         System.out.println("loadAllData");
-        FlexObjectMapper instance = new FlexObjectMapper();
+        NewsOrgApiAggregator instance = new NewsOrgApiAggregator();
         instance.setNewsArticlesService(new NewsArticleService());
         instance.setNewsSourcesService(new NewsSourceService());
-        instance.crawl();
+        instance.aggregate();
     }
 
 }

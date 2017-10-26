@@ -15,8 +15,6 @@ import crawlers.exceptions.AuthorsNotFoundException;
 import crawlers.exceptions.ContentNotFoundException;
 import crawlers.exceptions.ArticlesNotFoundException;
 import db.NewsSource;
-import javax.ejb.Schedule;
-import javax.ejb.Singleton;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -25,7 +23,7 @@ import org.jsoup.select.Elements;
  *
  * @author zua
  */
-@Singleton
+
 public class MakaAngolaCrawler extends FlexNewsCrawler {
 
     public MakaAngolaCrawler() {
@@ -37,7 +35,7 @@ public class MakaAngolaCrawler extends FlexNewsCrawler {
     }
 
     @Override
-    @Schedule(hour="*", minute="*/10")
+    
     public void crawl() {
         try {
             crawlWebsite(getUrl(), getMySource());

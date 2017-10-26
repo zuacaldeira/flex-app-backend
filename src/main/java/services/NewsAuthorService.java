@@ -6,9 +6,7 @@
 package services;
 
 import db.NewsAuthor;
-import javax.ejb.Singleton;
-import javax.ejb.TransactionAttribute;
-import javax.ejb.TransactionAttributeType;
+import javax.ejb.Stateless;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
 import org.neo4j.ogm.cypher.query.SortOrder;
@@ -17,9 +15,9 @@ import org.neo4j.ogm.cypher.query.SortOrder;
  *
  * @author zua
  */
-@Singleton
-@TransactionManagement(TransactionManagementType.CONTAINER)
 
+@TransactionManagement(TransactionManagementType.CONTAINER)
+@Stateless
 public class NewsAuthorService extends AbstractDBService<NewsAuthor>  implements NewsAuthorServiceInterface {
 
     @Override

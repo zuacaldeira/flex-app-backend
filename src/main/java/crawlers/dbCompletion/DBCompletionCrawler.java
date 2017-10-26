@@ -8,10 +8,6 @@ package crawlers.dbCompletion;
 import crawlers.Logos;
 import db.NewsSource;
 import java.util.List;
-import javax.ejb.Schedule;
-import javax.ejb.Singleton;
-import javax.ejb.TransactionManagement;
-import javax.ejb.TransactionManagementType;
 import services.NewsSourceService;
 import services.NewsSourceServiceInterface;
 import utils.FlexLogger;
@@ -20,18 +16,12 @@ import utils.FlexLogger;
  *
  * @author zua
  */
-@Singleton
-@TransactionManagement(TransactionManagementType.CONTAINER)
-
 public class DBCompletionCrawler {
 
     private final FlexLogger logger = new FlexLogger(DBCompletionCrawler.class);
 
     private NewsSourceServiceInterface sourcesService = new NewsSourceService();
 
-    // Add business logic below. (Right-click in editor and choose
-    // "Insert Code > Add Business Method")
-    @Schedule(hour="*", minute="*/10")
     public void crawl() {
         try {
             List<NewsSource> sources = (List<NewsSource>) sourcesService.findAllSources();

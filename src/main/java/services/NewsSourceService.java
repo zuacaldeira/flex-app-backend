@@ -10,9 +10,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Set;
 import java.util.TreeSet;
-import javax.ejb.Singleton;
-import javax.ejb.TransactionAttribute;
-import javax.ejb.TransactionAttributeType;
+import javax.ejb.Stateless;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
 import org.neo4j.ogm.cypher.BooleanOperator;
@@ -26,9 +24,9 @@ import utils.DatabaseUtils;
  *
  * @author zua
  */
-@Singleton
-@TransactionManagement(TransactionManagementType.CONTAINER)
 
+@TransactionManagement(TransactionManagementType.CONTAINER)
+@Stateless
 public class NewsSourceService extends AbstractDBService<NewsSource>  implements NewsSourceServiceInterface {
 
     @Override

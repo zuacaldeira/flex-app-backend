@@ -25,13 +25,13 @@ import java.io.IOException;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
-import javax.ejb.EJB;
-import javax.ejb.Schedule;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import services.NewsArticleService;
 import services.NewsArticleServiceInterface;
+import services.NewsSourceService;
 import services.NewsSourceServiceInterface;
 import utils.FlexLogger;
 
@@ -41,24 +41,28 @@ import utils.FlexLogger;
  */
 public abstract class FlexNewsCrawler {
 
-    @EJB
     private NewsArticleServiceInterface articlesService;
-    @EJB
+
     private NewsSourceServiceInterface sourcesService;
 
     private FlexLogger logger;
 
     public FlexNewsCrawler() {
         logger = new FlexLogger(getClass());
+        articlesService = new NewsArticleService();
+        sourcesService = new NewsSourceService();
     }
 
     public abstract void crawl();
 
     protected void crawlWebsite(String url, NewsSource source) {
-        logger.info("Processing source %s", source.getName());
+        logger.info("Processing source %s (%s)", source.getName(), url);
         Document document = openDocument(url);
-        crawlUrl(document, source);
-        sourcesService.save(source);
+        try {
+            crawlUrl(document, source);
+            sourcesService.save(source);
+        } catch (Exception e) {
+        }
         logger.info("Finished: %s", source.getName());
     }
 
@@ -89,7 +93,7 @@ public abstract class FlexNewsCrawler {
             try {
                 importArticle(article, source);
             } catch (Exception e) {
-                logger.error("Found exception: %s -- %s", e.getMessage(), article.text());
+                logger.error("Found exception: %s -- %s", e.getClass().getSimpleName(), article.text());
             }
         });
     }

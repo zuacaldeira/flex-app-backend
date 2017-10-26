@@ -14,7 +14,7 @@ import javax.ejb.Singleton;
  *
  * @author zua
  */
-@Singleton
+
 public class GlobalVoicesCrawlerSQ extends GlobalVoicesAbstractCrawler {
 
     public GlobalVoicesCrawlerSQ() {
@@ -37,7 +37,7 @@ public class GlobalVoicesCrawlerSQ extends GlobalVoicesAbstractCrawler {
     }
 
     @Override
-    @Schedule(hour="*", minute="*/10")
+    
     public void crawl() {
         super.crawl(); //To change body of generated methods, choose Tools | Templates.
     }

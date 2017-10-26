@@ -7,14 +7,12 @@ package crawlers.iolNews;
 
 import crawlers.Logos;
 import db.NewsSource;
-import javax.ejb.Schedule;
-import javax.ejb.Singleton;
 
 /**
  *
  * @author zua
  */
-@Singleton
+
 public class IOLNewsZACrawler extends AbstactIOLNewsCrawler {
 
     public IOLNewsZACrawler() {
@@ -43,7 +41,7 @@ public class IOLNewsZACrawler extends AbstactIOLNewsCrawler {
     }
 
     @Override
-    @Schedule(hour="*", minute="*/10")
+    
     public void crawl() {
         super.crawl(); //To change body of generated methods, choose Tools | Templates.
     }

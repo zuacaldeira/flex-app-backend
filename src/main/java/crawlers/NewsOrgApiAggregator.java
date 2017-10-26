@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package crawlers.newsApi;
+package crawlers;
 
 import crawlers.exceptions.ApiCallException;
 import json.MultipleSourcesResponse;
@@ -19,12 +19,13 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.net.URL;
 import java.nio.charset.Charset;
-import javax.ejb.EJB;
 import javax.ejb.Schedule;
 import javax.ejb.Singleton;
 import json.SingleArticleResponse;
 import json.SingleSourceResponse;
+import services.NewsArticleService;
 import services.NewsArticleServiceInterface;
+import services.NewsSourceService;
 import services.NewsSourceServiceInterface;
 import utils.FlexLogger;
 
@@ -33,7 +34,7 @@ import utils.FlexLogger;
  * @author zua
  */
 @Singleton
-public class FlexObjectMapper {
+public class NewsOrgApiAggregator {
 
     private final String API_KEY = "5b4e00f3046843138d8368211777a4f2";
     private final String SOURCES_URL = "http://newsapi.org/v1/sources?";
@@ -41,17 +42,25 @@ public class FlexObjectMapper {
 
     private ObjectMapper objectMapper;
 
-    @EJB
     private NewsArticleServiceInterface articlesService;
-
-    @EJB
     private NewsSourceServiceInterface sourcesService;
 
     private FlexLogger logger;
 
-    public FlexObjectMapper() {
+    public NewsOrgApiAggregator() {
         objectMapper = new ObjectMapper();
-        logger = new FlexLogger(FlexObjectMapper.class);
+        logger = new FlexLogger(NewsOrgApiAggregator.class);
+        articlesService = new NewsArticleService();
+        sourcesService = new NewsSourceService();
+    }
+
+    @Schedule(hour = "*", minute = "15/20")
+    public void aggregate() {
+        try {
+            loadAllData();
+        } catch (final Exception e) {
+            logger.error("Found exception %s", e);
+        }
     }
 
     public String getSourcesQuery(String category, String language2Letter, String country) {
@@ -115,15 +124,6 @@ public class FlexObjectMapper {
         } catch (Exception e) {
             logger.error("%s", "Error calling news api..." + e.getMessage());
             throw new ApiCallException(url);
-        }
-    }
-
-    @Schedule(hour="*", minute="*/10")
-    public void crawl() {
-        try {
-            loadAllData();
-        } catch (final Exception e) {
-            logger.error("Found exception %s", e);
         }
     }
 
