@@ -21,6 +21,7 @@ import java.net.URL;
 import java.nio.charset.Charset;
 import javax.ejb.Schedule;
 import javax.ejb.Singleton;
+import javax.ejb.Startup;
 import json.SingleArticleResponse;
 import json.SingleSourceResponse;
 import services.NewsArticleService;
@@ -34,6 +35,7 @@ import utils.FlexLogger;
  * @author zua
  */
 @Singleton
+@Startup
 public class NewsOrgApiAggregator {
 
     private final String API_KEY = "5b4e00f3046843138d8368211777a4f2";

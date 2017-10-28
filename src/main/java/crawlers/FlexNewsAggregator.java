@@ -15,12 +15,14 @@ import crawlers.telaNon.TelaNonCrawler;
 import crawlers.theBugleZa.TheBugleZACrawler;
 import javax.ejb.Singleton;
 import javax.ejb.Schedule;
+import javax.ejb.Startup;
 
 /**
  *
  * @author zua
  */
 @Singleton
+@Startup
 public class FlexNewsAggregator {
 
     // Add business logic below. (Right-click in editor and choose

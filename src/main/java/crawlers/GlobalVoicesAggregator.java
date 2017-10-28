@@ -50,12 +50,14 @@ import crawlers.globalVoices.GlobalVoicesCrawlerZHS;
 import crawlers.globalVoices.GlobalVoicesCrawlerZHT;
 import javax.ejb.Schedule;
 import javax.ejb.Singleton;
+import javax.ejb.Startup;
 
 /**
  *
  * @author zua
  */
 @Singleton
+@Startup
 public class GlobalVoicesAggregator {
 
     // Add business logic below. (Right-click in editor and choose
