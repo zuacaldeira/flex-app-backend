@@ -3,8 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package json;
+package utils.json;
 
+import utils.json.SingleArticleResponse;
+import utils.json.MultipleArticlesResponse;
 import java.util.LinkedList;
 import org.junit.Test;
 import static org.junit.Assert.*;

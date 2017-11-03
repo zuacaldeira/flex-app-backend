@@ -45,12 +45,8 @@ public class JornalDeAngolaCrawlerTest extends AbstractCrawlerTest {
     }
 
     @Override
-    @Test
-    //@Test(expected = AuthorsNotFoundException.class)
+    @Test(expected = AuthorsNotFoundException.class)
     public void testGetAuthors() throws AuthorsNotFoundException, DocumentNotFoundException, ArticlesNotFoundException {
         super.testGetAuthors();
     }
-    
-    
-
 }

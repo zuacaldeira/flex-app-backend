@@ -3,35 +3,30 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package main;
+package services;
 
-import crawlers.dbCompletion.LogoCompletionWorker;
 import db.AdsProvider;
 import db.Advertises;
 import db.Neo4jSessionFactory;
 import db.NewsArticle;
 import java.util.HashMap;
-import services.NewsSourceService;
+import javax.ejb.Singleton;
+import javax.ejb.Schedule;
+import javax.ejb.Startup;
 import utils.ShortUrlUtils;
 
 /**
  *
  * @author zua
  */
-public class Main {
+@Singleton
+@Startup
+public class ShortestCompletionWorker {
 
-    public static void main(String... args) {
-        completeLogos();
-        completeShortest();
-    }
-
-    private static void completeLogos() {
-        LogoCompletionWorker dbCrawler = new LogoCompletionWorker();
-        dbCrawler.setSourcesService(new NewsSourceService());
-        dbCrawler.crawl();
-    }
-
-    private static void completeShortest() {
+    // Add business logic below. (Right-click in editor and choose
+    // "Insert Code > Add Business Method")
+    @Schedule(hour="*", minute = "*/10")
+    public void completeWithShortestUrl() {
         String cypher = "MATCH (n:NewsArticle) WHERE NOT (n)--(:AdsProvider) RETURN n LIMIT 100";
         Iterable<NewsArticle> iterable = Neo4jSessionFactory.getInstance().getNeo4jSession().query(NewsArticle.class, cypher, new HashMap<>());
         iterable.forEach(article -> {

@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package elements;
+package utils.elements;
 
 /**
  * The title element stores a value to be used as a title.

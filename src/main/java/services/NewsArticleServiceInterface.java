@@ -32,6 +32,8 @@ public interface NewsArticleServiceInterface  extends DBService<NewsArticle> {
     
     public Collection<NewsArticle> findArticlesWithCountry(String value);
     public Collection<NewsArticle> findArticlesWithCountry(String username, String value);
+
+    public Collection<NewsArticle> findArticlesWithoutShortUrl();
     
     public Collection<NewsArticle> findAllRead(String username);
     public Collection<NewsArticle> findAllFavorite(String username);

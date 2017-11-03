@@ -14,6 +14,7 @@ import org.neo4j.ogm.annotation.Relationship;
 public class NewsAuthor extends  GraphEntity implements Comparable<NewsAuthor>{
 
     public static NewsAuthor UNKNOWN = new NewsAuthor("Unknown");
+    private static final long serialVersionUID = 5117714308650379252L;
 
     /**
      * Author's name. 

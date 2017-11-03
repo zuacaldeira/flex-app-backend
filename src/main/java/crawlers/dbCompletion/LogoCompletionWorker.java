@@ -16,9 +16,9 @@ import utils.FlexLogger;
  *
  * @author zua
  */
-public class DBCompletionCrawler {
+public class LogoCompletionWorker {
 
-    private final FlexLogger logger = new FlexLogger(DBCompletionCrawler.class);
+    private final FlexLogger logger = new FlexLogger(LogoCompletionWorker.class);
 
     private NewsSourceServiceInterface sourcesService = new NewsSourceService();
 

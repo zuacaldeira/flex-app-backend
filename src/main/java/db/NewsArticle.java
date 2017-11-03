@@ -15,6 +15,8 @@ import org.neo4j.ogm.annotation.Relationship;
 @NodeEntity
 public class NewsArticle extends GraphEntity implements Comparable<NewsArticle>{
 
+    private static final long serialVersionUID = -5488934119305207913L;
+
     @Index(unique=true, primary = true)
     private String title;
     

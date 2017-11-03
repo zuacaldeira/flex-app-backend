@@ -3,12 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package elements;
+package utils.elements;
 
 import com.tngtech.java.junit.dataprovider.DataProvider;
 import com.tngtech.java.junit.dataprovider.DataProviderRunner;
 import com.tngtech.java.junit.dataprovider.UseDataProvider;
-import elements.ImageUrlElement;
+import utils.elements.ImageUrlElement;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import org.junit.runner.RunWith;

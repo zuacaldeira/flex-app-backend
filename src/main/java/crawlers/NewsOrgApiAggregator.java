@@ -6,8 +6,8 @@
 package crawlers;
 
 import crawlers.exceptions.ApiCallException;
-import json.MultipleSourcesResponse;
-import json.MultipleArticlesResponse;
+import utils.json.MultipleSourcesResponse;
+import utils.json.MultipleArticlesResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import db.NewsArticle;
 import db.NewsAuthor;
@@ -22,8 +22,8 @@ import java.nio.charset.Charset;
 import javax.ejb.Schedule;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
-import json.SingleArticleResponse;
-import json.SingleSourceResponse;
+import utils.json.SingleArticleResponse;
+import utils.json.SingleSourceResponse;
 import services.NewsArticleService;
 import services.NewsArticleServiceInterface;
 import services.NewsSourceService;

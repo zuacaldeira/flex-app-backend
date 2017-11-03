@@ -3,39 +3,40 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package elements;
+package utils.elements;
 
-import elements.ContentElement;
 import com.tngtech.java.junit.dataprovider.DataProvider;
 import com.tngtech.java.junit.dataprovider.DataProviderRunner;
 import com.tngtech.java.junit.dataprovider.UseDataProvider;
+import utils.elements.UrlElement;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import org.junit.runner.RunWith;
 
 /**
+ * Test for the {@code TitleElement} class.
  *
  * @author zua
  */
 @RunWith(DataProviderRunner.class)
-public class ContentElementTest {
-    
-    public ContentElementTest() {
+public class UrlElementTest {
+
+    public UrlElementTest() {
     }
 
     @DataProvider
     public static Object[][] valueData() {
         Object[][] result = new Object[][]{
-            {null}, {"Title"}, {""}  
+            {null}, {"Title"}, {""}
         };
         return result;
     }
-    
+
     @Test
     @UseDataProvider("valueData")
-    public void testValue(String content) {
-        ContentElement te = new ContentElement(content);
-        assertEquals(content, te.getValue());
+    public void testValue(String url) {
+        UrlElement te = new UrlElement(url);
+        assertEquals(url, te.getValue());
     }
-    
+
 }

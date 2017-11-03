@@ -3,15 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package json;
+package utils.json;
 
 import db.NewsArticle;
 import db.NewsAuthor;
 import db.NewsSource;
-import java.text.ParseException;
 import java.util.Date;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import utils.MyDateUtils;
 
 /**

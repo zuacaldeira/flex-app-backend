@@ -32,10 +32,7 @@ public class Neo4jSessionFactory {
     }
     
     public static Neo4jSessionFactory getInstance() {
-        if(factory == null) {
-            factory = new Neo4jSessionFactory();
-        }
-	return factory;
+        return new Neo4jSessionFactory();
     }
     
     public Session getNeo4jSession() {

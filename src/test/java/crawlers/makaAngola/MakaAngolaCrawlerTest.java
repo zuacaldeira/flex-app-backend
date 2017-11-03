@@ -8,7 +8,6 @@ package crawlers.makaAngola;
 import crawlers.AbstractCrawlerTest;
 import crawlers.FlexNewsCrawler;
 import crawlers.Logos;
-import crawlers.makaAngola.MakaAngolaCrawler;
 import db.NewsSource;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;

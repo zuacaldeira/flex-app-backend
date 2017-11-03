@@ -35,7 +35,7 @@ public class DBCompletionCrawlerTestIT {
         assertNotNull(service.find(source));
         String logoUrl = service.find(source).getLogoUrl();
         assertTrue(logoUrl ==null || logoUrl.equals(""));
-        DBCompletionCrawler crawler = new DBCompletionCrawler();
+        LogoCompletionWorker crawler = new LogoCompletionWorker();
         crawler.setSourcesService(service);
         crawler.crawl();
         assertEquals(0, new NewsSourceService().findSourcesWithoutLogo().size());

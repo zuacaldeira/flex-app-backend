@@ -8,11 +8,11 @@ package crawlers.theBugleZa;
 import crawlers.AbstractCrawlerTest;
 import crawlers.FlexNewsCrawler;
 import crawlers.Logos;
-import crawlers.theBugleZa.TheBugleZACrawler;
+import crawlers.exceptions.ArticlesNotFoundException;
+import crawlers.exceptions.AuthorsNotFoundException;
+import crawlers.exceptions.DocumentNotFoundException;
 import db.NewsSource;
-import org.jsoup.nodes.Document;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 import org.junit.Test;
 
 /**
@@ -44,5 +44,10 @@ public class TheBugleZACrawlerTest extends AbstractCrawlerTest {
         assertEquals(Logos.getLogo("the-bugle"), source.getLogoUrl());
     }
     
+    @Override
+    @Test(expected = AuthorsNotFoundException.class)
+    public void testGetAuthors() throws AuthorsNotFoundException, DocumentNotFoundException, ArticlesNotFoundException {
+        super.testGetAuthors();
+    }
 
 }

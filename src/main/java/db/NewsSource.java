@@ -13,6 +13,8 @@ import org.neo4j.ogm.annotation.Relationship;
 @NodeEntity
 public class NewsSource extends GraphEntity implements Comparable<NewsSource> {
 
+    private static final long serialVersionUID = -7869974236968731845L;
+
     @Index(unique=true, primary = true)
     private String sourceId;
     private String name;

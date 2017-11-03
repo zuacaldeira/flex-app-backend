@@ -7,7 +7,6 @@ package crawlers.theBugleZa;
 
 import crawlers.AbstractCrawlerTestIT;
 import crawlers.FlexNewsCrawler;
-import crawlers.theBugleZa.TheBugleZACrawler;
 
 /**
  *

@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package json;
+package utils.json;
 
+import utils.json.SingleArticleResponse;
 import db.NewsArticle;
 import db.NewsAuthor;
 import db.NewsSource;

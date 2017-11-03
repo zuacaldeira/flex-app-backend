@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package json;
+package utils.json;
 
+import utils.json.SingleSourceResponse;
 import db.NewsSource;
 import java.util.HashMap;
 import java.util.LinkedList;

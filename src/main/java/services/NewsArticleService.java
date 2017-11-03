@@ -364,5 +364,17 @@ public class NewsArticleService extends AbstractDBService<NewsArticle> implement
             return false;
         }
     }
-
+    
+    @Override
+    public List<NewsArticle> findArticlesWithoutShortUrl() {
+        try {
+            String query = "MATCH (n:NewsArticle) ";
+            query += "WHERE n.shortUrl IS NULL RETURN n ";
+            query += "ORDER BY n.publishedAt DESC LIMIT " + LIMIT;
+            System.out.println(query);
+            return super.executeQuery(query);
+        } catch (Exception e) {
+            return new LinkedList<>();
+        }
+    }
 }
