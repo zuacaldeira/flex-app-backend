@@ -11,14 +11,17 @@ import crawlers.Logos;
 import crawlers.exceptions.ArticlesNotFoundException;
 import crawlers.exceptions.AuthorsNotFoundException;
 import crawlers.exceptions.DocumentNotFoundException;
+import crawlers.exceptions.JsoupElementNotFoundException;
 import db.NewsSource;
 import static org.junit.Assert.assertEquals;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
  *
  * @author zua
  */
+@Ignore
 public class TelaNonCrawlerTest extends AbstractCrawlerTest {
 
     public TelaNonCrawlerTest() {
@@ -45,11 +48,9 @@ public class TelaNonCrawlerTest extends AbstractCrawlerTest {
     }
 
     @Override
-    @Test(expected = AuthorsNotFoundException.class)
+    @Test(expected = JsoupElementNotFoundException.class)
     public void testGetAuthors() throws AuthorsNotFoundException, DocumentNotFoundException, ArticlesNotFoundException {
         super.testGetAuthors();
     }
-    
-    
 
 }

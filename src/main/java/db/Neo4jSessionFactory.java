@@ -20,7 +20,7 @@ public class Neo4jSessionFactory {
 
     private static Neo4jSessionFactory factory;
 
-    private SessionFactory sessionFactory;
+    private final SessionFactory sessionFactory;
     
     private Neo4jSessionFactory() {
         Configuration configuration = new Configuration("ogm.properties");
@@ -32,7 +32,10 @@ public class Neo4jSessionFactory {
     }
     
     public static Neo4jSessionFactory getInstance() {
-        return new Neo4jSessionFactory();
+        if(factory == null) {
+            factory = new Neo4jSessionFactory();
+        }
+        return factory;
     }
     
     public Session getNeo4jSession() {

@@ -13,17 +13,17 @@ import org.neo4j.ogm.annotation.StartNode;
  *
  * @author zua
  */
-@RelationshipEntity(type="ADVERTISES")
+@RelationshipEntity(type = "ADVERTISES")
 public class Advertises extends GraphRelationship {
 
     private static final long serialVersionUID = 4308653150737318550L;
-    
+
     @StartNode
     private AdsProvider provider;
-    
+
     @EndNode
     private NewsArticle news;
-    
+
     private String advertisementUrl;
 
     public Advertises(AdsProvider provider, NewsArticle news) {
@@ -58,5 +58,23 @@ public class Advertises extends GraphRelationship {
         this.advertisementUrl = advertisementUrl;
     }
 
-    
+    @Override
+    public String getPropertyName() {
+        return "advertisementUrl";
+    }
+
+    @Override
+    public String getPropertyValue() {
+        return advertisementUrl;
+    }
+
+    @Override
+    public boolean hasUrl() {
+        return advertisementUrl != null && !advertisementUrl.isEmpty();
+    }
+
+    @Override
+    public String getUrl() {
+        return advertisementUrl;
+    }
 }

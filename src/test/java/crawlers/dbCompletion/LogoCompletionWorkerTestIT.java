@@ -9,6 +9,7 @@ import db.NewsSource;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+import org.junit.Ignore;
 import org.junit.Test;
 import services.NewsSourceService;
 
@@ -16,16 +17,17 @@ import services.NewsSourceService;
  *
  * @author zua
  */
-public class DBCompletionCrawlerTestIT {
+public class LogoCompletionWorkerTestIT {
 
 
-    public DBCompletionCrawlerTestIT() {
+    public LogoCompletionWorkerTestIT() {
     }
     
     /**
      * Test of crawlWebsite method, of class TheBugleZACrawler.
      */
     @Test
+    @Ignore
     public void testCrawl() throws Exception {
         System.out.println("crawl");
         NewsSourceService service = new NewsSourceService();

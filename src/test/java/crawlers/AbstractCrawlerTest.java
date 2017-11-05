@@ -7,7 +7,6 @@ package crawlers;
 
 import crawlers.exceptions.DocumentNotFoundException;
 import crawlers.exceptions.UrlNotFoundException;
-import crawlers.exceptions.JsoupElementNotFoundException;
 import crawlers.exceptions.TimeNotFoundException;
 import crawlers.exceptions.TitleNotFoundException;
 import crawlers.exceptions.ImageNotFoundException;
@@ -153,10 +152,9 @@ public abstract class AbstractCrawlerTest {
         Elements articles = getArticles(crawler);
         Iterator<Element> it = articles.iterator();
         while (it.hasNext()) {
-            try {
-                String url = crawler.getUrl(it.next());
+            String url = crawler.getUrl(it.next());
+            if(url != null) {
                 return crawler.openDocument(url);
-            } catch (JsoupElementNotFoundException e) {
             }
         }
         throw new DocumentNotFoundException();
