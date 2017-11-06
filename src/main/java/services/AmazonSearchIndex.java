@@ -5,14 +5,10 @@
  */
 package services;
 
-import com.ECS.client.jax.Items;
-import javax.ejb.Remote;
-
 /**
  *
  * @author zua
  */
-@Remote
-public interface FlexAmazonServiceInterface {
-    public Items searchAmazonItems(String searchIndex, String keywords);
+public class AmazonSearchIndex {
+    public static final String BOOKS = "Books";
 }
