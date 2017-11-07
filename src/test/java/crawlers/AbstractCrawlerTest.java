@@ -129,20 +129,6 @@ public abstract class AbstractCrawlerTest {
         assertEquals(getCrawler().getMySource(), getCrawler().getSource());
     }
 
-    @Test
-    public void testImportArticle() {
-        System.out.println("importArticle");
-        FlexNewsCrawler crawler = getCrawler();
-        Document document = crawler.openDocument(crawler.getMySource().getUrl());
-        Elements articles = crawler.getArticles(document);
-        articles.stream().forEach(article -> {
-            try {
-                crawler.importArticle(article, crawler.getMySource());
-            } catch (Exception e) {
-            }
-        });
-    }
-
     protected Elements getArticles(FlexNewsCrawler crawler) throws DocumentNotFoundException, ArticlesNotFoundException {
         Document document = crawler.openDocument(crawler.getMySource().getUrl());
         return crawler.getArticles(document);

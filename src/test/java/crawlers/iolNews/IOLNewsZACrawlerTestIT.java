@@ -7,7 +7,8 @@ package crawlers.iolNews;
 
 import crawlers.AbstractCrawlerTestIT;
 import crawlers.FlexNewsCrawler;
-import crawlers.iolNews.IOLNewsZACrawler;
+import crawlers.exceptions.ContentNotFoundException;
+import org.junit.Test;
 
 /**
  *
@@ -22,4 +23,12 @@ public class IOLNewsZACrawlerTestIT extends AbstractCrawlerTestIT {
     protected FlexNewsCrawler getCrawler() {
         return new IOLNewsZACrawler();
     }
+    
+    
+    @Override
+    @Test(expected=ContentNotFoundException.class)
+    public void testImportArticle() {
+        super.testImportArticle();
+    }
+    
 }

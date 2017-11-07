@@ -6,6 +6,8 @@
 package crawlers;
 
 import crawlers.exceptions.DocumentNotFoundException;
+import org.jsoup.nodes.Document;
+import org.jsoup.select.Elements;
 import org.junit.Test;
 import services.NewsArticleService;
 import services.NewsSourceService;
@@ -37,5 +39,17 @@ public abstract class AbstractCrawlerTestIT {
         crawler.setSourcesService(new NewsSourceService());
         crawler.crawlWebsite("", crawler.getMySource());
     }
+    
+    @Test
+    public void testImportArticle() {
+        System.out.println("importArticle");
+        FlexNewsCrawler crawler = getCrawler();
+        Document document = crawler.openDocument(crawler.getMySource().getUrl());
+        Elements articles = crawler.getArticles(document);
+        if(!articles.isEmpty()) {
+            crawler.importArticle(articles.first(), crawler.getMySource());
+        }
+    }
+
 
 }

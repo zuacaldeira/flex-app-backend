@@ -23,14 +23,11 @@ public class AbstractAmazonWebServiceTest {
         Properties properties = new Properties();
         properties.load(new FileInputStream("/Users/zua/Work/apps/properties/flex-app/amazon.properties"));
 
-        System.out.println("ACCESS KEY = " + properties.getProperty("amazon.accessKey"));
-        System.out.println("SECRET KEY = " + properties.getProperty("amazon.secretKey"));
-        System.out.println("ASSOCIATE TAG = " + properties.getProperty("amazon.associateTag"));
-
         AmazonProperties amazonProperties = new AmazonProperties();
         amazonProperties.setAccessKey(properties.getProperty("amazon.accessKey"));
         amazonProperties.setSecretKey(properties.getProperty("amazon.secretKey"));
         amazonProperties.setAssociateTag(properties.getProperty("amazon.associateTag"));
+
         Neo4jSessionFactory.getInstance().getNeo4jSession().query("CREATE CONSTRAINT ON (n:AmazonProperties) ASSERT n.associateTag IS UNIQUE", new HashMap<>());
         Neo4jSessionFactory.getInstance().getNeo4jSession().save(amazonProperties);
     }

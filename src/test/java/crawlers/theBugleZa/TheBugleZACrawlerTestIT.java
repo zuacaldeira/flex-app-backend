@@ -7,6 +7,8 @@ package crawlers.theBugleZa;
 
 import crawlers.AbstractCrawlerTestIT;
 import crawlers.FlexNewsCrawler;
+import crawlers.exceptions.AuthorsNotFoundException;
+import org.junit.Test;
 
 /**
  *
@@ -21,4 +23,11 @@ public class TheBugleZACrawlerTestIT extends AbstractCrawlerTestIT {
     protected FlexNewsCrawler getCrawler() {
         return new TheBugleZACrawler();
     }
+    
+    @Override
+    @Test(expected=AuthorsNotFoundException.class)
+    public void testImportArticle() {
+        super.testImportArticle();
+    }
+    
 }

@@ -7,6 +7,8 @@ package crawlers.aVerdadeOnline;
 
 import crawlers.AbstractCrawlerTestIT;
 import crawlers.FlexNewsCrawler;
+import crawlers.exceptions.ImageNotFoundException;
+import org.junit.Test;
 
 /**
  *
@@ -21,4 +23,12 @@ public class AVerdadeOnlineCrawlerTestIT extends AbstractCrawlerTestIT {
     protected FlexNewsCrawler getCrawler() {
         return new AVerdadeOnlineCrawler();
     }
+
+    @Override
+    @Test(expected=ImageNotFoundException.class)
+    public void testImportArticle() {
+        super.testImportArticle();
+    }
+    
+    
 }
