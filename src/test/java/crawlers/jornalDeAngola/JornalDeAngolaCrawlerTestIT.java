@@ -7,12 +7,13 @@ package crawlers.jornalDeAngola;
 
 import crawlers.AbstractCrawlerTestIT;
 import crawlers.FlexNewsCrawler;
-import crawlers.jornalDeAngola.JornalDeAngolaCrawler;
+import org.junit.Ignore;
 
 /**
  *
  * @author zua
  */
+@Ignore(value = "Due to slowness")
 public class JornalDeAngolaCrawlerTestIT extends AbstractCrawlerTestIT {
 
     public JornalDeAngolaCrawlerTestIT() {

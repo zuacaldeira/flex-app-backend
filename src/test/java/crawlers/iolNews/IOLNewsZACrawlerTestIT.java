@@ -26,7 +26,6 @@ public class IOLNewsZACrawlerTestIT extends AbstractCrawlerTestIT {
     
     
     @Override
-    @Test(expected=ContentNotFoundException.class)
     public void testImportArticle() {
         super.testImportArticle();
     }
