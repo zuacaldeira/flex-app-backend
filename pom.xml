@@ -4,7 +4,7 @@
 
     <groupId>com.github.zuacaldeira</groupId>
     <artifactId>flex-app-backend</artifactId>
-    <version>1.1.1.a-SNAPSHOT</version>
+    <version>1.1.2</version>
     <packaging>ejb</packaging>
     <name>flex-app-backend</name>
     <description>Flex App backend.</description>
@@ -24,7 +24,8 @@
         <connection>scm:git:https://github.com/zuacaldeira/flex-app-backend</connection>
         <developerConnection>scm:git:https://github.com/zuacaldeira/flex-app-backend.git</developerConnection>
         <url>https://github.com/zuacaldeira/flex-app-backend</url>
-    </scm>
+      <tag>flex-app-backend-1.1.2</tag>
+  </scm>
 
     <properties>
         <endorsed.dir>${project.build.directory}/endorsed</endorsed.dir>
