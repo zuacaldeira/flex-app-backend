@@ -27,7 +27,7 @@ public class FlexNewsAggregator {
 
     // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")
-    @Schedule(hour = "*", minute = "5/20")
+    @Schedule(hour = "*", minute = "0/30")
     public void aggregate() {
         try {
             // Our crawlers and aggregators of crawlers 

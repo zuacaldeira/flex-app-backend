@@ -62,7 +62,7 @@ public class GlobalVoicesAggregator {
 
     // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")
-    @Schedule(hour = "*", minute = "10/20")
+    @Schedule(hour = "*", minute = "10/30")
     public void aggregate() {
         try {
             new GlobalVoicesCrawlerAM().crawl();

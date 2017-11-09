@@ -56,7 +56,7 @@ public class NewsOrgApiAggregator {
         sourcesService = new NewsSourceService();
     }
 
-    @Schedule(hour = "*", minute = "15/20")
+    @Schedule(hour = "*", minute = "20/30")
     public void aggregate() {
         try {
             loadAllData();
