@@ -8,6 +8,7 @@ package crawlers.aNacaoCv;
 import crawlers.AbstractCrawlerTestIT;
 import crawlers.FlexNewsCrawler;
 import crawlers.exceptions.ContentNotFoundException;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -25,7 +26,8 @@ public class ANacaoCVCrawlerTestIT extends AbstractCrawlerTestIT {
     }
 
     @Override
-    @Test(expected = ContentNotFoundException.class)
+    //@Test(expected = ContentNotFoundException.class)
+    @Ignore
     public void testImportArticle() {
         super.testImportArticle();
     }

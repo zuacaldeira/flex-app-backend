@@ -5,7 +5,6 @@
  */
 package crawlers;
 
-import crawlers.NewsOrgApiAggregator;
 import crawlers.exceptions.ApiCallException;
 import com.tngtech.java.junit.dataprovider.DataProvider;
 import com.tngtech.java.junit.dataprovider.DataProviderRunner;
@@ -23,9 +22,9 @@ import services.NewsSourceService;
  * @author zua
  */
 @RunWith(DataProviderRunner.class)
-public class FlexObjectMapperTestIT {
+public class NewsOrgApiAggregatorTestIT {
 
-    public FlexObjectMapperTestIT() {
+    public NewsOrgApiAggregatorTestIT() {
     }
 
     @DataProvider
