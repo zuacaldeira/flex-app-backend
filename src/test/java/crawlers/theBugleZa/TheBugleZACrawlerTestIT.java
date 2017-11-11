@@ -25,7 +25,6 @@ public class TheBugleZACrawlerTestIT extends AbstractCrawlerTestIT {
     }
     
     @Override
-    @Test(expected=AuthorsNotFoundException.class)
     public void testImportArticle() {
         super.testImportArticle();
     }
