@@ -7,15 +7,14 @@ package crawlers.globalVoices;
 
 import crawlers.Logos;
 import db.NewsSource;
-import javax.ejb.Schedule;
-import javax.ejb.Singleton;
+import javax.ejb.Stateless;
 
 /**
  *
  * @author zua
  */
 
-public class GlobalVoicesCrawlerPT extends GlobalVoicesAbstractCrawler {
+@Stateless public class GlobalVoicesCrawlerPT extends GlobalVoicesAbstractCrawler {
 
     public GlobalVoicesCrawlerPT() {
     }

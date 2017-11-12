@@ -7,13 +7,13 @@ package crawlers.globalVoices;
 
 import crawlers.Logos;
 import db.NewsSource;
+import javax.ejb.Stateless;
 
 /**
  *
  * @author zua
  */
-
-public class GlobalVoicesCrawlerAM extends GlobalVoicesAbstractCrawler {
+@Stateless public class GlobalVoicesCrawlerAM extends GlobalVoicesAbstractCrawler {
 
     public GlobalVoicesCrawlerAM() {
     }
@@ -34,11 +34,4 @@ public class GlobalVoicesCrawlerAM extends GlobalVoicesAbstractCrawler {
         return source;
     }
 
-    @Override
-    
-    public void crawl() {
-        super.crawl(); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    
 }

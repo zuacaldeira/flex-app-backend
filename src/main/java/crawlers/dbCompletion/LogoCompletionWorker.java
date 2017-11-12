@@ -8,7 +8,8 @@ package crawlers.dbCompletion;
 import crawlers.Logos;
 import db.NewsSource;
 import java.util.List;
-import services.NewsSourceService;
+import javax.ejb.EJB;
+import javax.ejb.Stateless;
 import services.NewsSourceServiceInterface;
 import utils.FlexLogger;
 
@@ -16,11 +17,13 @@ import utils.FlexLogger;
  *
  * @author zua
  */
+@Stateless
 public class LogoCompletionWorker {
 
     private final FlexLogger logger = new FlexLogger(LogoCompletionWorker.class);
 
-    private NewsSourceServiceInterface sourcesService = new NewsSourceService();
+    @EJB
+    private NewsSourceServiceInterface sourcesService;
 
     public void crawl() {
         try {

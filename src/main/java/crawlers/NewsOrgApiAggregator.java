@@ -19,6 +19,8 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.net.URL;
 import java.nio.charset.Charset;
+import javax.ejb.Lock;
+import javax.ejb.LockType;
 import javax.ejb.Schedule;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
@@ -36,6 +38,7 @@ import utils.FlexLogger;
  */
 @Singleton
 @Startup
+@Lock(LockType.READ)
 public class NewsOrgApiAggregator {
 
     private final String API_KEY = "5b4e00f3046843138d8368211777a4f2";

@@ -7,13 +7,14 @@ package crawlers.globalVoices;
 
 import crawlers.Logos;
 import db.NewsSource;
+import javax.ejb.Stateless;
 
 /**
  *
  * @author zua
  */
 
-public class GlobalVoicesCrawlerCA extends GlobalVoicesAbstractCrawler {
+@Stateless public class GlobalVoicesCrawlerCA extends GlobalVoicesAbstractCrawler {
 
     public GlobalVoicesCrawlerCA() {
     }

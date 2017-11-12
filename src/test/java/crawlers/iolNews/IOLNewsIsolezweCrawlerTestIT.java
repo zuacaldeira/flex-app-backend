@@ -24,10 +24,4 @@ public class IOLNewsIsolezweCrawlerTestIT extends AbstractCrawlerTestIT {
         return new IOLNewsIsolezweCrawler();
     }
 
-    @Override
-    @Test(expected = ContentNotFoundException.class)
-    public void testImportArticle() {
-        super.testImportArticle();
-    }
-
 }

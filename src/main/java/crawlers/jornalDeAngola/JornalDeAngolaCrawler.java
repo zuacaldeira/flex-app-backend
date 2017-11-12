@@ -15,6 +15,7 @@ import crawlers.exceptions.ContentNotFoundException;
 import crawlers.exceptions.ArticlesNotFoundException;
 import crawlers.exceptions.AuthorsNotFoundException;
 import db.NewsSource;
+import javax.ejb.Stateless;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -24,7 +25,7 @@ import org.jsoup.select.Elements;
  * @author zua
  */
 
-public class JornalDeAngolaCrawler extends FlexNewsCrawler {
+@Stateless public class JornalDeAngolaCrawler extends FlexNewsCrawler {
 
     public JornalDeAngolaCrawler() {
         super();

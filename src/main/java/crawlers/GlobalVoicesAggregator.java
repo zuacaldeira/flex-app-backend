@@ -48,6 +48,9 @@ import crawlers.globalVoices.GlobalVoicesCrawlerTR;
 import crawlers.globalVoices.GlobalVoicesCrawlerUR;
 import crawlers.globalVoices.GlobalVoicesCrawlerZHS;
 import crawlers.globalVoices.GlobalVoicesCrawlerZHT;
+import javax.ejb.EJB;
+import javax.ejb.Lock;
+import javax.ejb.LockType;
 import javax.ejb.Schedule;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
@@ -58,56 +61,153 @@ import javax.ejb.Startup;
  */
 @Singleton
 @Startup
+@Lock(LockType.READ)
 public class GlobalVoicesAggregator {
+
+    @EJB
+    private GlobalVoicesCrawlerAM globalVoicesCrawlerAM;
+    @EJB
+    private GlobalVoicesCrawlerAR globalVoicesCrawlerAR;
+    @EJB
+    private GlobalVoicesCrawlerAYM globalVoicesCrawlerAYM;
+    @EJB
+    private GlobalVoicesCrawlerBG globalVoicesCrawlerBG;
+    @EJB
+    private GlobalVoicesCrawlerBN globalVoicesCrawlerBN;
+    @EJB
+    private GlobalVoicesCrawlerCA globalVoicesCrawlerCA;
+    @EJB
+    private GlobalVoicesCrawlerCS globalVoicesCrawlerCS;
+    @EJB
+    private GlobalVoicesCrawlerDA globalVoicesCrawlerDA;
+    @EJB
+    private GlobalVoicesCrawlerDE globalVoicesCrawlerDE;
+    @EJB
+    private GlobalVoicesCrawlerEL globalVoicesCrawlerEL;
+    @EJB
+    private GlobalVoicesCrawlerEN globalVoicesCrawlerEN;
+    @EJB
+    private GlobalVoicesCrawlerEO globalVoicesCrawlerEO;
+    @EJB
+    private GlobalVoicesCrawlerES globalVoicesCrawlerES;
+    @EJB
+    private GlobalVoicesCrawlerFA globalVoicesCrawlerFA;
+    @EJB
+    private GlobalVoicesCrawlerFIL globalVoicesCrawlerFIL;
+    @EJB
+    private GlobalVoicesCrawlerFR globalVoicesCrawlerFR;
+    @EJB
+    private GlobalVoicesCrawlerHE globalVoicesCrawlerHE;
+    @EJB
+    private GlobalVoicesCrawlerHI globalVoicesCrawlerHI;
+    @EJB
+    private GlobalVoicesCrawlerHU globalVoicesCrawlerHU;
+    @EJB
+    private GlobalVoicesCrawlerID globalVoicesCrawlerID;
+    @EJB
+    private GlobalVoicesCrawlerIT globalVoicesCrawlerIT;
+    @EJB
+    private GlobalVoicesCrawlerJA globalVoicesCrawlerJA;
+    @EJB
+    private GlobalVoicesCrawlerKM globalVoicesCrawlerKM;
+    @EJB
+    private GlobalVoicesCrawlerKO globalVoicesCrawlerKO;
+    @EJB
+    private GlobalVoicesCrawlerMG globalVoicesCrawlerMG;
+    @EJB
+    private GlobalVoicesCrawlerMK globalVoicesCrawlerMK;
+    @EJB
+    private GlobalVoicesCrawlerNE globalVoicesCrawlerNE;
+    @EJB
+    private GlobalVoicesCrawlerOR globalVoicesCrawlerOR;
+    @EJB
+    private GlobalVoicesCrawlerPA globalVoicesCrawlerPA;
+    @EJB
+    private GlobalVoicesCrawlerPL globalVoicesCrawlerPL;
+    @EJB
+    private GlobalVoicesCrawlerPS globalVoicesCrawlerPS;
+    @EJB
+    private GlobalVoicesCrawlerPT globalVoicesCrawlerPT;
+    @EJB
+    private GlobalVoicesCrawlerRO globalVoicesCrawlerRO;
+    @EJB
+    private GlobalVoicesCrawlerRU globalVoicesCrawlerRU;
+    @EJB
+    private GlobalVoicesCrawlerSQ globalVoicesCrawlerSQ;
+    @EJB
+    private GlobalVoicesCrawlerSR globalVoicesCrawlerSR;
+    @EJB
+    private GlobalVoicesCrawlerSV globalVoicesCrawlerSV;
+    @EJB
+    private GlobalVoicesCrawlerSW globalVoicesCrawlerSW;
+    @EJB
+    private GlobalVoicesCrawlerTET globalVoicesCrawlerTET;
+    @EJB
+    private GlobalVoicesCrawlerTR globalVoicesCrawlerTR;
+    @EJB
+    private GlobalVoicesCrawlerUR globalVoicesCrawlerUR;
+    @EJB
+    private GlobalVoicesCrawlerZHS globalVoicesCrawlerZHS;
+    @EJB
+    private GlobalVoicesCrawlerZHT globalVoicesCrawlerZHT;
 
     // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")
     @Schedule(hour = "*", minute = "10/30")
-    public void aggregate() {
-        try {
-            new GlobalVoicesCrawlerAM().crawl();
-            new GlobalVoicesCrawlerAR().crawl();
-            new GlobalVoicesCrawlerAYM().crawl();
-            new GlobalVoicesCrawlerBG().crawl();
-            new GlobalVoicesCrawlerBN().crawl();
-            new GlobalVoicesCrawlerCA().crawl();
-            new GlobalVoicesCrawlerCS().crawl();
-            new GlobalVoicesCrawlerDA().crawl();
-            new GlobalVoicesCrawlerDE().crawl();
-            new GlobalVoicesCrawlerEL().crawl();
-            new GlobalVoicesCrawlerEN().crawl();
-            new GlobalVoicesCrawlerEO().crawl();
-            new GlobalVoicesCrawlerES().crawl();
-            new GlobalVoicesCrawlerFA().crawl();
-            new GlobalVoicesCrawlerFIL().crawl();
-            new GlobalVoicesCrawlerFR().crawl();
-            new GlobalVoicesCrawlerHE().crawl();
-            new GlobalVoicesCrawlerHI().crawl();
-            new GlobalVoicesCrawlerHU().crawl();
-            new GlobalVoicesCrawlerID().crawl();
-            new GlobalVoicesCrawlerIT().crawl();
-            new GlobalVoicesCrawlerJA().crawl();
-            new GlobalVoicesCrawlerKM().crawl();
-            new GlobalVoicesCrawlerKO().crawl();
-            new GlobalVoicesCrawlerMG().crawl();
-            new GlobalVoicesCrawlerMK().crawl();
-            new GlobalVoicesCrawlerNE().crawl();
-            new GlobalVoicesCrawlerOR().crawl();
-            new GlobalVoicesCrawlerPA().crawl();
-            new GlobalVoicesCrawlerPL().crawl();
-            new GlobalVoicesCrawlerPS().crawl();
-            new GlobalVoicesCrawlerPT().crawl();
-            new GlobalVoicesCrawlerRO().crawl();
-            new GlobalVoicesCrawlerRU().crawl();
-            new GlobalVoicesCrawlerSQ().crawl();
-            new GlobalVoicesCrawlerSR().crawl();
-            new GlobalVoicesCrawlerSV().crawl();
-            new GlobalVoicesCrawlerSW().crawl();
-            new GlobalVoicesCrawlerTET().crawl();
-            new GlobalVoicesCrawlerTR().crawl();
-            new GlobalVoicesCrawlerUR().crawl();
-            new GlobalVoicesCrawlerZHS().crawl();
-            new GlobalVoicesCrawlerZHT().crawl();
-        } catch(Throwable t) {}
+    public void aggregate1() {
+        globalVoicesCrawlerAM.crawl();
+        globalVoicesCrawlerAR.crawl();
+        globalVoicesCrawlerAYM.crawl();
+        globalVoicesCrawlerBG.crawl();
+        globalVoicesCrawlerBN.crawl();
+        globalVoicesCrawlerCA.crawl();
+        globalVoicesCrawlerCS.crawl();
+        globalVoicesCrawlerDA.crawl();
+        globalVoicesCrawlerDE.crawl();
+        globalVoicesCrawlerEL.crawl();
+        globalVoicesCrawlerEN.crawl();
+        globalVoicesCrawlerEO.crawl();
+        globalVoicesCrawlerES.crawl();
+    }
+
+
+
+
+    @Schedule(hour = "*", minute = "13/30")
+    public void aggregate2() {
+        globalVoicesCrawlerFA.crawl();
+        globalVoicesCrawlerFIL.crawl();
+        globalVoicesCrawlerFR.crawl();
+        globalVoicesCrawlerHE.crawl();
+        globalVoicesCrawlerHI.crawl();
+        globalVoicesCrawlerHU.crawl();
+        globalVoicesCrawlerID.crawl();
+        globalVoicesCrawlerIT.crawl();
+        globalVoicesCrawlerJA.crawl();
+        globalVoicesCrawlerKM.crawl();
+        globalVoicesCrawlerKO.crawl();
+        globalVoicesCrawlerMG.crawl();
+        globalVoicesCrawlerMK.crawl();
+        globalVoicesCrawlerNE.crawl();
+        globalVoicesCrawlerOR.crawl();
+    }
+    
+    @Schedule(hour = "*", minute = "16/30")
+    public void aggregate3() {
+        globalVoicesCrawlerPA.crawl();
+        globalVoicesCrawlerPL.crawl();
+        globalVoicesCrawlerPS.crawl();
+        globalVoicesCrawlerPT.crawl();
+        globalVoicesCrawlerRO.crawl();
+        globalVoicesCrawlerRU.crawl();
+        globalVoicesCrawlerSQ.crawl();
+        globalVoicesCrawlerSR.crawl();
+        globalVoicesCrawlerSV.crawl();
+        globalVoicesCrawlerSW.crawl();
+        globalVoicesCrawlerTET.crawl();
+        globalVoicesCrawlerTR.crawl();
+        globalVoicesCrawlerUR.crawl();
+        globalVoicesCrawlerZHS.crawl();
+        globalVoicesCrawlerZHT.crawl();
     }
 }

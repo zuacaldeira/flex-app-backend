@@ -25,13 +25,12 @@ import java.io.IOException;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
+import javax.ejb.EJB;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import services.NewsArticleService;
 import services.NewsArticleServiceInterface;
-import services.NewsSourceService;
 import services.NewsSourceServiceInterface;
 import utils.FlexLogger;
 
@@ -41,29 +40,30 @@ import utils.FlexLogger;
  */
 public abstract class FlexNewsCrawler {
 
+    @EJB
     private NewsArticleServiceInterface articlesService;
 
+    @EJB
     private NewsSourceServiceInterface sourcesService;
 
     private FlexLogger logger;
 
     public FlexNewsCrawler() {
         logger = new FlexLogger(getClass());
-        articlesService = new NewsArticleService();
-        sourcesService = new NewsSourceService();
     }
 
     public abstract void crawl();
 
     protected void crawlWebsite(String url, NewsSource source) {
-        logger.info("Processing source %s (%s)", source.getName(), url);
-        Document document = openDocument(url);
         try {
+            logger.info("Processing source %s (%s)", source.getName(), url);
+            Document document = openDocument(url);
             crawlUrl(document, source);
-            sourcesService.save(source);
+            //sourcesService.save(source);
+            logger.info("Finished: %s", source.getName());
         } catch (Exception e) {
+            logger.error("Error: %s", e.getMessage());
         }
-        logger.info("Finished: %s", source.getName());
     }
 
     /**
@@ -113,7 +113,7 @@ public abstract class FlexNewsCrawler {
     }
 
     private void saveArticle(String articleUrl, String title, String imageUrl, String description, Date date, Set<NewsAuthor> authors, NewsSource source) {
-        if (title != null && !title.isEmpty() && articlesService.findArticleWithTitle(title) == null) {
+        if (title != null && !title.isEmpty() && articlesService.find(title) == null) {
             NewsArticle newsArticle = new NewsArticle();
             newsArticle.setSourceId(source.getSourceId());
             newsArticle.setLanguage(source.getLanguage());
@@ -130,7 +130,7 @@ public abstract class FlexNewsCrawler {
             newsArticle.setAuthors(authors);
             source.setCorrespondents(authors);
 
-            //articlesService.save(newsArticle);
+            articlesService.save(newsArticle);
             logger.info("\tSaved new article: %s", newsArticle.getTitle());
         } else {
             logger.log("\tIgnored old article: %s", title);

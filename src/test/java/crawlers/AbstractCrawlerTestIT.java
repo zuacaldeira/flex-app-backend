@@ -33,7 +33,6 @@ public abstract class AbstractCrawlerTestIT {
         crawler.crawl();
     }
     
-    @Test(expected = DocumentNotFoundException.class)
     public void testCrawlWebsite() {
         FlexNewsCrawler crawler = getCrawler();
         crawler.setArticlesService(new NewsArticleService());
