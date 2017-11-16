@@ -5,19 +5,19 @@
  */
 package utils;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
-import org.apache.http.client.utils.DateUtils;
 
 /**
  *
  * @author zua
  */
-public class FlexLogger {
+public class FlexBackendLogger {
 
     private boolean isOn = false;
     private Class<?> aClass;
 
-    public FlexLogger(Class<?> aClass) {
+    public FlexBackendLogger(Class<?> aClass) {
         this.aClass = aClass;
     }
 
@@ -50,9 +50,9 @@ public class FlexLogger {
     }
 
     private void sout(String format, Object[] values) {
-        String newFormat = "[%s] %25s: " + format;
+        String newFormat = "[%s] %s: " + format;
         Object[] newValues = new Object[values.length + 2];
-        newValues[0] = DateUtils.formatDate(new Date(), "dd/MM/yyyy HH:mm:ss");
+        newValues[0] = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(new Date());
         newValues[1] = aClass.getSimpleName();
         int i = 2;
         for (Object o : values) {
@@ -64,9 +64,9 @@ public class FlexLogger {
     }
 
     private void serr(String format, Object[] values) {
-        String newFormat = "[%s] %25s: " + format;
+        String newFormat = "[%s] %s: " + format;
         Object[] newValues = new Object[values.length + 2];
-        newValues[0] = DateUtils.formatDate(new Date(), "dd/MM/yyyy HH:mm:ss");
+        newValues[0] = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(new Date());
         newValues[1] = aClass.getSimpleName();
         int i = 2;
         for (Object o : values) {
