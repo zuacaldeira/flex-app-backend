@@ -25,8 +25,6 @@ public class FlexAmazonServiceTest extends AbstractAmazonWebServiceTest{
     public void testSearchAmazonItems() throws Exception {
         System.out.println("searchAmazonItems");
         super.addPropertiesToTestDB();
-        Items items = new FlexAmazonService().searchAmazonItems("Books", "Java");
-        System.out.println("Items " + items);
         
     }
     
