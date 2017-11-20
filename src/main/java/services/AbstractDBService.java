@@ -12,7 +12,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import org.neo4j.ogm.cypher.query.SortOrder;
 import org.neo4j.ogm.session.Session;
 import utils.DatabaseUtils;
 
@@ -23,7 +22,7 @@ import utils.DatabaseUtils;
  */
 public abstract class AbstractDBService<T extends GraphEntity> implements DBService<T> {
 
-    public final int LIMIT = 50;
+    public final int LIMIT = 30;
 
     @Override
     public final Collection<T> findAll() {
@@ -32,13 +31,13 @@ public abstract class AbstractDBService<T extends GraphEntity> implements DBServ
 
     @Override
     public final List<T> findAllAsc() {
-        String query = getFindAllQuery(null, null, null, getSortOrderAsc(), LIMIT);
+        String query = Neo4jQueries.getFindAllQuery(getClassType(), null, null, null, getSortOrderAsc(), LIMIT);
         return executeQuery(query);
     }
 
     @Override
     public final List<T> findAllDesc() {
-        String query = getFindAllQuery(null, null, null, getSortOrderDesc(), LIMIT);
+        String query = Neo4jQueries.getFindAllQuery(getClassType(), null, null, null, getSortOrderDesc(), LIMIT);
         return executeQuery(query);
     }
 
@@ -49,13 +48,13 @@ public abstract class AbstractDBService<T extends GraphEntity> implements DBServ
 
     @Override
     public final List<T> findAllAscWithLimit(int limit) {
-        String query = getFindAllQuery(null, null, null, getSortOrderAsc(), limit);
+        String query = Neo4jQueries.getFindAllQuery(getClassType(), null, null, null, getSortOrderAsc(), limit);
         return executeQuery(query);
     }
 
     @Override
     public final List<T> findAllDescWithLimit(int limit) {
-        String query = getFindAllQuery(null, null, null, getSortOrderDesc(), limit);
+        String query = Neo4jQueries.getFindAllQuery(getClassType(), null, null, null, getSortOrderDesc(), limit);
         return executeQuery(query);
     }
 
@@ -66,13 +65,13 @@ public abstract class AbstractDBService<T extends GraphEntity> implements DBServ
 
     @Override
     public final List<T> findAllAsc(String username) {
-        String query = getFindAllQuery(username, null, null, getSortOrderAsc(), LIMIT);
+        String query = Neo4jQueries.getFindAllQuery(getClassType(), username, null, null, getSortOrderAsc(), LIMIT);
         return executeQuery(query);
     }
 
     @Override
     public final List<T> findAllDesc(String username) {
-        String query = getFindAllQuery(username, null, null, getSortOrderDesc(), LIMIT);
+        String query = Neo4jQueries.getFindAllQuery(getClassType(), username, null, null, getSortOrderDesc(), LIMIT);
         return executeQuery(query);
     }
 
@@ -83,13 +82,13 @@ public abstract class AbstractDBService<T extends GraphEntity> implements DBServ
 
     @Override
     public final List<T> findAllAsc(String username, int limit) {
-        String query = getFindAllQuery(username, null, null, getSortOrderAsc(), limit);
+        String query = Neo4jQueries.getFindAllQuery(getClassType(), username, null, null, getSortOrderAsc(), limit);
         return executeQuery(query);
     }
 
     @Override
     public final List<T> findAllDesc(String username, int limit) {
-        String query = getFindAllQuery(username, null, null, getSortOrderDesc(), limit);
+        String query = Neo4jQueries.getFindAllQuery(getClassType(), username, null, null, getSortOrderDesc(), limit);
         return executeQuery(query);
     }
 
@@ -100,13 +99,13 @@ public abstract class AbstractDBService<T extends GraphEntity> implements DBServ
 
     @Override
     public final List<T> findAllAsc(String property, Object value) {
-        String query = getFindAllQuery(null, property, value, getSortOrderAsc(), LIMIT);
+        String query = Neo4jQueries.getFindAllQuery(getClassType(), null, property, value, getSortOrderAsc(), LIMIT);
         return executeQuery(query);
     }
 
     @Override
     public final List<T> findAllDesc(String property, Object value) {
-        String query = getFindAllQuery(null, property, value, getSortOrderDesc(), LIMIT);
+        String query = Neo4jQueries.getFindAllQuery(getClassType(), null, property, value, getSortOrderDesc(), LIMIT);
         return executeQuery(query);
     }
 
@@ -117,13 +116,13 @@ public abstract class AbstractDBService<T extends GraphEntity> implements DBServ
 
     @Override
     public final List<T> findAllAsc(String property, Object value, int limit) {
-        String query = getFindAllQuery(null, property, value, getSortOrderAsc(), limit);
+        String query = Neo4jQueries.getFindAllQuery(getClassType(), null, property, value, getSortOrderAsc(), limit);
         return executeQuery(query);
     }
 
     @Override
     public final List<T> findAllDesc(String property, Object value, int limit) {
-        String query = getFindAllQuery(null, property, value, getSortOrderDesc(), limit);
+        String query = Neo4jQueries.getFindAllQuery(getClassType(), null, property, value, getSortOrderDesc(), limit);
         return executeQuery(query);
     }
 
@@ -134,13 +133,13 @@ public abstract class AbstractDBService<T extends GraphEntity> implements DBServ
 
     @Override
     public final List<T> findAllAsc(String username, String property, Object value) {
-        String query = getFindAllQuery(username, property, value, getSortOrderAsc(), LIMIT);
+        String query = Neo4jQueries.getFindAllQuery(getClassType(), username, property, value, getSortOrderAsc(), LIMIT);
         return executeQuery(query);
     }
 
     @Override
     public final List<T> findAllDesc(String username, String property, Object value) {
-        String query = getFindAllQuery(username, property, value, getSortOrderDesc(), LIMIT);
+        String query = Neo4jQueries.getFindAllQuery(getClassType(), username, property, value, getSortOrderDesc(), LIMIT);
         return executeQuery(query);
     }
 
@@ -151,13 +150,13 @@ public abstract class AbstractDBService<T extends GraphEntity> implements DBServ
 
     @Override
     public final List<T> findAllAsc(String username, String property, Object value, int limit) {
-        String query = getFindAllQuery(username, property, value, getSortOrderAsc(), limit);
+        String query = Neo4jQueries.getFindAllQuery(getClassType(), username, property, value, getSortOrderAsc(), limit);
         return executeQuery(query);
     }
 
     @Override
     public final List<T> findAllDesc(String username, String property, Object value, int limit) {
-        String query = getFindAllQuery(username, property, value, getSortOrderDesc(), limit);
+        String query = Neo4jQueries.getFindAllQuery(getClassType(), username, property, value, getSortOrderDesc(), limit);
         return executeQuery(query);
     }
 
@@ -207,90 +206,6 @@ public abstract class AbstractDBService<T extends GraphEntity> implements DBServ
 
     protected Session getSession() {
         return Neo4jSessionFactory.getInstance().getNeo4jSession();
-    }
-
-    protected String getCreateStateQuery(String relationName, String userProperty, String userPropertyValue, String entityProperty, String entityPropertyValue) {
-        String query = "MATCH (u:FlexUser),(n:" + getClassType().getSimpleName() + ") WHERE\n";
-        query += "u." + userProperty + "=" + DatabaseUtils.getInstance().wrapUp(userPropertyValue);
-        query += " AND ";
-        query += "n." + entityProperty + "=" + DatabaseUtils.getInstance().wrapUp(entityPropertyValue);
-        query += " CREATE (u)-[r:" + relationName + "]->(n) RETURN r";
-        return query;
-    }
-
-    protected String getMatchStateQuery(String relationName, String username, String property, String value, int limit) {
-        String query = "MATCH (u:FlexUser)-[:" + relationName + "]->(n:" + getClassType().getSimpleName() + ") WHERE\n";
-        query += "u.username=" + DatabaseUtils.getInstance().wrapUp(username);
-        if (property != null) {
-            query += " AND ";
-            query += "n." + property + "=" + DatabaseUtils.getInstance().wrapUp(value);
-        }
-        query += " RETURN n";
-
-        if (limit > 0) {
-            query += " limit " + limit;
-        }
-        return query;
-    }
-
-    protected String getDeleteStateQuery(String relationName, String userProperty, String userPropertyValue, String entityProperty, String entityPropertyValue) {
-        String query = "MATCH (u:FlexUser)-[r:" + relationName + "]->(n:" + getClassType().getSimpleName() + ") WHERE\n";
-        query += "u." + userProperty + "=" + DatabaseUtils.getInstance().wrapUp(userPropertyValue);
-        query += " AND ";
-        query += "n." + entityProperty + "=" + DatabaseUtils.getInstance().wrapUp(entityPropertyValue);
-        query += " DELETE r";
-        return query;
-    }
-
-    protected String getFindAllQuery(String username, String property, Object value, SortOrder order, int limit) {
-        StringBuffer buffer = new StringBuffer();
-        buffer.append("MATCH ");
-        if (username != null) {
-            buffer.append("(u:FlexUser), ");
-        }
-        buffer.append("(n:");
-        buffer.append(getClassType().getSimpleName());
-        buffer.append(") ");
-
-        if (username != null || property != null) {
-            buffer.append("WHERE ");
-        }
-
-        if (username != null) {
-            buffer.append("u.username=");
-            buffer.append(DatabaseUtils.getInstance().wrapUp(username));
-            if (property != null && value != null) {
-                buffer.append(" AND ");
-            }
-        }
-
-        if (property != null && value != null) {
-            buffer.append("n.");
-            buffer.append(property);
-            buffer.append("=");
-            buffer.append(DatabaseUtils.getInstance().wrapUp(value.toString()));
-            buffer.append(" ");
-        }
-
-        if (username != null) {
-            buffer.append(" AND NOT ( (u)-[:READ|FAVORITE|FAKE]->(n)) ");
-        }
-
-        buffer.append(" RETURN n ");
-
-        if (order != null) {
-            buffer.append(order.toString().replace("$", "n"));
-            buffer.append(" ");
-        }
-
-        if (limit > 0) {
-            buffer.append(" LIMIT ");
-            buffer.append(limit);
-        }
-
-        String query = buffer.toString();
-        System.out.println("Query = " + query.toUpperCase());
-        return query;
     }
 
     @Override

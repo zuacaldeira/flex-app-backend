@@ -7,15 +7,15 @@ package services;
 
 import db.Person;
 import java.util.HashMap;
+import javax.ejb.Stateless;
 import org.neo4j.ogm.cypher.query.SortOrder;
-import services.AbstractDBService;
-import services.FlexPeopleServiceInterface;
 import utils.DatabaseUtils;
 
 /**
  *
  * @author zua
  */
+@Stateless
 public class FlexPeopleService extends AbstractDBService<Person> implements FlexPeopleServiceInterface {
 
     public FlexPeopleService() {

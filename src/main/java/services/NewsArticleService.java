@@ -121,14 +121,7 @@ public class NewsArticleService extends AbstractDBService<NewsArticle> implement
     @Override
     public List<NewsArticle> findArticlesWithCategory(String username, String category) {
         try {
-            String query = "MATCH (u:FlexUser), (n:NewsArticle)--(a:NewsAuthor)--(s:NewsSource) ";
-            query += "WHERE u.username=" + DatabaseUtils.getInstance().wrapUp(username) + " ";
-            query += "  AND (n.category = " + DatabaseUtils.getInstance().wrapUp(category) + " ";
-            query += "  OR  s.category = " + DatabaseUtils.getInstance().wrapUp(category) + ") ";
-            query += "  AND NOT ( (u)-[:READ|FAVORITE|FAKE]->(n)) ";
-            query += "  RETURN n ";
-            query += "  ORDER BY n.publishedAt DESC LIMIT " + LIMIT;
-            System.out.println(query);
+            String query = Neo4jQueries.findArticlesWitCategory(username, category, LIMIT);
             return super.executeQuery(query);
         } catch (Exception e) {
             return new LinkedList<>();
@@ -138,12 +131,7 @@ public class NewsArticleService extends AbstractDBService<NewsArticle> implement
     @Override
     public List<NewsArticle> findArticlesWithSource(String sourceId) {
         try {
-            String query = "MATCH (n:NewsArticle) ";
-            query += "WHERE n.sourceId=" + DatabaseUtils.getInstance().wrapUp(sourceId) + " ";
-            query += "  RETURN n ";
-            query += "  ORDER BY n.publishedAt DESC LIMIT " + LIMIT;
-            System.out.println(query);
-            return super.executeQuery(query);
+            return super.executeQuery(Neo4jQueries.findArticlesWithSource(sourceId, LIMIT));
         } catch (Exception e) {
             return new LinkedList<>();
         }
@@ -152,14 +140,7 @@ public class NewsArticleService extends AbstractDBService<NewsArticle> implement
     @Override
     public List<NewsArticle> findArticlesWithSource(String username, String sourceId) {
         try {
-            String query = "MATCH (u:FlexUser), (n:NewsArticle)--(a:NewsAuthor)--(s:NewsSource) ";
-            query += "WHERE u.username=" + DatabaseUtils.getInstance().wrapUp(username) + " ";
-            query += "  AND (n.sourceId=" + DatabaseUtils.getInstance().wrapUp(sourceId) + " ";
-            query += "  OR s.sourceId=" + DatabaseUtils.getInstance().wrapUp(sourceId) + ") ";
-            query += "  AND NOT ( (u)-[:READ|FAVORITE|FAKE]->(n)) ";
-            query += "  RETURN n ";
-            query += "  ORDER BY n.publishedAt DESC LIMIT " + LIMIT;
-            System.out.println(query);
+            String query = Neo4jQueries.findArticlesWithSource(username, sourceId, LIMIT);
             return super.executeQuery(query);
         } catch (Exception e) {
             return new LinkedList<>();
@@ -169,14 +150,7 @@ public class NewsArticleService extends AbstractDBService<NewsArticle> implement
     @Override
     public Collection<NewsArticle> findArticlesWithLanguage(String username, String language) {
         try {
-            String query = "MATCH (u:FlexUser), (n:NewsArticle) ";
-            query += "WHERE u.username=" + DatabaseUtils.getInstance().wrapUp(username) + " ";
-            query += "AND n.language=" + DatabaseUtils.getInstance().wrapUp(language) + " ";
-            //query += "OR  s.language=" + DatabaseUtils.getInstance().wrapUp(language) + " ";
-            query += "AND NOT ( (u)-[:READ|FAVORITE|FAKE]->(n)) ";
-            query += "  RETURN n ";
-            query += "  ORDER BY n.publishedAt DESC LIMIT " + LIMIT;
-            return super.executeQuery(query);
+            return super.executeQuery(Neo4jQueries.findArticlesWithLanguage(username, language, LIMIT));
         } catch (Exception e) {
             return new LinkedList<>();
         }
@@ -185,11 +159,7 @@ public class NewsArticleService extends AbstractDBService<NewsArticle> implement
     @Override
     public Collection<NewsArticle> findArticlesWithLanguage(String language) {
         try {
-            String query = "MATCH (n:NewsArticle) ";
-            query += "WHERE n.language=" + DatabaseUtils.getInstance().wrapUp(language) + " ";
-            query += "  RETURN n ";
-            query += "  ORDER BY n.publishedAt DESC LIMIT " + LIMIT;
-            return super.executeQuery(query);
+            return super.executeQuery(Neo4jQueries.findArticlesWithLanguage(language, LIMIT));
         } catch (Exception e) {
             return new LinkedList<>();
         }
@@ -198,12 +168,7 @@ public class NewsArticleService extends AbstractDBService<NewsArticle> implement
     @Override
     public Collection<NewsArticle> findArticlesWithCountry(String country) {
         try {
-            String query = "MATCH (n:NewsArticle) ";
-            query += "WHERE n.country=" + DatabaseUtils.getInstance().wrapUp(country) + " ";
-            query += "  RETURN n ";
-            query += "  ORDER BY n.publishedAt DESC LIMIT " + LIMIT;
-            System.out.println(query);
-            return super.executeQuery(query);
+            return super.executeQuery(Neo4jQueries.findArticlesWithCountry(country, LIMIT));
         } catch (Exception e) {
             return new LinkedList<>();
         }
@@ -212,14 +177,7 @@ public class NewsArticleService extends AbstractDBService<NewsArticle> implement
     @Override
     public Collection<NewsArticle> findArticlesWithCountry(String username, String country) {
         try {
-            String query = "MATCH (u:FlexUser), (n:NewsArticle)--(a:NewsAuthor)--(s:NewsSource) ";
-            query += "WHERE u.username=" + DatabaseUtils.getInstance().wrapUp(username) + " ";
-            query += "AND n.country=" + DatabaseUtils.getInstance().wrapUp(country) + " ";
-            query += "AND NOT ( (u)-[:READ|FAVORITE|FAKE]->(n)) ";
-            query += "  RETURN n ";
-            query += "  ORDER BY n.publishedAt DESC LIMIT " + LIMIT;
-            System.out.println(query);
-            return super.executeQuery(query);
+            return super.executeQuery(Neo4jQueries.findArticlesWithCountry(username, country, LIMIT));
         } catch (Exception e) {
             return new LinkedList<>();
         }
@@ -248,7 +206,7 @@ public class NewsArticleService extends AbstractDBService<NewsArticle> implement
     @Override
     public List<NewsArticle> findAllRead(String username) {
         try {
-            String query = getMatchStateQuery("READ", username, null, null, LIMIT);
+            String query = Neo4jQueries.getMatchStateQuery(getClassType(), "READ", username, null, null, LIMIT);
             return executeQuery(query);
         } catch (Exception e) {
             return new LinkedList<>();
@@ -258,7 +216,7 @@ public class NewsArticleService extends AbstractDBService<NewsArticle> implement
     @Override
     public List<NewsArticle> findAllFavorite(String username) {
         try {
-            String query = getMatchStateQuery("FAVORITE", username, null, null, LIMIT);
+            String query = Neo4jQueries.getMatchStateQuery(getClassType(), "FAVORITE", username, null, null, LIMIT);
             return executeQuery(query);
         } catch (Exception e) {
             return new LinkedList<>();
@@ -268,7 +226,7 @@ public class NewsArticleService extends AbstractDBService<NewsArticle> implement
     @Override
     public List<NewsArticle> findAllFake(String username) {
         try {
-            String query = getMatchStateQuery("FAKE", username, null, null, LIMIT);
+            String query = Neo4jQueries.getMatchStateQuery(getClassType(), "FAKE", username, null, null, LIMIT);
             return executeQuery(query);
         } catch (Exception e) {
             return new LinkedList<>();
@@ -279,7 +237,7 @@ public class NewsArticleService extends AbstractDBService<NewsArticle> implement
     public void markAsRead(String username, NewsArticle entity) {
         try {
             if (!isRead(username, entity)) {
-                getSession().query(getCreateStateQuery("READ", "username", username, entity.getPropertyName(), entity.getPropertyValue()), new HashMap<String, Object>());
+                getSession().query(Neo4jQueries.getCreateStateQuery(getClassType(), "READ", "username", username, entity.getPropertyName(), entity.getPropertyValue()), new HashMap<String, Object>());
             }
         } catch (Exception e) {
         }
@@ -289,7 +247,7 @@ public class NewsArticleService extends AbstractDBService<NewsArticle> implement
     public void markAsFavorite(String username, NewsArticle entity) {
         try {
             if (!isFavorite(username, entity)) {
-                getSession().query(getCreateStateQuery("FAVORITE", "username", username, entity.getPropertyName(), entity.getPropertyValue()), new HashMap<String, Object>());
+                getSession().query(Neo4jQueries.getCreateStateQuery(getClassType(), "FAVORITE", "username", username, entity.getPropertyName(), entity.getPropertyValue()), new HashMap<String, Object>());
             }
         } catch (Exception e) {
         }
@@ -299,7 +257,7 @@ public class NewsArticleService extends AbstractDBService<NewsArticle> implement
     public void markAsFake(String username, NewsArticle entity) {
         try {
             if (!isFake(username, entity)) {
-                getSession().query(getCreateStateQuery("FAKE", "username", username, entity.getPropertyName(), entity.getPropertyValue()), new HashMap<String, Object>());
+                getSession().query(Neo4jQueries.getCreateStateQuery(getClassType(), "FAKE", "username", username, entity.getPropertyName(), entity.getPropertyValue()), new HashMap<String, Object>());
             }
         } catch (Exception e) {
         }
@@ -309,7 +267,7 @@ public class NewsArticleService extends AbstractDBService<NewsArticle> implement
     public void removeMarkAsRead(String username, NewsArticle entity) {
         try {
             if (isRead(username, entity)) {
-                getSession().query(getDeleteStateQuery("READ", "username", username, entity.getPropertyName(), entity.getPropertyValue()), new HashMap<String, Object>());
+                getSession().query(Neo4jQueries.getDeleteStateQuery(getClassType(), "READ", "username", username, entity.getPropertyName(), entity.getPropertyValue()), new HashMap<String, Object>());
             }
         } catch (Exception e) {
         }
@@ -319,7 +277,7 @@ public class NewsArticleService extends AbstractDBService<NewsArticle> implement
     public void removeMarkAsFavorite(String username, NewsArticle entity) {
         try {
             if (isFavorite(username, entity)) {
-                getSession().query(getDeleteStateQuery("FAVORITE", "username", username, entity.getPropertyName(), entity.getPropertyValue()), new HashMap<String, Object>());
+                getSession().query(Neo4jQueries.getDeleteStateQuery(getClassType(), "FAVORITE", "username", username, entity.getPropertyName(), entity.getPropertyValue()), new HashMap<String, Object>());
             }
         } catch (Exception e) {
         }
@@ -329,7 +287,7 @@ public class NewsArticleService extends AbstractDBService<NewsArticle> implement
     public void removeMarkAsFake(String username, NewsArticle entity) {
         try {
             if (isFake(username, entity)) {
-                getSession().query(getDeleteStateQuery("FAKE", "username", username, entity.getPropertyName(), entity.getPropertyValue()), new HashMap<String, Object>());
+                getSession().query(Neo4jQueries.getDeleteStateQuery(getClassType(), "FAKE", "username", username, entity.getPropertyName(), entity.getPropertyValue()), new HashMap<String, Object>());
             }
         } catch (Exception e) {
         }
@@ -338,7 +296,7 @@ public class NewsArticleService extends AbstractDBService<NewsArticle> implement
     @Override
     public boolean isRead(String username, NewsArticle entity) {
         try {
-            return getSession().queryForObject(getClassType(), getMatchStateQuery("READ", username, entity.getPropertyName(), entity.getPropertyValue(), -1), new HashMap<String, Object>())
+            return getSession().queryForObject(getClassType(), Neo4jQueries.getMatchStateQuery(getClassType(), "READ", username, entity.getPropertyName(), entity.getPropertyValue(), -1), new HashMap<String, Object>())
                     != null;
         } catch (Exception e) {
             return false;
@@ -348,7 +306,7 @@ public class NewsArticleService extends AbstractDBService<NewsArticle> implement
     @Override
     public boolean isFavorite(String username, NewsArticle entity) {
         try {
-            return getSession().queryForObject(getClassType(), getMatchStateQuery("FAVORITE", username, entity.getPropertyName(), entity.getPropertyValue(), -1), new HashMap<String, Object>())
+            return getSession().queryForObject(getClassType(), Neo4jQueries.getMatchStateQuery(getClassType(), "FAVORITE", username, entity.getPropertyName(), entity.getPropertyValue(), -1), new HashMap<String, Object>())
                     != null;
         } catch (Exception e) {
             return false;
@@ -358,7 +316,7 @@ public class NewsArticleService extends AbstractDBService<NewsArticle> implement
     @Override
     public boolean isFake(String username, NewsArticle entity) {
         try {
-            return getSession().queryForObject(getClassType(), getMatchStateQuery("FAKE", username, entity.getPropertyName(), entity.getPropertyValue(), -1), new HashMap<String, Object>())
+            return getSession().queryForObject(getClassType(), Neo4jQueries.getMatchStateQuery(getClassType(), "FAKE", username, entity.getPropertyName(), entity.getPropertyValue(), -1), new HashMap<String, Object>())
                     != null;
         } catch (Exception e) {
             return false;
