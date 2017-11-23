@@ -7,6 +7,7 @@ package services;
 
 import db.FlexUser;
 import java.util.Collection;
+import java.util.HashMap;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
@@ -29,24 +30,23 @@ public class FlexUserService extends AbstractDBService<FlexUser> implements Flex
     @Override
     public FlexUser login(String username, String password) {
         System.out.println("INSIDE FLEX USER SERVICE ");
-        FlexUser user = findUserNamed(username);
-        if(user != null && user.getPassword().equals(password)) {
-            return user;
-        }
-        return null;
+        String query = UsersQueries.findUser(username, password);
+        return getSession().queryForObject(FlexUser.class, query, new HashMap<>());
     }
 
     @Override
     public FlexUser register(String username, String password) {
         getSession().save(new FlexUser(username, password));
-        return findUserNamed(username);
+        return login(username, password);
     }
 
     
+    @Override
     public SortOrder getSortOrderAsc() {
         return new SortOrder().add(SortOrder.Direction.ASC, "username");
     }
 
+    @Override
     public SortOrder getSortOrderDesc() {
         return new SortOrder().add(SortOrder.Direction.DESC, "username");
     }

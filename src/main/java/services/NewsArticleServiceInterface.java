@@ -57,4 +57,6 @@ public interface NewsArticleServiceInterface  extends DBService<NewsArticle> {
     public void removeMarkAsFavorite(String username, NewsArticle entity);
     public void removeMarkAsFake(String username, NewsArticle entity);
 
+    public Collection<NewsArticle> findAll(int page, int pageSize);
+
   }

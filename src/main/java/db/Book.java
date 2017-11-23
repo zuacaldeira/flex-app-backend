@@ -3,7 +3,6 @@ package db;
 
 import java.util.Date;
 import java.util.HashSet;
-import java.util.Objects;
 import java.util.Set;
 import org.neo4j.ogm.annotation.Index;
 import org.neo4j.ogm.annotation.NodeEntity;
@@ -21,8 +20,6 @@ public class Book extends GraphEntity implements Comparable<Book>{
     private String ISBN;
     private String title;
     private String description;
-    private String url;
-    private String imageUrl;
     
     //@DateLong
     private Date publishedAt;
@@ -40,56 +37,32 @@ public class Book extends GraphEntity implements Comparable<Book>{
         categories = new HashSet<>();
     }
 
-    public Book(String ISBN, String title, String description, String url, String imageUrl, Date publishedAt, String sourceId, String language, String country) {
-        this();
-        this.ISBN = ISBN;
-        this.title = title;
-        this.description = description;
-        this.url = url;
-        this.imageUrl = imageUrl;
-        this.publishedAt = publishedAt;
-        this.publisher = sourceId;
-        this.language = language;
-        this.country = country;
+    public String getISBN() {
+        return ISBN;
     }
-    
-    
+
+    public void setISBN(String ISBN) {
+        this.ISBN = ISBN;
+    }
 
     public String getTitle() {
         return title;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    @Override
-    public String getUrl() {
-        return url;
-    }
-
-    public String getImageUrl() {
-        return imageUrl;
-    }
-
-    public Date getPublishedAt() {
-        return publishedAt;
     }
 
     public void setTitle(String title) {
         this.title = title;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
     public void setDescription(String description) {
         this.description = description;
     }
 
-    public void setUrl(String url) {
-        this.url = url;
-    }
-
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
+    public Date getPublishedAt() {
+        return publishedAt;
     }
 
     public void setPublishedAt(Date publishedAt) {
@@ -102,14 +75,6 @@ public class Book extends GraphEntity implements Comparable<Book>{
 
     public void setPublisher(String publisher) {
         this.publisher = publisher;
-    }
-
-    public Set<NewsAuthor> getAuthors() {
-        return authors;
-    }
-
-    public void setAuthors(Set<NewsAuthor> authors) {
-        this.authors = authors;
     }
 
     public String getLanguage() {
@@ -125,7 +90,7 @@ public class Book extends GraphEntity implements Comparable<Book>{
     }
 
     public void setCountry(String country) {
-        this.country = country.toUpperCase();
+        this.country = country;
     }
 
     public Set<String> getCategories() {
@@ -135,31 +100,15 @@ public class Book extends GraphEntity implements Comparable<Book>{
     public void setCategories(Set<String> categories) {
         this.categories = categories;
     }
-    
-    
-    
-    
-    @Override
-    public int hashCode() {
-        int hash = 5;
-        hash = 37 * hash + Objects.hashCode(this.title);
-        return hash;
+
+    public Set<NewsAuthor> getAuthors() {
+        return authors;
     }
 
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final Book other = (Book) obj;
-        if (!Objects.equals(this.title, other.title)) {
-            return false;
-        }
-        return super.equals(obj);
+    public void setAuthors(Set<NewsAuthor> authors) {
+        this.authors = authors;
     }
+
     
     @Override
     public String toString() {
@@ -197,10 +146,15 @@ public class Book extends GraphEntity implements Comparable<Book>{
 
     @Override
     public boolean hasUrl() {
-        return url != null;
+        return false;
     }
 
     public void addCategory(String category) {
         categories.add(category);
+    }
+
+    @Override
+    public String getUrl() {
+        return null;
     }
 }

@@ -17,6 +17,7 @@ import org.neo4j.ogm.cypher.BooleanOperator;
 import org.neo4j.ogm.cypher.ComparisonOperator;
 import org.neo4j.ogm.cypher.Filter;
 import org.neo4j.ogm.cypher.Filters;
+import org.neo4j.ogm.cypher.query.Pagination;
 import org.neo4j.ogm.cypher.query.SortOrder;
 import utils.DatabaseUtils;
 
@@ -334,5 +335,11 @@ public class NewsArticleService extends AbstractDBService<NewsArticle> implement
         } catch (Exception e) {
             return new LinkedList<>();
         }
+    }
+    
+    @Override
+    public Collection<NewsArticle> findAll(int page, int pageSize) {
+        Pagination paging = new Pagination(page, pageSize);
+        return getSession().loadAll(NewsArticle.class, paging);
     }
 }

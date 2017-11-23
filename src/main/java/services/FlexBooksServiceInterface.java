@@ -6,6 +6,7 @@
 package services;
 
 import db.Book;
+import java.util.Collection;
 import javax.ejb.Remote;
 
 /**
@@ -13,7 +14,8 @@ import javax.ejb.Remote;
  * @author zua
  */
 @Remote
-public interface FlexBooksServiceInterface {
+public interface FlexBooksServiceInterface extends DBService<Book>{
     public Book findBook(String ISBN);
     public Book findBookNamed(String title);
+    public Collection<Book> findAll(int i, int i0);
 }

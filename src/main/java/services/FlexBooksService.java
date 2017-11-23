@@ -6,7 +6,10 @@
 package services;
 
 import db.Book;
+import java.util.Collection;
+import java.util.HashMap;
 import javax.ejb.Stateless;
+import org.neo4j.ogm.cypher.query.Pagination;
 import org.neo4j.ogm.cypher.query.SortOrder;
 
 
@@ -15,12 +18,12 @@ public class FlexBooksService extends AbstractDBService<Book> implements FlexBoo
 
     @Override
     public Book findBook(String ISBN) {
-        return null;
+        return getSession().queryForObject(Book.class, BooksQueries.findBookByISBN(ISBN), new HashMap<>());
     }
 
     @Override
     public Book findBookNamed(String title) {
-        return null;
+        return getSession().queryForObject(Book.class, BooksQueries.findBookByTitle(title), new HashMap<>());
     }
 
     @Override
@@ -36,6 +39,12 @@ public class FlexBooksService extends AbstractDBService<Book> implements FlexBoo
     @Override
     public SortOrder getSortOrderDesc() {
         return new SortOrder().add(SortOrder.Direction.DESC);
+    }
+
+    @Override
+    public Collection<Book> findAll(int page, int pageSize) {
+        Pagination paging = new Pagination(page, pageSize);
+        return getSession().loadAll(Book.class, paging);
     }
     
 }
