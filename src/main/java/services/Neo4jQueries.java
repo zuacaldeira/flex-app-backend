@@ -14,7 +14,7 @@ import utils.DatabaseUtils;
  */
 public class Neo4jQueries {
 
-    public static String findArticlesWitCategory(String username, String category, int limit) {
+    public static String findArticlesWithCategory(String username, String category, int limit) {
         String query = "MATCH (u:FlexUser), (n:NewsArticle)--(a:NewsAuthor)--(s:NewsSource) ";
         query += "WHERE u.username=" + DatabaseUtils.getInstance().wrapUp(username) + " ";
         query += "  AND (n.category = " + DatabaseUtils.getInstance().wrapUp(category) + " ";
@@ -25,6 +25,14 @@ public class Neo4jQueries {
         return query;
     }
 
+    public static String findArticlesWithCategory(String category, int limit) {
+        String query = "MATCH (n:NewsArticle)--(a:NewsAuthor)--(s:NewsSource) ";
+        query += "WHERE (n.category = " + DatabaseUtils.getInstance().wrapUp(category) + " ";
+        query += "  OR  s.category = " + DatabaseUtils.getInstance().wrapUp(category) + ") ";
+        query += "  RETURN n ";
+        query += "  ORDER BY n.publishedAt DESC LIMIT " + limit;
+        return query;
+    }
 
     public static String findArticlesWithSource(String sourceId, int LIMIT) {
         String query = "MATCH (n:NewsArticle) ";
@@ -169,12 +177,19 @@ public class Neo4jQueries {
 
     public static String findArticlesWithText(String username, String value, int limit) {
         String query = "MATCH (u:FlexUser),(n:NewsArticle) WHERE ";
-        query += "u.username=" + DatabaseUtils.getInstance().wrapUp(username) + " ";
-        query += " AND ";
-        query += "n.title=" + DatabaseUtils.getInstance().wrapUp(value) + " OR ";
-        query += "n.description=" + DatabaseUtils.getInstance().wrapUp(value) + " ";
+        query += "u.username=" + DatabaseUtils.getInstance().wrapUp(username) + " AND ";
+        query += "n.title CONTAINS " + DatabaseUtils.getInstance().wrapUp(value) + " OR ";
+        query += "n.description CONTAINS " + DatabaseUtils.getInstance().wrapUp(value) + " ";
         query += "RETURN n LIMIT " + limit;
         return query;
     }
     
+    public static String findArticlesWithText(String value, int limit) {
+        String query = "MATCH (n:NewsArticle) WHERE ";
+        query += "n.title CONTAINS " + DatabaseUtils.getInstance().wrapUp(value) + " OR ";
+        query += "n.description CONTAINS " + DatabaseUtils.getInstance().wrapUp(value) + " ";
+        query += "RETURN n LIMIT " + limit;
+        return query;
+    }
+
 }

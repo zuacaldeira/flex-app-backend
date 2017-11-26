@@ -11,12 +11,6 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import javax.ejb.Stateless;
-import javax.ejb.TransactionManagement;
-import javax.ejb.TransactionManagementType;
-import org.neo4j.ogm.cypher.BooleanOperator;
-import org.neo4j.ogm.cypher.ComparisonOperator;
-import org.neo4j.ogm.cypher.Filter;
-import org.neo4j.ogm.cypher.Filters;
 import org.neo4j.ogm.cypher.query.Pagination;
 import org.neo4j.ogm.cypher.query.SortOrder;
 import utils.DatabaseUtils;
@@ -26,7 +20,6 @@ import utils.DatabaseUtils;
  * @author zua
  */
 
-@TransactionManagement(TransactionManagementType.CONTAINER)
 @Stateless
 public class NewsArticleService extends AbstractDBService<NewsArticle> implements NewsArticleServiceInterface {
 
@@ -53,40 +46,21 @@ public class NewsArticleService extends AbstractDBService<NewsArticle> implement
 
     @Override
     public Collection<NewsArticle> findArticlesWithText(String value) {
-        try {
-            if (value == null || value.isEmpty()) {
-                throw new NewsServiceException(new IllegalArgumentException("Value cannot be a null nor empty string"));
-            }
-            Filter fTitle = new Filter("title", ComparisonOperator.CONTAINING, value);
-            Filter fDescription = new Filter("description", ComparisonOperator.CONTAINING, value);
-            fDescription.setBooleanOperator(BooleanOperator.OR);
-            Filters filters = new Filters(fTitle, fDescription);
-            return getSession().loadAll(NewsArticle.class, filters, 2);
-        } catch (Exception e) {
-            return new LinkedList<>();
+        if(value != null && !value.isEmpty()) {
+            return executeQuery(Neo4jQueries.findArticlesWithText(value, LIMIT));
         }
+        return new LinkedList<>();
     }
 
     @Override
     public Collection<NewsArticle> findArticlesWithText(String username, String value) {
-        try {
-            if (value == null || value.isEmpty()) {
-                throw new NewsServiceException(new IllegalArgumentException("Value cannot be a null nor empty string"));
-            }
-            if (username == null || username.isEmpty()) {
-                throw new NewsServiceException(new IllegalArgumentException("Username cannot be null nor empty string"));
-            }
-            String query = "MATCH (u:FlexUser)--(n:NewsArticle) ";
-            query += "WHERE u.username=" + DatabaseUtils.getInstance().wrapUp(username) + " ";
-            query += " AND (n.title CONTAINS " + DatabaseUtils.getInstance().wrapUp(value) + " ";
-            query += " OR n.description CONTAINS " + DatabaseUtils.getInstance().wrapUp(value) + ") ";
-            query += " RETURN n ";
-            query += " ORDER BY n.publishedAt DESC LIMIT " + LIMIT;
-            //System.out.println(query);
-            return super.executeQuery(query);
-        } catch (Exception e) {
-            return new LinkedList<>();
+        if(username == null || username.isEmpty()) {
+            return findArticlesWithText(value);
         }
+        if(value != null && !value.isEmpty()) {
+            return super.executeQuery(Neo4jQueries.findArticlesWithText(username, value, LIMIT));
+        }
+        return new LinkedList<>();
     }
 
     @Override
@@ -106,82 +80,54 @@ public class NewsArticleService extends AbstractDBService<NewsArticle> implement
 
     @Override
     public List<NewsArticle> findArticlesWithCategory(String category) {
-        try {
-            String query = "MATCH (n:NewsArticle)--(a:NewsAuthor)--(s:NewsSource) ";
-            query += "WHERE (n.category = " + DatabaseUtils.getInstance().wrapUp(category) + " ";
-            query += "  OR  s.category = " + DatabaseUtils.getInstance().wrapUp(category) + ") ";
-            query += "  RETURN n ";
-            query += "  ORDER BY n.publishedAt DESC LIMIT " + LIMIT;
-            System.out.println(query);
-            return super.executeQuery(query);
-        } catch (Exception e) {
-            return new LinkedList<>();
-        }
+        return executeQuery(Neo4jQueries.findArticlesWithCategory(category, LIMIT));
     }
 
     @Override
     public List<NewsArticle> findArticlesWithCategory(String username, String category) {
-        try {
-            String query = Neo4jQueries.findArticlesWitCategory(username, category, LIMIT);
-            return super.executeQuery(query);
-        } catch (Exception e) {
-            return new LinkedList<>();
+        if(username == null) {
+            return findArticlesWithCategory(category);
         }
+        return super.executeQuery(Neo4jQueries.findArticlesWithCategory(username, category, LIMIT));
     }
 
     @Override
     public List<NewsArticle> findArticlesWithSource(String sourceId) {
-        try {
-            return super.executeQuery(Neo4jQueries.findArticlesWithSource(sourceId, LIMIT));
-        } catch (Exception e) {
-            return new LinkedList<>();
-        }
+        return super.executeQuery(Neo4jQueries.findArticlesWithSource(sourceId, LIMIT));
     }
 
     @Override
     public List<NewsArticle> findArticlesWithSource(String username, String sourceId) {
-        try {
-            String query = Neo4jQueries.findArticlesWithSource(username, sourceId, LIMIT);
-            return super.executeQuery(query);
-        } catch (Exception e) {
-            return new LinkedList<>();
+        if(username == null) {
+            return findArticlesWithSource(sourceId);
         }
+        return super.executeQuery(Neo4jQueries.findArticlesWithSource(username, sourceId, LIMIT));
     }
 
     @Override
     public Collection<NewsArticle> findArticlesWithLanguage(String username, String language) {
-        try {
-            return super.executeQuery(Neo4jQueries.findArticlesWithLanguage(username, language, LIMIT));
-        } catch (Exception e) {
-            return new LinkedList<>();
+        if(username == null) {
+            return findArticlesWithLanguage(language);
         }
+        return super.executeQuery(Neo4jQueries.findArticlesWithLanguage(username, language, LIMIT));
     }
 
     @Override
     public Collection<NewsArticle> findArticlesWithLanguage(String language) {
-        try {
-            return super.executeQuery(Neo4jQueries.findArticlesWithLanguage(language, LIMIT));
-        } catch (Exception e) {
-            return new LinkedList<>();
-        }
+        return super.executeQuery(Neo4jQueries.findArticlesWithLanguage(language, LIMIT));
     }
 
     @Override
     public Collection<NewsArticle> findArticlesWithCountry(String country) {
-        try {
-            return super.executeQuery(Neo4jQueries.findArticlesWithCountry(country, LIMIT));
-        } catch (Exception e) {
-            return new LinkedList<>();
-        }
+        return super.executeQuery(Neo4jQueries.findArticlesWithCountry(country, LIMIT));
     }
 
     @Override
     public Collection<NewsArticle> findArticlesWithCountry(String username, String country) {
-        try {
-            return super.executeQuery(Neo4jQueries.findArticlesWithCountry(username, country, LIMIT));
-        } catch (Exception e) {
-            return new LinkedList<>();
+        if(username == null) {
+            return findArticlesWithCountry(country);
         }
+        return super.executeQuery(Neo4jQueries.findArticlesWithCountry(username, country, LIMIT));
     }
 
     @Override
@@ -196,132 +142,111 @@ public class NewsArticleService extends AbstractDBService<NewsArticle> implement
 
     @Override
     public List<NewsArticle> findLatest(String username) {
+        if(username == null) {
+            return findLatest();
+        }
         return findAllDesc(username);
     }
 
     @Override
     public List<NewsArticle> findOldest(String username) {
+        if(username == null) {
+            return findOldest();
+        }
         return findAllAsc(username);
     }
 
     @Override
     public List<NewsArticle> findAllRead(String username) {
-        try {
+        if(username == null) {
+            return findLatest();
+        }
+        else {
             String query = Neo4jQueries.getMatchStateQuery(getClassType(), "READ", username, null, null, LIMIT);
             return executeQuery(query);
-        } catch (Exception e) {
-            return new LinkedList<>();
         }
     }
 
     @Override
     public List<NewsArticle> findAllFavorite(String username) {
-        try {
+        if(username == null) {
+            return findLatest();
+        }
+        else {
             String query = Neo4jQueries.getMatchStateQuery(getClassType(), "FAVORITE", username, null, null, LIMIT);
             return executeQuery(query);
-        } catch (Exception e) {
-            return new LinkedList<>();
         }
     }
 
     @Override
     public List<NewsArticle> findAllFake(String username) {
-        try {
+        if(username == null) {
+            return findLatest();
+        }
+        else {
             String query = Neo4jQueries.getMatchStateQuery(getClassType(), "FAKE", username, null, null, LIMIT);
             return executeQuery(query);
-        } catch (Exception e) {
-            return new LinkedList<>();
         }
     }
 
     @Override
     public void markAsRead(String username, NewsArticle entity) {
-        try {
-            if (!isRead(username, entity)) {
-                getSession().query(Neo4jQueries.getCreateStateQuery(getClassType(), "READ", "username", username, entity.getPropertyName(), entity.getPropertyValue()), new HashMap<String, Object>());
-            }
-        } catch (Exception e) {
+        if (!isRead(username, entity)) {
+            getSession().query(Neo4jQueries.getCreateStateQuery(getClassType(), "READ", "username", username, entity.getPropertyName(), entity.getPropertyValue()), new HashMap<>());
         }
     }
 
     @Override
     public void markAsFavorite(String username, NewsArticle entity) {
-        try {
-            if (!isFavorite(username, entity)) {
-                getSession().query(Neo4jQueries.getCreateStateQuery(getClassType(), "FAVORITE", "username", username, entity.getPropertyName(), entity.getPropertyValue()), new HashMap<String, Object>());
-            }
-        } catch (Exception e) {
+        if (!isFavorite(username, entity)) {
+            getSession().query(Neo4jQueries.getCreateStateQuery(getClassType(), "FAVORITE", "username", username, entity.getPropertyName(), entity.getPropertyValue()), new HashMap<>());
         }
     }
 
     @Override
     public void markAsFake(String username, NewsArticle entity) {
-        try {
-            if (!isFake(username, entity)) {
-                getSession().query(Neo4jQueries.getCreateStateQuery(getClassType(), "FAKE", "username", username, entity.getPropertyName(), entity.getPropertyValue()), new HashMap<String, Object>());
-            }
-        } catch (Exception e) {
+        if (!isFake(username, entity)) {
+            getSession().query(Neo4jQueries.getCreateStateQuery(getClassType(), "FAKE", "username", username, entity.getPropertyName(), entity.getPropertyValue()), new HashMap<>());
         }
     }
 
     @Override
     public void removeMarkAsRead(String username, NewsArticle entity) {
-        try {
-            if (isRead(username, entity)) {
-                getSession().query(Neo4jQueries.getDeleteStateQuery(getClassType(), "READ", "username", username, entity.getPropertyName(), entity.getPropertyValue()), new HashMap<String, Object>());
-            }
-        } catch (Exception e) {
+        if (isRead(username, entity)) {
+            getSession().query(Neo4jQueries.getDeleteStateQuery(getClassType(), "READ", "username", username, entity.getPropertyName(), entity.getPropertyValue()), new HashMap<>());
         }
     }
 
     @Override
     public void removeMarkAsFavorite(String username, NewsArticle entity) {
-        try {
-            if (isFavorite(username, entity)) {
-                getSession().query(Neo4jQueries.getDeleteStateQuery(getClassType(), "FAVORITE", "username", username, entity.getPropertyName(), entity.getPropertyValue()), new HashMap<String, Object>());
-            }
-        } catch (Exception e) {
+        if (isFavorite(username, entity)) {
+            getSession().query(Neo4jQueries.getDeleteStateQuery(getClassType(), "FAVORITE", "username", username, entity.getPropertyName(), entity.getPropertyValue()), new HashMap<>());
         }
     }
 
     @Override
     public void removeMarkAsFake(String username, NewsArticle entity) {
-        try {
-            if (isFake(username, entity)) {
-                getSession().query(Neo4jQueries.getDeleteStateQuery(getClassType(), "FAKE", "username", username, entity.getPropertyName(), entity.getPropertyValue()), new HashMap<String, Object>());
-            }
-        } catch (Exception e) {
+        if (isFake(username, entity)) {
+            getSession().query(Neo4jQueries.getDeleteStateQuery(getClassType(), "FAKE", "username", username, entity.getPropertyName(), entity.getPropertyValue()), new HashMap<>());
         }
     }
 
     @Override
     public boolean isRead(String username, NewsArticle entity) {
-        try {
-            return getSession().queryForObject(getClassType(), Neo4jQueries.getMatchStateQuery(getClassType(), "READ", username, entity.getPropertyName(), entity.getPropertyValue(), -1), new HashMap<String, Object>())
-                    != null;
-        } catch (Exception e) {
-            return false;
-        }
+        return getSession().queryForObject(getClassType(), Neo4jQueries.getMatchStateQuery(getClassType(), "READ", username, entity.getPropertyName(), entity.getPropertyValue(), -1), new HashMap<>())
+                != null;
     }
 
     @Override
     public boolean isFavorite(String username, NewsArticle entity) {
-        try {
-            return getSession().queryForObject(getClassType(), Neo4jQueries.getMatchStateQuery(getClassType(), "FAVORITE", username, entity.getPropertyName(), entity.getPropertyValue(), -1), new HashMap<String, Object>())
+        return getSession().queryForObject(getClassType(), Neo4jQueries.getMatchStateQuery(getClassType(), "FAVORITE", username, entity.getPropertyName(), entity.getPropertyValue(), -1), new HashMap<>())
                     != null;
-        } catch (Exception e) {
-            return false;
-        }
     }
 
     @Override
     public boolean isFake(String username, NewsArticle entity) {
-        try {
-            return getSession().queryForObject(getClassType(), Neo4jQueries.getMatchStateQuery(getClassType(), "FAKE", username, entity.getPropertyName(), entity.getPropertyValue(), -1), new HashMap<String, Object>())
-                    != null;
-        } catch (Exception e) {
-            return false;
-        }
+        return getSession().queryForObject(getClassType(), Neo4jQueries.getMatchStateQuery(getClassType(), "FAKE", username, entity.getPropertyName(), entity.getPropertyValue(), -1), new HashMap<>())
+            != null;
     }
     
     @Override
