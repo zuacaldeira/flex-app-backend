@@ -14,12 +14,19 @@ import utils.DatabaseUtils;
 public class UsersQueries {
 
     public static String findUser(String username, String password) {
-        String query
-                = "MATCH (u:FlexUser) WHERE "
-                + "u.username=" + DatabaseUtils.getInstance().wrapUp(username)
-                + " AND "
-                + "u.password=" + DatabaseUtils.getInstance().wrapUp(password)
-                + " RETURN u";
+        StringBuilder builder = new StringBuilder();
+        builder.append("MATCH (u:FlexUser) WHERE u.username=");
+        builder.append(DatabaseUtils.getInstance().wrapUp(username));
+        if(password != null) {
+            builder.append(" AND u.password=");
+            builder.append(DatabaseUtils.getInstance().wrapUp(password));
+            
+        } else {
+            builder.append(" AND u.password IS NULL");
+        }
+        builder.append(" RETURN u");
+        String query = builder.toString();
+        System.out.println("FIND_USER_QUERY = " + query);
         return query;
     }
 }

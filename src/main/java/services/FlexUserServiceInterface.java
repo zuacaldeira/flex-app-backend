@@ -14,7 +14,7 @@ import javax.ejb.Remote;
  * @author zua
  */
 @Remote
-public interface FlexUserServiceInterface {
+public interface FlexUserServiceInterface extends DBService<FlexUser> {
     public Collection<FlexUser> findAllUsers();
     public FlexUser findUserNamed(String username);
     public FlexUser login(String username, String password);
