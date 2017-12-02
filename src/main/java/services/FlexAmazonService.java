@@ -8,8 +8,8 @@ package services;
 import db.AmazonBook;
 import com.ECS.client.jax.Items;
 import de.malkusch.amazon.ecs.exception.RequestException;
+import io.reactivex.Observable;
 import java.io.UnsupportedEncodingException;
-import java.util.Collection;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.Stateless;
@@ -34,7 +34,7 @@ public class FlexAmazonService extends AbstractDBService<AmazonBook> implements 
     }
 
     @Override
-    public Collection<AmazonBook> findFavoriteBooks(String name) {
+    public Observable<AmazonBook> findFavoriteBooks(String name) {
         String query = "MATCH (n:FavoriteBook)--(p:Person) WHERE n.person=" 
                 + DatabaseUtils.getInstance().wrapUp(name) 
                 + " RETURN n"; 

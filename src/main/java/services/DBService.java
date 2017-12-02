@@ -1,7 +1,6 @@
 package services;
 
-import java.util.Collection;
-import java.util.LinkedList;
+import io.reactivex.Observable;
 import org.neo4j.ogm.cypher.query.SortOrder;
 
 /**
@@ -10,37 +9,37 @@ import org.neo4j.ogm.cypher.query.SortOrder;
  */
 public interface DBService<T> {
 
-    public Collection<T> findAll();
-    public Collection<T> findAllAsc();
-    public Collection<T> findAllDesc();
+    public Observable<T> findAll();
+    public Observable<T> findAllAsc();
+    public Observable<T> findAllDesc();
 
-    public Collection<T> findAllWithLimit(int limit);
-    public Collection<T> findAllAscWithLimit(int limit);
-    public Collection<T> findAllDescWithLimit(int limit);
+    public Observable<T> findAllWithLimit(int limit);
+    public Observable<T> findAllAscWithLimit(int limit);
+    public Observable<T> findAllDescWithLimit(int limit);
 
-    public Collection<T> findAll(String property, Object value);
-    public Collection<T> findAllAsc(String property, Object value);
-    public Collection<T> findAllDesc(String property, Object value);
+    public Observable<T> findAll(String property, Object value);
+    public Observable<T> findAllAsc(String property, Object value);
+    public Observable<T> findAllDesc(String property, Object value);
 
-    public Collection<T> findAll(String property, Object value, int limit);
-    public Collection<T> findAllAsc(String property, Object value, int limit);
-    public Collection<T> findAllDesc(String property, Object value, int limit);
+    public Observable<T> findAll(String property, Object value, int limit);
+    public Observable<T> findAllAsc(String property, Object value, int limit);
+    public Observable<T> findAllDesc(String property, Object value, int limit);
 
-    public Collection<T> findAll(String username);
-    public Collection<T> findAllAsc(String username);
-    public Collection<T> findAllDesc(String username);
+    public Observable<T> findAll(String username);
+    public Observable<T> findAllAsc(String username);
+    public Observable<T> findAllDesc(String username);
 
-    public Collection<T> findAll(String username, int limit);
-    public Collection<T> findAllAsc(String username, int limit);
-    public Collection<T> findAllDesc(String username, int limit);
+    public Observable<T> findAll(String username, int limit);
+    public Observable<T> findAllAsc(String username, int limit);
+    public Observable<T> findAllDesc(String username, int limit);
 
-    public Collection<T> findAll(String username, String property, Object value);
-    public Collection<T> findAllAsc(String username, String property, Object value);
-    public Collection<T> findAllDesc(String username, String property, Object value);
+    public Observable<T> findAll(String username, String property, Object value);
+    public Observable<T> findAllAsc(String username, String property, Object value);
+    public Observable<T> findAllDesc(String username, String property, Object value);
     
-    public Collection<T> findAll(String username, String property, Object value, int limit);
-    public Collection<T> findAllAsc(String username, String property, Object value, int limit);
-    public Collection<T> findAllDesc(String username, String property, Object value, int limit);
+    public Observable<T> findAll(String username, String property, Object value, int limit);
+    public Observable<T> findAllAsc(String username, String property, Object value, int limit);
+    public Observable<T> findAllDesc(String username, String property, Object value, int limit);
 
   
     public T find(String id);    
@@ -53,6 +52,6 @@ public interface DBService<T> {
     public Class<T> getClassType();
     public SortOrder getSortOrderAsc();
     public SortOrder getSortOrderDesc();
-    public LinkedList<T> executeQuery(String query);   
+    public Observable<T> executeQuery(String query);   
     
 }

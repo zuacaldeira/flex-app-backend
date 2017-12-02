@@ -5,13 +5,10 @@
  */
 package services;
 
-import com.google.common.collect.Lists;
 import db.Neo4jSessionFactory;
 import db.GraphEntity;
-import java.util.Collection;
+import io.reactivex.Observable;
 import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
 import org.neo4j.ogm.session.Session;
 import utils.DatabaseUtils;
 
@@ -25,137 +22,137 @@ public abstract class AbstractDBService<T extends GraphEntity> implements DBServ
     public final int LIMIT = 30;
 
     @Override
-    public final Collection<T> findAll() {
-        return getSession().loadAll(getClassType(), getSortOrderDesc(), LIMIT);
+    public final Observable<T> findAll() {
+        return Observable.fromIterable(getSession().loadAll(getClassType(), getSortOrderDesc(), LIMIT));
     }
 
     @Override
-    public final List<T> findAllAsc() {
+    public final Observable<T> findAllAsc() {
         String query = Neo4jQueries.getFindAllQuery(getClassType(), null, null, null, getSortOrderAsc(), LIMIT);
         return executeQuery(query);
     }
 
     @Override
-    public final List<T> findAllDesc() {
+    public final Observable<T> findAllDesc() {
         String query = Neo4jQueries.getFindAllQuery(getClassType(), null, null, null, getSortOrderDesc(), LIMIT);
         return executeQuery(query);
     }
 
     @Override
-    public final List<T> findAllWithLimit(int limit) {
+    public final Observable<T> findAllWithLimit(int limit) {
         return findAllDescWithLimit(limit);
     }
 
     @Override
-    public final List<T> findAllAscWithLimit(int limit) {
+    public final Observable<T> findAllAscWithLimit(int limit) {
         String query = Neo4jQueries.getFindAllQuery(getClassType(), null, null, null, getSortOrderAsc(), limit);
         return executeQuery(query);
     }
 
     @Override
-    public final List<T> findAllDescWithLimit(int limit) {
+    public final Observable<T> findAllDescWithLimit(int limit) {
         String query = Neo4jQueries.getFindAllQuery(getClassType(), null, null, null, getSortOrderDesc(), limit);
         return executeQuery(query);
     }
 
     @Override
-    public final List<T> findAll(String username) {
+    public final Observable<T> findAll(String username) {
         return findAllDesc(username);
     }
 
     @Override
-    public final List<T> findAllAsc(String username) {
+    public final Observable<T> findAllAsc(String username) {
         String query = Neo4jQueries.getFindAllQuery(getClassType(), username, null, null, getSortOrderAsc(), LIMIT);
         return executeQuery(query);
     }
 
     @Override
-    public final List<T> findAllDesc(String username) {
+    public final Observable<T> findAllDesc(String username) {
         String query = Neo4jQueries.getFindAllQuery(getClassType(), username, null, null, getSortOrderDesc(), LIMIT);
         return executeQuery(query);
     }
 
     @Override
-    public final List<T> findAll(String username, int limit) {
+    public final Observable<T> findAll(String username, int limit) {
         return findAllDesc(username, limit);
     }
 
     @Override
-    public final List<T> findAllAsc(String username, int limit) {
+    public final Observable<T> findAllAsc(String username, int limit) {
         String query = Neo4jQueries.getFindAllQuery(getClassType(), username, null, null, getSortOrderAsc(), limit);
         return executeQuery(query);
     }
 
     @Override
-    public final List<T> findAllDesc(String username, int limit) {
+    public final Observable<T> findAllDesc(String username, int limit) {
         String query = Neo4jQueries.getFindAllQuery(getClassType(), username, null, null, getSortOrderDesc(), limit);
         return executeQuery(query);
     }
 
     @Override
-    public final List<T> findAll(String property, Object value) {
+    public final Observable<T> findAll(String property, Object value) {
         return findAllDesc(property, value);
     }
 
     @Override
-    public final List<T> findAllAsc(String property, Object value) {
+    public final Observable<T> findAllAsc(String property, Object value) {
         String query = Neo4jQueries.getFindAllQuery(getClassType(), null, property, value, getSortOrderAsc(), LIMIT);
         return executeQuery(query);
     }
 
     @Override
-    public final List<T> findAllDesc(String property, Object value) {
+    public final Observable<T> findAllDesc(String property, Object value) {
         String query = Neo4jQueries.getFindAllQuery(getClassType(), null, property, value, getSortOrderDesc(), LIMIT);
         return executeQuery(query);
     }
 
     @Override
-    public final List<T> findAll(String property, Object value, int limit) {
+    public final Observable<T> findAll(String property, Object value, int limit) {
         return findAllDesc(property, value, limit);
     }
 
     @Override
-    public final List<T> findAllAsc(String property, Object value, int limit) {
+    public final Observable<T> findAllAsc(String property, Object value, int limit) {
         String query = Neo4jQueries.getFindAllQuery(getClassType(), null, property, value, getSortOrderAsc(), limit);
         return executeQuery(query);
     }
 
     @Override
-    public final List<T> findAllDesc(String property, Object value, int limit) {
+    public final Observable<T> findAllDesc(String property, Object value, int limit) {
         String query = Neo4jQueries.getFindAllQuery(getClassType(), null, property, value, getSortOrderDesc(), limit);
         return executeQuery(query);
     }
 
     @Override
-    public final List<T> findAll(String username, String property, Object value) {
+    public final Observable<T> findAll(String username, String property, Object value) {
         return findAllDesc(username, property, value);
     }
 
     @Override
-    public final List<T> findAllAsc(String username, String property, Object value) {
+    public final Observable<T> findAllAsc(String username, String property, Object value) {
         String query = Neo4jQueries.getFindAllQuery(getClassType(), username, property, value, getSortOrderAsc(), LIMIT);
         return executeQuery(query);
     }
 
     @Override
-    public final List<T> findAllDesc(String username, String property, Object value) {
+    public final Observable<T> findAllDesc(String username, String property, Object value) {
         String query = Neo4jQueries.getFindAllQuery(getClassType(), username, property, value, getSortOrderDesc(), LIMIT);
         return executeQuery(query);
     }
 
     @Override
-    public final List<T> findAll(String username, String property, Object value, int limit) {
+    public final Observable<T> findAll(String username, String property, Object value, int limit) {
         return findAllDesc(username, property, value, limit);
     }
 
     @Override
-    public final List<T> findAllAsc(String username, String property, Object value, int limit) {
+    public final Observable<T> findAllAsc(String username, String property, Object value, int limit) {
         String query = Neo4jQueries.getFindAllQuery(getClassType(), username, property, value, getSortOrderAsc(), limit);
         return executeQuery(query);
     }
 
     @Override
-    public final List<T> findAllDesc(String username, String property, Object value, int limit) {
+    public final Observable<T> findAllDesc(String username, String property, Object value, int limit) {
         String query = Neo4jQueries.getFindAllQuery(getClassType(), username, property, value, getSortOrderDesc(), limit);
         return executeQuery(query);
     }
@@ -209,11 +206,11 @@ public abstract class AbstractDBService<T extends GraphEntity> implements DBServ
     }
 
     @Override
-    public LinkedList<T> executeQuery(String query) {
-        return Lists.newLinkedList(getSession().query(getClassType(), query, new HashMap<String, Object>()));
+    public Observable<T> executeQuery(String query) {
+        return Observable.fromIterable(getSession().query(getClassType(), query, new HashMap<String, Object>()));
     }
 
-    protected <U> LinkedList<U> executeQuery(Class<U> type, String query) {
-        return Lists.newLinkedList(getSession().query(type, query, new HashMap<String, Object>()));
+    protected <U> Observable<U> executeQuery(Class<U> type, String query) {
+        return Observable.fromIterable(getSession().query(type, query, new HashMap<String, Object>()));
     }
 }

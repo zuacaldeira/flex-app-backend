@@ -7,7 +7,7 @@ package services;
 
 import db.Advertises;
 import db.NewsArticle;
-import java.util.Collection;
+import io.reactivex.Observable;
 import javax.ejb.Remote;
 
 /**
@@ -16,5 +16,5 @@ import javax.ejb.Remote;
  */
 @Remote
 public interface FlexAdvertisementServiceInterface {
-    public Collection<Advertises> findAll(NewsArticle article);
+    public Observable<Advertises> findAll(NewsArticle article);
 }

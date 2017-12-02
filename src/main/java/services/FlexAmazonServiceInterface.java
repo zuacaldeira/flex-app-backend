@@ -7,7 +7,7 @@ package services;
 
 import com.ECS.client.jax.Items;
 import db.AmazonBook;
-import java.util.Collection;
+import io.reactivex.Observable;
 import javax.ejb.Remote;
 
 /**
@@ -17,6 +17,6 @@ import javax.ejb.Remote;
 @Remote
 public interface FlexAmazonServiceInterface {
     public Items searchAmazonItems(String searchIndex, String keywords);
-    public Collection<AmazonBook> findFavoriteBooks(String name);
+    public Observable<AmazonBook> findFavoriteBooks(String name);
     
 }

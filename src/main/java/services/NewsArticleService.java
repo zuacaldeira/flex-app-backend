@@ -6,10 +6,9 @@
 package services;
 
 import db.NewsArticle;
-import java.util.Collection;
+import io.reactivex.Observable;
 import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.List;
 import javax.ejb.Stateless;
 import org.neo4j.ogm.cypher.query.Pagination;
 import org.neo4j.ogm.cypher.query.SortOrder;
@@ -36,31 +35,24 @@ public class NewsArticleService extends AbstractDBService<NewsArticle> implement
     }
 
     @Override
-    public Collection<NewsArticle> findAllArticles() {
-        try {
-            return getSession().loadAll(NewsArticle.class, 2);
-        } catch (Exception e) {
-            return new LinkedList<>();
-        }
+    public Observable<NewsArticle> findAllArticles() {
+        return Observable.fromIterable(getSession().loadAll(NewsArticle.class, 2));
     }
 
     @Override
-    public Collection<NewsArticle> findArticlesWithText(String value) {
-        if(value != null && !value.isEmpty()) {
-            return executeQuery(Neo4jQueries.findArticlesWithText(value, LIMIT));
+    public Observable<NewsArticle> findArticlesWithText(String value) {
+        if(value == null || value.isEmpty()) {
+            return Observable.fromIterable(new LinkedList<>());
         }
-        return new LinkedList<>();
+        return executeQuery(Neo4jQueries.findArticlesWithText(value, LIMIT));
     }
 
     @Override
-    public Collection<NewsArticle> findArticlesWithText(String username, String value) {
-        if(username == null || username.isEmpty()) {
+    public Observable<NewsArticle> findArticlesWithText(String username, String value) {
+        if(username == null || username.isEmpty() ) {
             return findArticlesWithText(value);
         }
-        if(value != null && !value.isEmpty()) {
-            return super.executeQuery(Neo4jQueries.findArticlesWithText(username, value, LIMIT));
-        }
-        return new LinkedList<>();
+        return executeQuery(Neo4jQueries.findArticlesWithText(username, value, LIMIT));
     }
 
     @Override
@@ -79,69 +71,69 @@ public class NewsArticleService extends AbstractDBService<NewsArticle> implement
     }
 
     @Override
-    public List<NewsArticle> findArticlesWithCategory(String category) {
+    public Observable<NewsArticle> findArticlesWithCategory(String category) {
         return executeQuery(Neo4jQueries.findArticlesWithCategory(category, LIMIT));
     }
 
     @Override
-    public List<NewsArticle> findArticlesWithCategory(String username, String category) {
+    public Observable<NewsArticle> findArticlesWithCategory(String username, String category) {
         if(username == null) {
             return findArticlesWithCategory(category);
         }
-        return super.executeQuery(Neo4jQueries.findArticlesWithCategory(username, category, LIMIT));
+        return executeQuery(Neo4jQueries.findArticlesWithCategory(username, category, LIMIT));
     }
 
     @Override
-    public List<NewsArticle> findArticlesWithSource(String sourceId) {
-        return super.executeQuery(Neo4jQueries.findArticlesWithSource(sourceId, LIMIT));
+    public Observable<NewsArticle> findArticlesWithSource(String sourceId) {
+        return executeQuery(Neo4jQueries.findArticlesWithSource(sourceId, LIMIT));
     }
 
     @Override
-    public List<NewsArticle> findArticlesWithSource(String username, String sourceId) {
+    public Observable<NewsArticle> findArticlesWithSource(String username, String sourceId) {
         if(username == null) {
             return findArticlesWithSource(sourceId);
         }
-        return super.executeQuery(Neo4jQueries.findArticlesWithSource(username, sourceId, LIMIT));
+        return executeQuery(Neo4jQueries.findArticlesWithSource(username, sourceId, LIMIT));
     }
 
     @Override
-    public Collection<NewsArticle> findArticlesWithLanguage(String username, String language) {
+    public Observable<NewsArticle> findArticlesWithLanguage(String username, String language) {
         if(username == null) {
             return findArticlesWithLanguage(language);
         }
-        return super.executeQuery(Neo4jQueries.findArticlesWithLanguage(username, language, LIMIT));
+        return executeQuery(Neo4jQueries.findArticlesWithLanguage(username, language, LIMIT));
     }
 
     @Override
-    public Collection<NewsArticle> findArticlesWithLanguage(String language) {
-        return super.executeQuery(Neo4jQueries.findArticlesWithLanguage(language, LIMIT));
+    public Observable<NewsArticle> findArticlesWithLanguage(String language) {
+        return executeQuery(Neo4jQueries.findArticlesWithLanguage(language, LIMIT));
     }
 
     @Override
-    public Collection<NewsArticle> findArticlesWithCountry(String country) {
-        return super.executeQuery(Neo4jQueries.findArticlesWithCountry(country, LIMIT));
+    public Observable<NewsArticle> findArticlesWithCountry(String country) {
+        return executeQuery(Neo4jQueries.findArticlesWithCountry(country, LIMIT));
     }
 
     @Override
-    public Collection<NewsArticle> findArticlesWithCountry(String username, String country) {
+    public Observable<NewsArticle> findArticlesWithCountry(String username, String country) {
         if(username == null) {
             return findArticlesWithCountry(country);
         }
-        return super.executeQuery(Neo4jQueries.findArticlesWithCountry(username, country, LIMIT));
+        return executeQuery(Neo4jQueries.findArticlesWithCountry(username, country, LIMIT));
     }
 
     @Override
-    public List<NewsArticle> findLatest() {
+    public Observable<NewsArticle> findLatest() {
         return findAllDesc();
     }
 
     @Override
-    public List<NewsArticle> findOldest() {
+    public Observable<NewsArticle> findOldest() {
         return findAllAsc();
     }
 
     @Override
-    public List<NewsArticle> findLatest(String username) {
+    public Observable<NewsArticle> findLatest(String username) {
         if(username == null) {
             return findLatest();
         }
@@ -149,7 +141,7 @@ public class NewsArticleService extends AbstractDBService<NewsArticle> implement
     }
 
     @Override
-    public List<NewsArticle> findOldest(String username) {
+    public Observable<NewsArticle> findOldest(String username) {
         if(username == null) {
             return findOldest();
         }
@@ -157,7 +149,7 @@ public class NewsArticleService extends AbstractDBService<NewsArticle> implement
     }
 
     @Override
-    public List<NewsArticle> findAllRead(String username) {
+    public Observable<NewsArticle> findAllRead(String username) {
         if(username == null) {
             return findLatest();
         }
@@ -168,7 +160,7 @@ public class NewsArticleService extends AbstractDBService<NewsArticle> implement
     }
 
     @Override
-    public List<NewsArticle> findAllFavorite(String username) {
+    public Observable<NewsArticle> findAllFavorite(String username) {
         if(username == null) {
             return findLatest();
         }
@@ -179,7 +171,7 @@ public class NewsArticleService extends AbstractDBService<NewsArticle> implement
     }
 
     @Override
-    public List<NewsArticle> findAllFake(String username) {
+    public Observable<NewsArticle> findAllFake(String username) {
         if(username == null) {
             return findLatest();
         }
@@ -250,21 +242,17 @@ public class NewsArticleService extends AbstractDBService<NewsArticle> implement
     }
     
     @Override
-    public List<NewsArticle> findArticlesWithoutShortUrl() {
-        try {
-            String query = "MATCH (n:NewsArticle) ";
-            query += "WHERE n.shortUrl IS NULL RETURN n ";
-            query += "ORDER BY n.publishedAt DESC LIMIT " + LIMIT;
-            System.out.println(query);
-            return super.executeQuery(query);
-        } catch (Exception e) {
-            return new LinkedList<>();
-        }
+    public Observable<NewsArticle> findArticlesWithoutShortUrl() {
+        String query = "MATCH (n:NewsArticle) ";
+        query += "WHERE n.shortUrl IS NULL RETURN n ";
+        query += "ORDER BY n.publishedAt DESC LIMIT " + LIMIT;
+        System.out.println(query);
+        return executeQuery(query);
     }
     
     @Override
-    public Collection<NewsArticle> findAll(int page, int pageSize) {
+    public Observable<NewsArticle> findAll(int page, int pageSize) {
         Pagination paging = new Pagination(page, pageSize);
-        return getSession().loadAll(NewsArticle.class, paging);
+        return Observable.fromIterable(getSession().loadAll(NewsArticle.class, paging));
     }
 }

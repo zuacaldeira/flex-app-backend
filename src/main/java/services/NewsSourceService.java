@@ -6,10 +6,8 @@
 package services;
 
 import db.NewsSource;
-import java.util.Collection;
+import io.reactivex.Observable;
 import java.util.HashMap;
-import java.util.Set;
-import java.util.TreeSet;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
@@ -30,35 +28,35 @@ import utils.DatabaseUtils;
 public class NewsSourceService extends AbstractDBService<NewsSource>  implements NewsSourceServiceInterface {
 
     @Override
-    public Collection<NewsSource> findAllSources() {
-        return getSession().loadAll(NewsSource.class, 2);
+    public Observable<NewsSource> findAllSources() {
+        return Observable.fromIterable(getSession().loadAll(NewsSource.class, 2));
     }
     
     @Override
-    public Collection<NewsSource> findSourcesWithCategory(String category) {
+    public Observable<NewsSource> findSourcesWithCategory(String category) {
         Filter fCategory = new Filter("category", ComparisonOperator.EQUALS, category);
-        return getSession().loadAll(NewsSource.class, fCategory, 2);
+        return Observable.fromIterable(getSession().loadAll(NewsSource.class, fCategory, 2));
     }
 
     @Override
-    public Collection<NewsSource> findSourcesWithoutLogo() {
+    public Observable<NewsSource> findSourcesWithoutLogo() {
         Filter nullLogoFilter = new Filter("logoUrl", ComparisonOperator.IS_NULL);
         Filter emptyLogoFilter = new Filter("logoUrl", ComparisonOperator.EQUALS, "");
         emptyLogoFilter.setBooleanOperator(BooleanOperator.OR);
         Filters filters = new Filters(nullLogoFilter, emptyLogoFilter);
-        return getSession().loadAll(NewsSource.class, filters, 2);
+        return Observable.fromIterable(getSession().loadAll(NewsSource.class, filters, 2));
     }
 
     @Override
-    public Collection<NewsSource> findSourcesWithLanguage(String language) {
+    public Observable<NewsSource> findSourcesWithLanguage(String language) {
         Filter fCategory = new Filter("language", ComparisonOperator.EQUALS, language);
-        return getSession().loadAll(NewsSource.class, fCategory, 2);
+        return Observable.fromIterable(getSession().loadAll(NewsSource.class, fCategory, 2));
     }
 
     @Override
-    public Collection<NewsSource> findSourcesWithCountry(String country) {
+    public Observable<NewsSource> findSourcesWithCountry(String country) {
         Filter fCategory = new Filter("country", ComparisonOperator.EQUALS, country);
-        return getSession().loadAll(NewsSource.class, fCategory, 2);
+        return Observable.fromIterable(getSession().loadAll(NewsSource.class, fCategory, 2));
     }
     
 
@@ -78,43 +76,33 @@ public class NewsSourceService extends AbstractDBService<NewsSource>  implements
     }
 
     @Override
-    public Set<String> findCategories() {
-        String query = "MATCH (s:NewsSource) RETURN DISTINCT s.category ORDER BY s.category ASC";
-        TreeSet<String> result = new TreeSet<>();
-        result.addAll(executeQuery(String.class, query));
-        return result;
+    public Observable<String> findCategories() {
+        String query = SourcesQueries.findAllCategoriesQuery();
+        return executeQuery(String.class, query);
     }
 
     @Override
-    public Set<String> findNames() {
-        String query = "MATCH (s:NewsSource) RETURN DISTINCT s.name ORDER BY s.name ASC";
-        TreeSet<String> result = new TreeSet<>();
-        result.addAll(executeQuery(String.class, query));
-        return result;
+    public Observable<String> findNames() {
+        String query = SourcesQueries.findAllNamesQuery();
+        return executeQuery(String.class, query);
     }
 
     @Override
-    public Set<String> findLanguages() {
-        String query = "MATCH (s:NewsSource) RETURN DISTINCT s.language ORDER BY s.language ASC";
-        TreeSet<String> result = new TreeSet<>();
-        result.addAll(executeQuery(String.class, query));
-        return result;
+    public Observable<String> findLanguages() {
+        String query = SourcesQueries.findAllLanguagesQuery();
+        return executeQuery(String.class, query);
     }
 
     @Override
-    public Set<String> findCountries() {
-        String query = "MATCH (s:NewsSource) RETURN DISTINCT s.country ORDER BY s.country ASC";
-        TreeSet<String> result = new TreeSet<>();
-        result.addAll(executeQuery(String.class, query));
-        return result;
+    public Observable<String> findCountries() {
+        String query = SourcesQueries.findAllCountriesQuery();
+        return executeQuery(String.class, query);
     }
 
     @Override
-    public Set<String> findLocales() {
-        String query = "MATCH (s:NewsSource) RETURN DISTINCT s.language+'_'+s.country";
-        TreeSet<String> result = new TreeSet<>();
-        result.addAll(executeQuery(String.class, query));
-        return result;
+    public Observable<String> findLocales() {
+        String query = SourcesQueries.findAllLocalesQuery();
+        return executeQuery(String.class, query);
     }
     
     @Override

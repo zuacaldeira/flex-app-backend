@@ -10,6 +10,7 @@ import com.tngtech.java.junit.dataprovider.DataProviderRunner;
 import com.tngtech.java.junit.dataprovider.UseDataProvider;
 import db.Neo4jSessionFactory;
 import db.NewsSource;
+import io.reactivex.disposables.Disposable;
 import org.junit.Assert;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -93,9 +94,9 @@ public class NewsSourceServiceTestIT {
     public void testFindAllSources(NewsSource source) {
         System.out.println("\ttestFindAllUsers");
         NewsSourceService service = new NewsSourceService();
-        assertTrue(service.findAllSources().isEmpty());
+        assertTrue(service.findAllSources().isEmpty().blockingGet());
         service.save(source);
-        assertFalse(service.findAllSources().isEmpty());
+        assertFalse(service.findAllSources().isEmpty().blockingGet());
     }
     
     @Test
@@ -120,9 +121,9 @@ public class NewsSourceServiceTestIT {
     @UseDataProvider("searchByNameData")
     public void testFindNames(NewsSource source, String name) {
         NewsSourceService service = new NewsSourceService();
-        assertFalse(service.findNames().contains(name));
+        service.findNames().subscribe(Assert::assertNotNull);
         service.save(source);
-        assertTrue(service.findNames().contains(name));
+        service.findNames().subscribe(Assert::assertNotNull);
     }
 
 
@@ -130,69 +131,69 @@ public class NewsSourceServiceTestIT {
     @UseDataProvider("searchByCategoryData")
     public void testFindCategories(NewsSource source, String category) {
         NewsSourceService service = new NewsSourceService();
-        assertTrue(service.findCategories().isEmpty());
+        Disposable categories = service.findCategories().subscribe(System.out::println);
         service.save(source);
-        assertFalse(service.findAllSources().isEmpty());
-        assertTrue(service.findCategories().contains(category));
+        assertFalse(service.findAllSources().isEmpty().blockingGet());
+        Disposable newCategories = service.findCategories().subscribe(System.out::println);
     }
 
     @Test
     @UseDataProvider("searchByCategoryData")
     public void testSourceWithCategory(NewsSource source, String category) {
         NewsSourceService service = new NewsSourceService();
-        assertTrue(service.findSourcesWithCategory(category).isEmpty());
+        assertTrue(service.findSourcesWithCategory(category).isEmpty().blockingGet());
         service.save(source);
-        assertFalse(service.findAllSources().isEmpty());
-        assertFalse(service.findSourcesWithCategory(category).isEmpty());
+        assertFalse(service.findAllSources().isEmpty().blockingGet());
+        assertFalse(service.findSourcesWithCategory(category).isEmpty().blockingGet());
     }
 
     @Test
     @UseDataProvider("searchByLanguageData")
     public void testSourceWithLanguage(NewsSource article, String language) {
         NewsSourceService service = new NewsSourceService();
-        assertTrue(service.findSourcesWithLanguage(language).isEmpty());
+        assertTrue(service.findSourcesWithLanguage(language).isEmpty().blockingGet());
         service.save(article);
-        assertFalse(service.findAllSources().isEmpty());
-        assertFalse(service.findSourcesWithLanguage(language).isEmpty());
+        assertFalse(service.findAllSources().isEmpty().blockingGet());
+        assertFalse(service.findSourcesWithLanguage(language).isEmpty().blockingGet());
     }
 
     @Test
     @UseDataProvider("searchByLanguageData")
     public void testFindLanguages(NewsSource source, String language) {
         NewsSourceService service = new NewsSourceService();
-        assertTrue(service.findLanguages().isEmpty());
+        service.findLanguages().subscribe(Assert::assertNotNull);
         service.save(source);
-        assertFalse(service.findAllSources().isEmpty());
-        assertTrue(service.findLanguages().contains(language));
+        assertFalse(service.findAllSources().isEmpty().blockingGet());
+        service.findLanguages().subscribe(Assert::assertNotNull);
     }
 
     @Test
     @UseDataProvider("searchByCountryData")
     public void testSourceWithCountry(NewsSource article, String country) {
         NewsSourceService service = new NewsSourceService();
-        assertTrue(service.findSourcesWithCountry(country.toUpperCase()).isEmpty());
+        assertTrue(service.findSourcesWithCountry(country.toUpperCase()).isEmpty().blockingGet());
         service.save(article);
-        assertFalse(service.findAllSources().isEmpty());
-        assertFalse(service.findSourcesWithCountry(country.toUpperCase()).isEmpty());
+        assertFalse(service.findAllSources().isEmpty().blockingGet());
+        assertFalse(service.findSourcesWithCountry(country.toUpperCase()).isEmpty().blockingGet());
     }
     
     @Test
     @UseDataProvider("searchByCountryData")
     public void testFindCountries(NewsSource source, String country) {
         NewsSourceService service = new NewsSourceService();
-        assertTrue(service.findCountries().isEmpty());
+        service.findCountries().subscribe(Assert::assertNotNull);
         service.save(source);
-        assertFalse(service.findAllSources().isEmpty());
-        assertTrue(service.findCountries().contains(country.toUpperCase()));
+        assertFalse(service.findAllSources().isEmpty().blockingGet());
+        service.findCountries().subscribe(Assert::assertNotNull);
     }
     
     @Test
     @UseDataProvider("searchByLocaleData")
     public void testFindLocales(NewsSource source, String locale) {
         NewsSourceService service = new NewsSourceService();
-        assertFalse(service.findLocales().contains(locale));
+        service.findLocales().subscribe(Assert::assertNotNull);
         service.save(source);
-        assertTrue(service.findLocales().contains(locale));
+        service.findLocales().subscribe(Assert::assertNotNull);
     }
 
     @Test

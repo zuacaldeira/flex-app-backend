@@ -6,7 +6,7 @@
 package services;
 
 import db.NewsArticle;
-import java.util.Collection;
+import io.reactivex.Observable;
 import javax.ejb.Remote;
 
 /**
@@ -16,34 +16,34 @@ import javax.ejb.Remote;
 @Remote
 public interface NewsArticleServiceInterface  extends DBService<NewsArticle> {
     public NewsArticle findArticleWithTitle(String title);
-    public Collection<NewsArticle> findAllArticles();
+    public Observable<NewsArticle> findAllArticles();
 
-    public Collection<NewsArticle> findArticlesWithText(String search);
-    public Collection<NewsArticle> findArticlesWithText(String username, String search);
+    public Observable<NewsArticle> findArticlesWithText(String search);
+    public Observable<NewsArticle> findArticlesWithText(String username, String search);
 
-    public Collection<NewsArticle> findArticlesWithCategory(String category);
-    public Collection<NewsArticle> findArticlesWithCategory(String username, String category);
+    public Observable<NewsArticle> findArticlesWithCategory(String category);
+    public Observable<NewsArticle> findArticlesWithCategory(String username, String category);
     
-    public Collection<NewsArticle> findArticlesWithSource(String sourceId);
-    public Collection<NewsArticle> findArticlesWithSource(String username, String sourceId);
+    public Observable<NewsArticle> findArticlesWithSource(String sourceId);
+    public Observable<NewsArticle> findArticlesWithSource(String username, String sourceId);
     
-    public Collection<NewsArticle> findArticlesWithLanguage(String language);
-    public Collection<NewsArticle> findArticlesWithLanguage(String username, String language);
+    public Observable<NewsArticle> findArticlesWithLanguage(String language);
+    public Observable<NewsArticle> findArticlesWithLanguage(String username, String language);
     
-    public Collection<NewsArticle> findArticlesWithCountry(String value);
-    public Collection<NewsArticle> findArticlesWithCountry(String username, String value);
+    public Observable<NewsArticle> findArticlesWithCountry(String value);
+    public Observable<NewsArticle> findArticlesWithCountry(String username, String value);
 
-    public Collection<NewsArticle> findArticlesWithoutShortUrl();
+    public Observable<NewsArticle> findArticlesWithoutShortUrl();
     
-    public Collection<NewsArticle> findAllRead(String username);
-    public Collection<NewsArticle> findAllFavorite(String username);
-    public Collection<NewsArticle> findAllFake(String username);
+    public Observable<NewsArticle> findAllRead(String username);
+    public Observable<NewsArticle> findAllFavorite(String username);
+    public Observable<NewsArticle> findAllFake(String username);
     
-    public Collection<NewsArticle> findLatest();
-    public Collection<NewsArticle> findLatest(String username);
+    public Observable<NewsArticle> findLatest();
+    public Observable<NewsArticle> findLatest(String username);
 
-    public Collection<NewsArticle> findOldest();
-    public Collection<NewsArticle> findOldest(String username);
+    public Observable<NewsArticle> findOldest();
+    public Observable<NewsArticle> findOldest(String username);
     
     public boolean isRead(String username, NewsArticle entity);
     public boolean isFavorite(String username, NewsArticle entity);
@@ -57,6 +57,6 @@ public interface NewsArticleServiceInterface  extends DBService<NewsArticle> {
     public void removeMarkAsFavorite(String username, NewsArticle entity);
     public void removeMarkAsFake(String username, NewsArticle entity);
 
-    public Collection<NewsArticle> findAll(int page, int pageSize);
+    public Observable<NewsArticle> findAll(int page, int pageSize);
 
   }

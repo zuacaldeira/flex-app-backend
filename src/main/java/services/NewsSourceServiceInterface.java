@@ -6,7 +6,7 @@
 package services;
 
 import db.NewsSource;
-import java.util.Collection;
+import io.reactivex.Observable;
 import javax.ejb.Remote;
 
 /**
@@ -15,16 +15,16 @@ import javax.ejb.Remote;
  */
 @Remote
 public interface NewsSourceServiceInterface extends DBService<NewsSource> {
-    public Collection<NewsSource> findAllSources();
-    public Collection<NewsSource> findSourcesWithCategory(String category);
-    public Collection<NewsSource> findSourcesWithLanguage(String language);
-    public Collection<NewsSource> findSourcesWithCountry(String country);    
-    public Collection<NewsSource> findSourcesWithoutLogo();
-    public Collection<String> findCategories();
-    public Collection<String> findNames();
-    public Collection<String> findLanguages();
-    public Collection<String> findCountries();
-    public Collection<String> findLocales();
+    public Observable<NewsSource> findAllSources();
+    public Observable<NewsSource> findSourcesWithCategory(String category);
+    public Observable<NewsSource> findSourcesWithLanguage(String language);
+    public Observable<NewsSource> findSourcesWithCountry(String country);    
+    public Observable<NewsSource> findSourcesWithoutLogo();
+    public Observable<String> findCategories();
+    public Observable<String> findNames();
+    public Observable<String> findLanguages();
+    public Observable<String> findCountries();
+    public Observable<String> findLocales();
     public NewsSource findSourceWithSourceId(String sourceId);
     public NewsSource findSourceNamed(String value);
 

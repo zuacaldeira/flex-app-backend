@@ -7,7 +7,7 @@ package services;
 
 import db.Advertises;
 import db.NewsArticle;
-import java.util.Collection;
+import io.reactivex.Observable;
 import javax.ejb.Stateless;
 import org.neo4j.ogm.cypher.query.SortOrder;
 import utils.DatabaseUtils;
@@ -35,7 +35,7 @@ public class FlexAdvertisementService extends AbstractDBService<Advertises> impl
     }
     
     @Override
-    public Collection<Advertises> findAll(NewsArticle article) {
+    public Observable<Advertises> findAll(NewsArticle article) {
         String query = "MATCH (aP:AdsProvider)-[r:Advertises]-(nA:NewsArticle) WHERE ";
         query += "nA.url = " + DatabaseUtils.getInstance().wrapUp(article.getUrl());
         query += "RETURN r";
