@@ -15,7 +15,7 @@ import org.neo4j.ogm.annotation.NodeEntity;
  * @author zua
  */
 @NodeEntity
-public class Auth0UserInfo extends GraphEntity {
+public class AuthUserInfo extends GraphEntity {
 
     private static final long serialVersionUID = 1359299010814564837L;
 
@@ -31,7 +31,7 @@ public class Auth0UserInfo extends GraphEntity {
     private String familyName;
     private String picture;
     
-    public Auth0UserInfo() {
+    public AuthUserInfo() {
     }
 
     @Override

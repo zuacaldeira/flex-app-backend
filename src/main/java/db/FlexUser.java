@@ -25,7 +25,7 @@ public class FlexUser extends GraphEntity {
     private Set<GraphEntity> read;
     private Set<GraphEntity> favorite;
     private Set<GraphEntity> fake;
-    private Auth0UserInfo userInfo;
+    private AuthUserInfo userInfo;
 
     public FlexUser() {
         read = new HashSet<>();
@@ -123,11 +123,11 @@ public class FlexUser extends GraphEntity {
         this.fake = fake;
     }
 
-    public Auth0UserInfo getUserInfo() {
+    public AuthUserInfo getUserInfo() {
         return userInfo;
     }
 
-    public void setUserInfo(Auth0UserInfo userInfo) {
+    public void setUserInfo(AuthUserInfo userInfo) {
         this.userInfo = userInfo;
     }
 
