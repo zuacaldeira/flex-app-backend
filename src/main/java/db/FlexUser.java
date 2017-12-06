@@ -7,7 +7,7 @@ package db;
 
 import java.util.HashSet;
 import java.util.Set;
-import org.neo4j.ogm.annotation.Index;
+import org.neo4j.ogm.annotation.GraphId;
 import org.neo4j.ogm.annotation.NodeEntity;
 
 /**
@@ -19,7 +19,8 @@ public class FlexUser extends GraphEntity {
 
     private static final long serialVersionUID = -5822981670795508682L;
     
-    @Index(unique = true)
+    @GraphId    
+    private String advertisementUrl;
     private String username;
     private String password;
     private Set<GraphEntity> read;

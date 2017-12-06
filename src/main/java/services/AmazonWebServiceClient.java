@@ -10,7 +10,7 @@ import com.ECS.client.jax.Cart;
 import com.ECS.client.jax.ItemSearchRequest;
 import com.ECS.client.jax.Items;
 import db.AmazonProperties;
-import db.Neo4jSessionFactory;
+import factory.Neo4jSessionFactory;
 import de.malkusch.amazon.ecs.ProductAdvertisingAPI;
 import de.malkusch.amazon.ecs.configuration.Configuration;
 import de.malkusch.amazon.ecs.configuration.PropertiesConfiguration;

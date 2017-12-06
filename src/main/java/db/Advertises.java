@@ -6,6 +6,7 @@
 package db;
 
 import org.neo4j.ogm.annotation.EndNode;
+import org.neo4j.ogm.annotation.GraphId;
 import org.neo4j.ogm.annotation.RelationshipEntity;
 import org.neo4j.ogm.annotation.StartNode;
 
@@ -18,13 +19,15 @@ public class Advertises extends GraphRelationship {
 
     private static final long serialVersionUID = 4308653150737318550L;
 
+    @GraphId    
+    private String advertisementUrl;
+
     @StartNode
     private AdsProvider provider;
 
     @EndNode
     private NewsArticle news;
 
-    private String advertisementUrl;
 
     public Advertises(AdsProvider provider, NewsArticle news) {
         this.provider = provider;

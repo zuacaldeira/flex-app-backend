@@ -3,7 +3,7 @@ package db;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
-import org.neo4j.ogm.annotation.Index;
+import org.neo4j.ogm.annotation.GraphId;
 import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Relationship;
 
@@ -15,7 +15,7 @@ public class NewsSource extends GraphEntity implements Comparable<NewsSource> {
 
     private static final long serialVersionUID = -7869974236968731845L;
 
-    @Index(unique=true)
+    @GraphId    
     private String sourceId;
     private String name;
     private String description;

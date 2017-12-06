@@ -5,7 +5,7 @@
  */
 package db;
 
-import org.neo4j.ogm.annotation.Index;
+import org.neo4j.ogm.annotation.GraphId;
 import org.neo4j.ogm.annotation.NodeEntity;
 
 /**
@@ -16,8 +16,7 @@ import org.neo4j.ogm.annotation.NodeEntity;
 public class AmazonProperties extends GraphEntity {
 
     private static final long serialVersionUID = -1348884683033101301L;
-    
-    @Index(unique = true)
+    @GraphId    
     private String associateTag;
     private String accessKey;
     private String secretKey;

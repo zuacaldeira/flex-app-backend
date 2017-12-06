@@ -5,7 +5,7 @@
  */
 package services;
 
-import db.Neo4jSessionFactory;
+import factory.Neo4jSessionFactory;
 import javax.annotation.PostConstruct;
 import javax.ejb.Singleton;
 

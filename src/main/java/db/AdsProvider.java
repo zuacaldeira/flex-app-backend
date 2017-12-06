@@ -5,6 +5,7 @@
  */
 package db;
 
+import org.neo4j.ogm.annotation.GraphId;
 import org.neo4j.ogm.annotation.NodeEntity;
 
 /**
@@ -15,8 +16,11 @@ import org.neo4j.ogm.annotation.NodeEntity;
 public class AdsProvider extends GraphEntity implements Comparable<AdsProvider> {
 
     private static final long serialVersionUID = -361708908491302783L;
-    private String name;
+    
+
+    @GraphId    
     private String url;
+    private String name;
     private String apiKey;
 
     public AdsProvider() {

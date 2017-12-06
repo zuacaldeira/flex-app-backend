@@ -5,6 +5,7 @@
  */
 package db;
 
+import org.neo4j.ogm.annotation.GraphId;
 import org.neo4j.ogm.annotation.NodeEntity;
 
 /**
@@ -16,6 +17,7 @@ public class Person extends GraphEntity {
 
     private static final long serialVersionUID = 5462730122562191198L;
 
+    @GraphId    
     private String name;
     private String url;
     private String photoUrl;

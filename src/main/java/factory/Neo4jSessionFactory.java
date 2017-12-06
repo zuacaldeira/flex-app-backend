@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package db;
+package factory;
 
 import org.neo4j.ogm.session.Session;
 import org.neo4j.ogm.session.SessionFactory;
@@ -17,7 +17,6 @@ import org.neo4j.ogm.session.SessionFactory;
 public class Neo4jSessionFactory {
 
     private static Neo4jSessionFactory factory;
-
     private final SessionFactory sessionFactory;
     
     private Neo4jSessionFactory() {

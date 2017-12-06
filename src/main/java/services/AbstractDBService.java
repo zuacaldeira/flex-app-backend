@@ -5,7 +5,7 @@
  */
 package services;
 
-import db.Neo4jSessionFactory;
+import factory.Neo4jSessionFactory;
 import db.GraphEntity;
 import io.reactivex.Observable;
 import java.util.HashMap;

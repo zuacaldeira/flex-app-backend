@@ -6,8 +6,7 @@
 package db;
 
 import java.util.Date;
-import java.util.Locale;
-import org.neo4j.ogm.annotation.Index;
+import org.neo4j.ogm.annotation.GraphId;
 import org.neo4j.ogm.annotation.NodeEntity;
 
 /**
@@ -19,7 +18,8 @@ public class AuthUserInfo extends GraphEntity {
 
     private static final long serialVersionUID = 1359299010814564837L;
 
-    @Index(unique = true)
+    @GraphId    
+    private String advertisementUrl;
     private String sub;
     private boolean emailVerified;
     private Gender gender;
@@ -27,7 +27,7 @@ public class AuthUserInfo extends GraphEntity {
     private String nickname;
     private String name;
     private String givenName;
-    private Locale locale;
+    private String locale;
     private String familyName;
     private String picture;
     
@@ -110,11 +110,11 @@ public class AuthUserInfo extends GraphEntity {
         this.givenName = givenName;
     }
 
-    public Locale getLocale() {
+    public String getLocale() {
         return locale;
     }
 
-    public void setLocale(Locale locale) {
+    public void setLocale(String locale) {
         this.locale = locale;
     }
 

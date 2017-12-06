@@ -4,7 +4,7 @@ package db;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
-import org.neo4j.ogm.annotation.Index;
+import org.neo4j.ogm.annotation.GraphId;
 import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Relationship;
 
@@ -16,7 +16,8 @@ public class Book extends GraphEntity implements Comparable<Book>{
 
     private static final long serialVersionUID = -5488934119305207913L;
 
-    @Index(unique=true)
+    @GraphId    
+    private String advertisementUrl;
     private String ISBN;
     private String title;
     private String description;

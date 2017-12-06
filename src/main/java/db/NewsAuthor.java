@@ -3,7 +3,7 @@ package db;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
-import org.neo4j.ogm.annotation.Index;
+import org.neo4j.ogm.annotation.GraphId;
 import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Relationship;
 
@@ -22,7 +22,7 @@ public class NewsAuthor extends  GraphEntity implements Comparable<NewsAuthor>{
      * Names are unique, and the db has a uniqueness constraint on this 
      * property.
      */
-    @Index(unique=true)
+    @GraphId    
     private String name;
     
     /**

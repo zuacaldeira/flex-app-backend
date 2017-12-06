@@ -5,6 +5,7 @@
  */
 package db;
 
+import org.neo4j.ogm.annotation.GraphId;
 import org.neo4j.ogm.annotation.NodeEntity;
 
 /**
@@ -16,6 +17,7 @@ public class AmazonBook extends GraphEntity {
 
     private static final long serialVersionUID = 590262573267973488L;
 
+    @GraphId    
     private String apn;
     private String title;
     private String url;
