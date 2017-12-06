@@ -22,7 +22,7 @@ public class NewsAuthor extends  GraphEntity implements Comparable<NewsAuthor>{
      * Names are unique, and the db has a uniqueness constraint on this 
      * property.
      */
-    @Index(unique=true, primary = true)
+    @Index(unique=true)
     private String name;
     
     /**

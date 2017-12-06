@@ -19,7 +19,7 @@ public class AuthUserInfo extends GraphEntity {
 
     private static final long serialVersionUID = 1359299010814564837L;
 
-    @Index(primary = true, unique = true)
+    @Index(unique = true)
     private String sub;
     private boolean emailVerified;
     private Gender gender;

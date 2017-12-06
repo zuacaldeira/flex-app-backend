@@ -2,7 +2,8 @@ package db;
 
 import java.io.Serializable;
 import java.util.Objects;
-import org.neo4j.ogm.annotation.GraphId;
+import org.neo4j.ogm.annotation.Id;
+import org.neo4j.ogm.annotation.GeneratedValue;
 
 /**
  * Created by zua on 15/04/17.
@@ -11,7 +12,8 @@ public abstract class GraphEntity implements Serializable {
 
     private static final long serialVersionUID = 842576810489298435L;
 
-    @GraphId
+    @Id
+    @GeneratedValue
     private Long id;
 
     public GraphEntity() {

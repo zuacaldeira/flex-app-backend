@@ -14,8 +14,10 @@ import org.neo4j.ogm.annotation.NodeEntity;
  */
 @NodeEntity
 public class AmazonProperties extends GraphEntity {
+
+    private static final long serialVersionUID = -1348884683033101301L;
     
-    @Index(primary = true, unique = true)
+    @Index(unique = true)
     private String associateTag;
     private String accessKey;
     private String secretKey;

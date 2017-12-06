@@ -17,7 +17,7 @@ public class NewsArticle extends GraphEntity implements Comparable<NewsArticle>{
 
     private static final long serialVersionUID = -5488934119305207913L;
 
-    @Index(unique=true, primary = true)
+    @Index(unique=true)
     private String title;
     
     private String description;

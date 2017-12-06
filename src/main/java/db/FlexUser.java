@@ -19,7 +19,7 @@ public class FlexUser extends GraphEntity {
 
     private static final long serialVersionUID = -5822981670795508682L;
     
-    @Index(unique = true, primary = true)
+    @Index(unique = true)
     private String username;
     private String password;
     private Set<GraphEntity> read;

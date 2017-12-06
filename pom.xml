@@ -65,6 +65,11 @@
             <artifactId>neo4j-ogm-api</artifactId>
             <version>3.0.2</version>
         </dependency>
+        <dependency> <!-- If you're using the BOLT driver -->
+            <groupId>org.neo4j</groupId>
+            <artifactId>neo4j-ogm-bolt-driver</artifactId>
+            <version>3.0.2</version>
+        </dependency>
         <dependency> <!-- If you're using the EMBEDDED driver -->
             <groupId>org.neo4j</groupId>
             <artifactId>neo4j-ogm-embedded-driver</artifactId>
@@ -78,17 +83,10 @@
             <type>jar</type>
         </dependency>
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.12</version>
+            <groupId>org.testng</groupId>
+            <artifactId>testng</artifactId>
+            <version>6.13.1</version>
             <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.tngtech.java</groupId>
-            <artifactId>junit-dataprovider</artifactId>
-            <version>1.13.1</version>
-            <scope>test</scope>
-            <type>jar</type>
         </dependency>
         <dependency>
             <groupId>com.neovisionaries</groupId>
