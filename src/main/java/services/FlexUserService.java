@@ -8,6 +8,7 @@ package services;
 import db.FlexUser;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Objects;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
@@ -31,7 +32,11 @@ public class FlexUserService extends AbstractDBService<FlexUser> implements Flex
     public FlexUser login(String username, String password) {
         System.out.println("INSIDE FLEX USER SERVICE ");
         String query = UsersQueries.findUser(username, password);
-        return getSession().queryForObject(FlexUser.class, query, new HashMap<>());
+        FlexUser user =  getSession().load(FlexUser.class, username, 2);
+        if(Objects.equals(password, user.getPassword())) {
+            return user;
+        }
+        return null;
     }
 
     @Override
