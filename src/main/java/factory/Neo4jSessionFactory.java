@@ -21,7 +21,7 @@ public class Neo4jSessionFactory {
     private Neo4jSessionFactory() {
         Configuration configuration = new Configuration();
         configuration.driverConfiguration()
-                .setDriverClassName("org.neo4j.ogm.drivers.http.driver.BoltDriver")
+                .setDriverClassName("org.neo4j.ogm.drivers.http.driver.HttpDriver")
                 .setURI(System.getenv("GRAPHENEDB_URL"));
 
         // We pass it as the first argument to a SessionFactory instance
