@@ -31,10 +31,11 @@ public class DatabaseUtils {
         if (string.isEmpty()) {
             return "";
         }
-
-        if (string.contains("\"")) {
+        
+        if(string.contains("\"")) {
             string = string.replace("\"", "");
         }
+        
         return "\"" + string + "\"";
     }
 
