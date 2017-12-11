@@ -25,14 +25,6 @@ public abstract class GraphEntity implements Serializable {
         this.id = id;
     }
 
-    public abstract String getPropertyName();
-
-    public abstract String getPropertyValue();
-
-    public abstract boolean hasUrl();
-
-    public abstract String getUrl();
-
     @Override
     public boolean equals(Object other) {
         if (other instanceof GraphEntity) {

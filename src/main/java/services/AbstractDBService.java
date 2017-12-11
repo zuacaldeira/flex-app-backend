@@ -5,12 +5,11 @@
  */
 package services;
 
-import factory.Neo4jSessionFactory;
+import session.Neo4jSessionFactory;
 import db.GraphEntity;
-import io.reactivex.Observable;
+import java.util.Collection;
 import java.util.HashMap;
 import org.neo4j.ogm.session.Session;
-import utils.DatabaseUtils;
 
 /**
  *
@@ -22,171 +21,20 @@ public abstract class AbstractDBService<T extends GraphEntity> implements DBServ
     public final int LIMIT = 30;
 
     @Override
-    public final Observable<T> findAll() {
-        return Observable.fromIterable(getSession().loadAll(getClassType(), getSortOrderDesc(), LIMIT));
-    }
-
-    @Override
-    public final Observable<T> findAllAsc() {
-        String query = Neo4jQueries.getFindAllQuery(getClassType(), null, null, null, getSortOrderAsc(), LIMIT);
-        return executeQuery(query);
-    }
-
-    @Override
-    public final Observable<T> findAllDesc() {
-        String query = Neo4jQueries.getFindAllQuery(getClassType(), null, null, null, getSortOrderDesc(), LIMIT);
-        return executeQuery(query);
-    }
-
-    @Override
-    public final Observable<T> findAllWithLimit(int limit) {
-        return findAllDescWithLimit(limit);
-    }
-
-    @Override
-    public final Observable<T> findAllAscWithLimit(int limit) {
-        String query = Neo4jQueries.getFindAllQuery(getClassType(), null, null, null, getSortOrderAsc(), limit);
-        return executeQuery(query);
-    }
-
-    @Override
-    public final Observable<T> findAllDescWithLimit(int limit) {
-        String query = Neo4jQueries.getFindAllQuery(getClassType(), null, null, null, getSortOrderDesc(), limit);
-        return executeQuery(query);
-    }
-
-    @Override
-    public final Observable<T> findAll(String username) {
-        return findAllDesc(username);
-    }
-
-    @Override
-    public final Observable<T> findAllAsc(String username) {
-        String query = Neo4jQueries.getFindAllQuery(getClassType(), username, null, null, getSortOrderAsc(), LIMIT);
-        return executeQuery(query);
-    }
-
-    @Override
-    public final Observable<T> findAllDesc(String username) {
-        String query = Neo4jQueries.getFindAllQuery(getClassType(), username, null, null, getSortOrderDesc(), LIMIT);
-        return executeQuery(query);
-    }
-
-    @Override
-    public final Observable<T> findAll(String username, int limit) {
-        return findAllDesc(username, limit);
-    }
-
-    @Override
-    public final Observable<T> findAllAsc(String username, int limit) {
-        String query = Neo4jQueries.getFindAllQuery(getClassType(), username, null, null, getSortOrderAsc(), limit);
-        return executeQuery(query);
-    }
-
-    @Override
-    public final Observable<T> findAllDesc(String username, int limit) {
-        String query = Neo4jQueries.getFindAllQuery(getClassType(), username, null, null, getSortOrderDesc(), limit);
-        return executeQuery(query);
-    }
-
-    @Override
-    public final Observable<T> findAll(String property, Object value) {
-        return findAllDesc(property, value);
-    }
-
-    @Override
-    public final Observable<T> findAllAsc(String property, Object value) {
-        String query = Neo4jQueries.getFindAllQuery(getClassType(), null, property, value, getSortOrderAsc(), LIMIT);
-        return executeQuery(query);
-    }
-
-    @Override
-    public final Observable<T> findAllDesc(String property, Object value) {
-        String query = Neo4jQueries.getFindAllQuery(getClassType(), null, property, value, getSortOrderDesc(), LIMIT);
-        return executeQuery(query);
-    }
-
-    @Override
-    public final Observable<T> findAll(String property, Object value, int limit) {
-        return findAllDesc(property, value, limit);
-    }
-
-    @Override
-    public final Observable<T> findAllAsc(String property, Object value, int limit) {
-        String query = Neo4jQueries.getFindAllQuery(getClassType(), null, property, value, getSortOrderAsc(), limit);
-        return executeQuery(query);
-    }
-
-    @Override
-    public final Observable<T> findAllDesc(String property, Object value, int limit) {
-        String query = Neo4jQueries.getFindAllQuery(getClassType(), null, property, value, getSortOrderDesc(), limit);
-        return executeQuery(query);
-    }
-
-    @Override
-    public final Observable<T> findAll(String username, String property, Object value) {
-        return findAllDesc(username, property, value);
-    }
-
-    @Override
-    public final Observable<T> findAllAsc(String username, String property, Object value) {
-        String query = Neo4jQueries.getFindAllQuery(getClassType(), username, property, value, getSortOrderAsc(), LIMIT);
-        return executeQuery(query);
-    }
-
-    @Override
-    public final Observable<T> findAllDesc(String username, String property, Object value) {
-        String query = Neo4jQueries.getFindAllQuery(getClassType(), username, property, value, getSortOrderDesc(), LIMIT);
-        return executeQuery(query);
-    }
-
-    @Override
-    public final Observable<T> findAll(String username, String property, Object value, int limit) {
-        return findAllDesc(username, property, value, limit);
-    }
-
-    @Override
-    public final Observable<T> findAllAsc(String username, String property, Object value, int limit) {
-        String query = Neo4jQueries.getFindAllQuery(getClassType(), username, property, value, getSortOrderAsc(), limit);
-        return executeQuery(query);
-    }
-
-    @Override
-    public final Observable<T> findAllDesc(String username, String property, Object value, int limit) {
-        String query = Neo4jQueries.getFindAllQuery(getClassType(), username, property, value, getSortOrderDesc(), limit);
-        return executeQuery(query);
+    public final Collection<T> findAll() {
+        return getSession().loadAll(getClassType(), getSortOrderDesc(), LIMIT);
     }
 
     @Override
     public final T find(String id) {
-        try {
-            Session session = Neo4jSessionFactory.getInstance().getNeo4jSession();
-            return session.load(getClassType(), id, 2);
-        } catch (Exception e) {
-            return null;
-        }
-    }
-
-    @Override
-    public final T find(T object) {
-        try {
-            String classname = getClassType().getSimpleName();
-            String query = "MATCH (n:" + classname + ")";
-            query += " WHERE n." + object.getPropertyName() + "=" + DatabaseUtils.getInstance().wrapUp(object.getPropertyValue());
-            query += " RETURN n";
-            Session session = Neo4jSessionFactory.getInstance().getNeo4jSession();
-            return session.queryForObject(getClassType(), query, new HashMap<String, Object>());
-        } catch(Exception e) {
-            return null;
-        }
+        Session session = Neo4jSessionFactory.getInstance().getNeo4jSession();
+        return session.load(getClassType(), id, 2);
     }
 
     @Override
     public final void save(T object) {
-        try {
-            Session session = Neo4jSessionFactory.getInstance().getNeo4jSession();
-            session.save(object);
-        } catch(Exception e) {}
+        Session session = Neo4jSessionFactory.getInstance().getNeo4jSession();
+        session.save(object);
     }
 
     @Override
@@ -206,11 +54,17 @@ public abstract class AbstractDBService<T extends GraphEntity> implements DBServ
     }
 
     @Override
-    public Observable<T> executeQuery(String query) {
-        return Observable.fromIterable(getSession().query(getClassType(), query, new HashMap<String, Object>()));
+    public Iterable<T> executeQuery(String query) {
+        return getSession().query(getClassType(), query, new HashMap<>());
+    }
+    
+    @Override
+    public <T> Iterable<T> executeQuery(Class<T> aClass, String query) {
+        return getSession().query(aClass, query, new HashMap<>());
     }
 
-    protected <U> Observable<U> executeQuery(Class<U> type, String query) {
-        return Observable.fromIterable(getSession().query(type, query, new HashMap<String, Object>()));
+    @Override
+    public T executeQueryForObject(String query) {
+        return getSession().queryForObject(getClassType(), query, new HashMap<>());
     }
 }

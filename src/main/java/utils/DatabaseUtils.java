@@ -32,11 +32,10 @@ public class DatabaseUtils {
             return "";
         }
         
-        if(string.contains("\"")) {
-            string = string.replace("\"", "");
+        if(string.contains("\'")) {
+            string = string.replace("\'", "`");
         }
-        
-        return "\"" + string + "\"";
+        return "'" + string + "'";
     }
 
 }
