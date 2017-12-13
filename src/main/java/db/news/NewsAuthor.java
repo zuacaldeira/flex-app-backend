@@ -1,6 +1,7 @@
 package db.news;
 
 import db.GraphEntity;
+import db.relationships.AuthoredBy;
 import db.relationships.EditedBy;
 import java.util.HashSet;
 import java.util.Objects;
@@ -34,9 +35,13 @@ public class NewsAuthor extends GraphEntity implements Comparable<NewsAuthor> {
     @Relationship(type = "EDITED_BY")
     private Set<EditedBy> editedBy;
 
+    @Relationship(type = "AUTHORED_BY")
+    private Set<AuthoredBy> authored;
+
     public NewsAuthor() {
         name = "Unknown";
         editedBy = new HashSet<>();
+        authored = new HashSet<>();
     }
 
     public NewsAuthor(String name) {
@@ -59,6 +64,16 @@ public class NewsAuthor extends GraphEntity implements Comparable<NewsAuthor> {
     public void setEditedBy(Set<EditedBy> editedBy) {
         this.editedBy = editedBy;
     }
+
+    public Set<AuthoredBy> getAuthored() {
+        return authored;
+    }
+
+    public void setAuthored(Set<AuthoredBy> authored) {
+        this.authored = authored;
+    }
+    
+    
 
     @Override
     public int compareTo(NewsAuthor o) {

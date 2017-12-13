@@ -42,6 +42,7 @@ public class PublishedBy extends GraphEntity {
 
     public void setSource(NewsSource source) {
         this.source = source;
+        this.source.getPublished().add(this);
     }
     
     

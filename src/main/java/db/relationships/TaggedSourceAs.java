@@ -6,8 +6,8 @@
 package db.relationships;
 
 import db.GraphEntity;
-import db.news.NewsAuthor;
 import db.news.NewsSource;
+import db.news.Tag;
 import org.neo4j.ogm.annotation.EndNode;
 import org.neo4j.ogm.annotation.RelationshipEntity;
 import org.neo4j.ogm.annotation.StartNode;
@@ -16,25 +16,16 @@ import org.neo4j.ogm.annotation.StartNode;
  *
  * @author zua
  */
-@RelationshipEntity(type = "EdITED_BY")
-public class EditedBy extends GraphEntity {
+@RelationshipEntity(type = "TAGGED_AS")
+public class TaggedSourceAs extends GraphEntity {
 
-    private static final long serialVersionUID = -6504968713105578857L;
+    private static final long serialVersionUID = 7786453007625414455L;
     
     @StartNode
-    private NewsAuthor author;
+    private NewsSource source;
     
     @EndNode
-    private NewsSource source;
-
-    public NewsAuthor getAuthor() {
-        return author;
-    }
-
-    public void setAuthor(NewsAuthor author) {
-        this.author = author;
-        this.author.getEditedBy().add(this);
-    }
+    private Tag tag;
 
     public NewsSource getSource() {
         return source;
@@ -42,9 +33,16 @@ public class EditedBy extends GraphEntity {
 
     public void setSource(NewsSource source) {
         this.source = source;
-        this.source.getEdited().add(this);
+        this.source.setCategory(this);
     }
 
-    
+
+    public Tag getTag() {
+        return tag;
+    }
+
+    public void setTag(Tag tag) {
+        this.tag = tag;
+    }
     
 }

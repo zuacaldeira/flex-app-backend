@@ -42,6 +42,7 @@ public class AuthoredBy extends GraphEntity {
 
     public void setAuthor(NewsAuthor author) {
         this.author = author;
+        this.author.getAuthored().add(this);
     }
 
     

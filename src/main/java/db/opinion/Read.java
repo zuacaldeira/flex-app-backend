@@ -9,6 +9,7 @@ import db.GraphEntity;
 import db.auth.FlexUser;
 import db.news.NewsArticle;
 import java.util.Date;
+import java.util.Objects;
 import org.neo4j.ogm.annotation.EndNode;
 import org.neo4j.ogm.annotation.Property;
 import org.neo4j.ogm.annotation.RelationshipEntity;
@@ -59,6 +60,36 @@ public class Read extends GraphEntity {
     public void setCreatedAt(Date createdAt) {
         this.createdAt = createdAt;
     }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 29 * hash + Objects.hashCode(this.user);
+        hash = 29 * hash + Objects.hashCode(this.article);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Read other = (Read) obj;
+        if (!Objects.equals(this.user, other.user)) {
+            return false;
+        }
+        if (!Objects.equals(this.article, other.article)) {
+            return false;
+        }
+        return true;
+    }
+    
     
     
 }

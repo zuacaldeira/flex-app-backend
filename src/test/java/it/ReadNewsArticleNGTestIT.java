@@ -12,7 +12,7 @@ import org.neo4j.ogm.session.Session;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
 import org.testng.annotations.Test;
-import queries.ArticlesQueries;
+import backend.queries.ArticlesQueries;
 
 /**
  *

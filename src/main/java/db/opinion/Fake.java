@@ -5,9 +5,11 @@
  */
 package db.opinion;
 
+import db.GraphEntity;
 import db.auth.FlexUser;
 import db.news.NewsArticle;
 import java.util.Date;
+import java.util.Objects;
 import org.neo4j.ogm.annotation.EndNode;
 import org.neo4j.ogm.annotation.Property;
 import org.neo4j.ogm.annotation.RelationshipEntity;
@@ -18,7 +20,9 @@ import org.neo4j.ogm.annotation.StartNode;
  * @author zua
  */
 @RelationshipEntity(type="FAKE")
-public class Fake {
+public class Fake extends GraphEntity {
+
+    private static final long serialVersionUID = -1999397390369275235L;
     
     @StartNode
     private FlexUser user;
@@ -35,6 +39,7 @@ public class Fake {
 
     public void setUser(FlexUser user) {
         this.user = user;
+        this.user.getFake().add(this);
     }
 
     public NewsArticle getArticle() {
@@ -52,6 +57,36 @@ public class Fake {
     public void setCreatedAt(Date createdAt) {
         this.createdAt = createdAt;
     }
+
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 79 * hash + Objects.hashCode(this.user);
+        hash = 79 * hash + Objects.hashCode(this.article);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Fake other = (Fake) obj;
+        if (!Objects.equals(this.user, other.user)) {
+            return false;
+        }
+        if (!Objects.equals(this.article, other.article)) {
+            return false;
+        }
+        return true;
+    }
+
     
     
 }

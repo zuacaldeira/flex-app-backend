@@ -5,7 +5,7 @@
  */
 package it;
 
-import session.Neo4jSessionFactory;
+import backend.session.Neo4jSessionFactory;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 

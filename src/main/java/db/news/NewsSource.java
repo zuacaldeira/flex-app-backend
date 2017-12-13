@@ -1,7 +1,9 @@
 package db.news;
 
 import db.GraphEntity;
+import db.relationships.EditedBy;
 import db.relationships.PublishedBy;
+import db.relationships.TaggedSourceAs;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -22,16 +24,23 @@ public class NewsSource extends GraphEntity implements Comparable<NewsSource> {
     private String name;
     private String description;
     private String url;
-    private String category;
     private String language;
     private String country;
     private String logoUrl;
     
+    @Relationship(type = "TAGGED_AS")
+    private TaggedSourceAs category;
+    
+    
     @Relationship(type = "PUBLISHED_BY")
-    private Set<PublishedBy> publishedBy;
-
+    private Set<PublishedBy> published;
+    
+    @Relationship(type = "EDITED_BY")
+    private Set<EditedBy> edited;
+    
     public NewsSource() {
-        publishedBy = new HashSet<>();
+        published = new HashSet<>();
+        edited = new HashSet<>();
     }
 
     public String getSourceId() {
@@ -48,10 +57,6 @@ public class NewsSource extends GraphEntity implements Comparable<NewsSource> {
 
     public String getUrl() {
         return url;
-    }
-
-    public String getCategory() {
-        return category;
     }
 
     public String getLanguage() {
@@ -78,10 +83,6 @@ public class NewsSource extends GraphEntity implements Comparable<NewsSource> {
         this.url = url;
     }
 
-    public void setCategory(String category) {
-        this.category = category;
-    }
-
     public void setLanguage(String language) {
         this.language = language;
     }
@@ -89,6 +90,34 @@ public class NewsSource extends GraphEntity implements Comparable<NewsSource> {
     public void setCountry(String country) {
         this.country = country;
     }
+
+    public Set<PublishedBy> getPublished() {
+        return published;
+    }
+
+    public void setPublished(Set<PublishedBy> published) {
+        this.published = published;
+    }
+
+    public Set<EditedBy> getEdited() {
+        return edited;
+    }
+
+    public void setEdited(Set<EditedBy> edited) {
+        this.edited = edited;
+    }
+
+    public TaggedSourceAs getCategory() {
+        return category;
+    }
+
+    public void setCategory(TaggedSourceAs category) {
+        this.category = category;
+    }
+
+    
+    
+    
 
     @Override
     public String toString() {
@@ -100,15 +129,6 @@ public class NewsSource extends GraphEntity implements Comparable<NewsSource> {
         return sourceId.compareTo(o.getSourceId());
     }
 
-
-    public Set<PublishedBy> getPublishedBy() {
-        return publishedBy;
-    }
-
-    public void setPublishedBy(Set<PublishedBy> publishedBy) {
-        this.publishedBy = publishedBy;
-    }
-    
     @Override
     public int hashCode() {
         int hash = 7;

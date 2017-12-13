@@ -23,7 +23,6 @@ public class NewsArticle extends GraphEntity implements Comparable<NewsArticle> 
     @Index(primary = true, unique = true)
     private String title;
 
-    @Index
     private String url;
     private String description;
     private String imageUrl;
@@ -34,13 +33,13 @@ public class NewsArticle extends GraphEntity implements Comparable<NewsArticle> 
     private String country;
 
 
-    @Relationship(type = "PUBLISHED_BY", direction = Relationship.OUTGOING)
+    @Relationship(type = "PUBLISHED_BY")
     private PublishedBy publishedBy;
 
-    @Relationship(type = "AUTHORED_BY", direction = Relationship.OUTGOING)
+    @Relationship(type = "AUTHORED_BY")
     private Set<AuthoredBy> authoredBy;
 
-    @Relationship(type = "TAGGED_AS", direction = Relationship.OUTGOING)
+    @Relationship(type = "TAGGED_AS")
     private Set<TaggedAs> taggedAs;
     
     public NewsArticle() {

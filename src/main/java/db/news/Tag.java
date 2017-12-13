@@ -21,6 +21,14 @@ public class Tag extends GraphEntity {
     @Index(unique = true, primary = true)
     private String tag;
 
+    public Tag() {
+    }
+
+    
+    public Tag(String category) {
+        this.tag = category;
+    }
+
     public String getTag() {
         return tag;
     }
