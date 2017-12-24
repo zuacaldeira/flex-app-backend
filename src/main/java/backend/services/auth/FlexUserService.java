@@ -32,7 +32,6 @@ public class FlexUserService extends AbstractDBService<FlexUser> implements Flex
     @Override
     public FlexUser login(String username, String password) {
         System.out.println("INSIDE FLEX USER SERVICE ");
-        String query = UsersQueries.findUser(username, password);
         FlexUser user =  getSession().load(FlexUser.class, username, 2);
         if(Objects.equals(password, user.getPassword())) {
             return user;

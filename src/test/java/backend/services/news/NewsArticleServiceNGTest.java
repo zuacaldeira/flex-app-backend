@@ -5,12 +5,11 @@
  */
 package backend.services.news;
 
-import backend.services.news.NewsArticleService;
 import db.auth.FlexUser;
 import db.news.NewsArticle;
+import db.news.NewsAuthor;
 import db.news.NewsSource;
 import db.news.Tag;
-import db.relationships.PublishedBy;
 import db.relationships.TaggedAs;
 import it.NGTestIT;
 import static org.testng.Assert.assertNotNull;
@@ -110,13 +109,14 @@ public class NewsArticleServiceNGTest extends NGTestIT {
         NewsSource publisher = new NewsSource();
         publisher.setSourceId("sourceId");
 
-        PublishedBy publishedBy = new PublishedBy();
-        publishedBy.setArticle(article);
-        publishedBy.setSource(publisher);
-
-        NewsArticleService service = new NewsArticleService();
-        service.save(article);
-        assertTrue(service.findArticlesPublishedBy("sourceId").iterator().hasNext());
+        NewsAuthor author = new NewsAuthor("Johny");
+        
+        publisher.getAuthors().add(author);
+        author.getAuthored().add(article);
+        
+        NewsSourceService service = new NewsSourceService();
+        service.save(publisher);
+        assertTrue(new NewsArticleService().findArticlesPublishedBy("sourceId").iterator().hasNext());
     }
 
     @Test
@@ -136,13 +136,14 @@ public class NewsArticleServiceNGTest extends NGTestIT {
         NewsSource publisher = new NewsSource();
         publisher.setSourceId("sourceId");
 
-        PublishedBy publishedBy = new PublishedBy();
-        publishedBy.setArticle(article);
-        publishedBy.setSource(publisher);
+        NewsAuthor author = new NewsAuthor("Johny");
 
-        NewsArticleService service = new NewsArticleService();
-        service.save(article);
-        assertTrue(service.findArticlesPublishedBy(username, "sourceId").iterator().hasNext());
+        publisher.getAuthors().add(author);
+        author.getAuthored().add(article);
+        
+        NewsSourceService service = new NewsSourceService();
+        service.save(publisher);
+        assertTrue(new NewsArticleService().findArticlesPublishedBy(username, "sourceId").iterator().hasNext());
     }
 
     @Test

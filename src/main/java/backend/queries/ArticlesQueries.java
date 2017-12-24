@@ -49,7 +49,7 @@ public class ArticlesQueries {
     }
 
     public static String findArticlesPublishedBy(String sourceId) {
-        String query = "MATCH (n:NewsArticle)--(s:NewsSource) ";
+        String query = "MATCH (n:NewsArticle)--(:NewsAuthor)--(s:NewsSource) ";
         query += "WHERE s.sourceId=" + DatabaseUtils.getInstance().wrapUp(sourceId) + " ";
         query += "RETURN n ";
         query += "ORDER BY n.publishedAt DESC LIMIT " + LIMIT;
@@ -57,7 +57,7 @@ public class ArticlesQueries {
     }
 
     public static String findArticlesPublishedBy(String username, String sourceId) {
-        String query = "MATCH (u:FlexUser), (n:NewsArticle)--(s:NewsSource) ";
+        String query = "MATCH (u:FlexUser), (n:NewsArticle)--(:NewsAuthor)--(s:NewsSource) ";
         query += "WHERE s.sourceId=" + DatabaseUtils.getInstance().wrapUp(sourceId) + " ";
         query += "AND NOT (u:FlexUser)-[:READ|FAVORITE|FAKE]-(n) ";
         query += "RETURN n ";

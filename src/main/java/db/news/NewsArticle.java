@@ -1,8 +1,6 @@
 package db.news;
 
-import db.relationships.PublishedBy;
 import db.relationships.TaggedAs;
-import db.relationships.AuthoredBy;
 import db.GraphEntity;
 import java.util.Date;
 import java.util.HashSet;
@@ -33,17 +31,10 @@ public class NewsArticle extends GraphEntity implements Comparable<NewsArticle> 
     private String country;
 
 
-    @Relationship(type = "PUBLISHED_BY")
-    private PublishedBy publishedBy;
-
-    @Relationship(type = "AUTHORED_BY")
-    private Set<AuthoredBy> authoredBy;
-
     @Relationship(type = "TAGGED_AS")
     private Set<TaggedAs> taggedAs;
     
     public NewsArticle() {
-        authoredBy = new HashSet<>();
         taggedAs = new HashSet<>();
     }
 
@@ -103,21 +94,6 @@ public class NewsArticle extends GraphEntity implements Comparable<NewsArticle> 
         this.country = country.toUpperCase();
     }
 
-    public PublishedBy getPublishedBy() {
-        return publishedBy;
-    }
-
-    public void setPublishedBy(PublishedBy publishedBy) {
-        this.publishedBy = publishedBy;
-    }
-
-    public Set<AuthoredBy> getAuthoredBy() {
-        return authoredBy;
-    }
-
-    public void setAuthoredBy(Set<AuthoredBy> authoredBy) {
-        this.authoredBy = authoredBy;
-    }
 
     public Set<TaggedAs> getTaggedAs() {
         return taggedAs;
@@ -126,8 +102,6 @@ public class NewsArticle extends GraphEntity implements Comparable<NewsArticle> 
     public void setTaggedAs(Set<TaggedAs> taggedAs) {
         this.taggedAs = taggedAs;
     }
-
-
     
     @Override
     public int hashCode() {

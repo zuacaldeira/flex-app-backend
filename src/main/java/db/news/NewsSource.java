@@ -1,8 +1,6 @@
 package db.news;
 
 import db.GraphEntity;
-import db.relationships.EditedBy;
-import db.relationships.PublishedBy;
 import db.relationships.TaggedSourceAs;
 import java.util.HashSet;
 import java.util.Objects;
@@ -30,17 +28,12 @@ public class NewsSource extends GraphEntity implements Comparable<NewsSource> {
     
     @Relationship(type = "TAGGED_AS")
     private TaggedSourceAs category;
-    
-    
-    @Relationship(type = "PUBLISHED_BY")
-    private Set<PublishedBy> published;
-    
-    @Relationship(type = "EDITED_BY")
-    private Set<EditedBy> edited;
+
+    @Relationship(type = "PUBLISHED")
+    private Set<NewsAuthor> authors;
     
     public NewsSource() {
-        published = new HashSet<>();
-        edited = new HashSet<>();
+        authors = new HashSet<>();
     }
 
     public String getSourceId() {
@@ -91,20 +84,12 @@ public class NewsSource extends GraphEntity implements Comparable<NewsSource> {
         this.country = country;
     }
 
-    public Set<PublishedBy> getPublished() {
-        return published;
+    public Set<NewsAuthor> getAuthors() {
+        return authors;
     }
 
-    public void setPublished(Set<PublishedBy> published) {
-        this.published = published;
-    }
-
-    public Set<EditedBy> getEdited() {
-        return edited;
-    }
-
-    public void setEdited(Set<EditedBy> edited) {
-        this.edited = edited;
+    public void setAuthors(Set<NewsAuthor> authors) {
+        this.authors = authors;
     }
 
     public TaggedSourceAs getCategory() {

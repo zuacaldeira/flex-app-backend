@@ -6,10 +6,9 @@
 package db.auth;
 
 import db.GraphEntity;
-import db.opinion.Fake;
-import db.opinion.Favorite;
-import db.opinion.Read;
+import db.news.NewsArticle;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 import org.neo4j.ogm.annotation.Index;
 import org.neo4j.ogm.annotation.NodeEntity;
@@ -39,19 +38,19 @@ public class FlexUser extends GraphEntity {
      * Articles that will not be presented to the user.
      */
     @Relationship(type = "READ")
-    private Set<Read> read;
+    private Set<NewsArticle> read;
 
     /**
      * Articles that user finds relevant.
      */
     @Relationship(type = "FAVORITE")
-    private Set<Favorite> favorite;
+    private Set<NewsArticle> favorite;
 
     /**
      * Articles that user finds abusive for any reason.
      */
     @Relationship(type = "FAKE")
-    private Set<Fake> fake;
+    private Set<NewsArticle> fake;
 
     /**
      * User authorization object.
@@ -136,60 +135,53 @@ public class FlexUser extends GraphEntity {
         this.userInfo = userInfo;
     }
 
-    /**
-     * Returns articles the user do not want to see. This is a uncategorized
-     * type of filter, that filters out selected articles from being retrieved
-     * from database.
-     *
-     * @return Set of articles marked as Read
-     */
-    public Set<Read> getRead() {
+    public Set<NewsArticle> getRead() {
         return read;
     }
 
-    /**
-     * Set the articles not to be retrieved from the database.
-     *
-     * @param read
-     */
-    public void setRead(Set<Read> read) {
+    public void setRead(Set<NewsArticle> read) {
         this.read = read;
     }
 
-    /**
-     * Return the articles user finds relevant.
-     *
-     * @return User's favorite or relevant articles
-     */
-    public Set<Favorite> getFavorite() {
+    public Set<NewsArticle> getFavorite() {
         return favorite;
     }
 
-    /**
-     * Set relevant or favorite articles.
-     *
-     * @param favorite Favorite or relevant articles
-     */
-    public void setFavorite(Set<Favorite> favorite) {
+    public void setFavorite(Set<NewsArticle> favorite) {
         this.favorite = favorite;
     }
 
-    /**
-     * Return the articles user finds abusive.
-     *
-     * @return Abusive articles, as reported by this user
-     */
-    public Set<Fake> getFake() {
+    public Set<NewsArticle> getFake() {
         return fake;
     }
 
-    /**
-     * Updates articles the user finds abusive.
-     *
-     * @param fake Abusive articles
-     */
-    public void setFake(Set<Fake> fake) {
+    public void setFake(Set<NewsArticle> fake) {
         this.fake = fake;
     }
 
+    
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 29 * hash + Objects.hashCode(this.username);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final FlexUser other = (FlexUser) obj;
+        if (!Objects.equals(this.username, other.username)) {
+            return false;
+        }
+        return true;
+    }
 }
