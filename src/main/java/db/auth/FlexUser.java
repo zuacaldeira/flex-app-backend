@@ -57,6 +57,11 @@ public class FlexUser extends GraphEntity {
      */
     @Relationship(type = "AUTHORIZED_AS")
     private AuthUserInfo userInfo;
+    
+    /**
+     * Checks whether this user is an administrator.
+     */
+    private boolean isAdmin;
 
     /**
      * Initialize an empty user.
@@ -157,6 +162,14 @@ public class FlexUser extends GraphEntity {
 
     public void setFake(Set<NewsArticle> fake) {
         this.fake = fake;
+    }
+
+    public boolean isAdmin() {
+        return isAdmin;
+    }
+
+    public void setIsAdmin(boolean isAdmin) {
+        this.isAdmin = isAdmin;
     }
 
     
