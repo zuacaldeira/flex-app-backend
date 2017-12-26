@@ -32,7 +32,7 @@ public class ArticlesQueries {
     }
 
     public static String findArticlesTaggedAs(String tag) {
-        String query = "MATCH (n:NewsArticle)--(t:Tag) ";
+        String query = "MATCH (n:NewsArticle)--(a:NewsAuthor)--(s:NewsSource)--(t:Tag) ";
         query += "WHERE t.tag=" + DatabaseUtils.getInstance().wrapUp(tag) + " ";
         query += "RETURN n ";
         query += "ORDER BY n.publishedAt DESC LIMIT " + LIMIT;
@@ -40,7 +40,7 @@ public class ArticlesQueries {
     }
 
     public static String findArticlesTaggedAs(String username, String tag) {
-        String query = "MATCH (u:FlexUser), (n:NewsArticle)--(t:Tag) ";
+        String query = "MATCH (u:FlexUser), (n:NewsArticle)--(a:NewsAuthor)--(s:NewsSource)--(t:Tag) ";
         query += "WHERE t.tag=" + DatabaseUtils.getInstance().wrapUp(tag) + " ";
         query += "AND NOT (u:FlexUser)-[:READ|FAVORITE|FAKE]-(n) ";
         query += "RETURN n ";

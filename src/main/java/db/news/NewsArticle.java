@@ -34,6 +34,9 @@ public class NewsArticle extends GraphEntity implements Comparable<NewsArticle> 
     @Relationship(type = "TAGGED_AS")
     private Set<TaggedAs> taggedAs;
     
+    private String sourceId;
+    
+    
     public NewsArticle() {
         taggedAs = new HashSet<>();
     }
@@ -102,6 +105,17 @@ public class NewsArticle extends GraphEntity implements Comparable<NewsArticle> 
     public void setTaggedAs(Set<TaggedAs> taggedAs) {
         this.taggedAs = taggedAs;
     }
+
+    public String getSourceId() {
+        return sourceId;
+    }
+
+    public void setSourceId(String sourceId) {
+        this.sourceId = sourceId;
+    }
+
+    
+    
     
     @Override
     public int hashCode() {
