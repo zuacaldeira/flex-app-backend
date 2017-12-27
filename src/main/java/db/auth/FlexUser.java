@@ -136,7 +136,7 @@ public class FlexUser extends GraphEntity {
     /**
      * Updates user authentication info.
      *
-     * @param userInfo
+     * @param userInfo New user authentication info.
      */
     public void setUserInfo(AuthUserInfo userInfo) {
         this.userInfo = userInfo;
@@ -146,16 +146,16 @@ public class FlexUser extends GraphEntity {
      * Returns the articles the user marked as read. These articles will not be
      * presented to the user.
      *
-     * @return
+     * @return The set of articles this user marked as {@code READ}.
      */
     public Set<NewsArticle> getRead() {
         return read;
     }
 
     /**
-     * Updates the articles marked as <i>READ</i>.
+     * Updates the articles marked as {@code READ}.
      *
-     * @param read
+     * @param read New set of particles marked as {@code READ}.
      */
     public void setRead(Set<NewsArticle> read) {
         this.read = read;
@@ -165,7 +165,7 @@ public class FlexUser extends GraphEntity {
      * Returns the articles the user marked as favorite. These are the user's
      * recommendations.
      *
-     * @return
+     * @return The set of articles this user marked as {@code FAVORITE}.
      */
     public Set<NewsArticle> getFavorite() {
         return favorite;
