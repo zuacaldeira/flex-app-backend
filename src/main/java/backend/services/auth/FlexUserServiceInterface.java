@@ -18,7 +18,7 @@ import backend.services.DBService;
 public interface FlexUserServiceInterface extends DBService<FlexUser> {
     public Collection<FlexUser> findAllUsers();
     public FlexUser findUserNamed(String username);
-    public FlexUser login(String username, String password);
-    public FlexUser register(String username, String password);
+    public FlexUser login(FlexUser user);
+    public FlexUser register(FlexUser user);
     public void delete(FlexUser user);    
 }

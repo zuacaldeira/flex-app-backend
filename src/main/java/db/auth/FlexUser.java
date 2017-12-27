@@ -59,10 +59,10 @@ public class FlexUser extends GraphEntity {
     private AuthUserInfo userInfo;
 
     /**
-     * The roles this user can authenticate in.
+     * The role this user can authenticate in.
      */
     @Relationship(type = "HAS_ROLE")
-    private Set<UserRole> roles;
+    private UserRole role;
 
     /**
      * Initialize an empty user.
@@ -71,7 +71,6 @@ public class FlexUser extends GraphEntity {
         read = new HashSet<>();
         favorite = new HashSet<>();
         fake = new HashSet<>();
-        roles = new HashSet<>();
     }
 
     /**
@@ -199,21 +198,21 @@ public class FlexUser extends GraphEntity {
     }
 
     /**
-     * The user's roles in the application.
+     * The user role in the application.
      *
-     * @return The user's roles.
+     * @return The user's role.
      */
-    public Set<UserRole> getRoles() {
-        return roles;
+    public UserRole getRole() {
+        return role;
     }
 
     /**
-     * Updates the user roles in the application.
+     * Updates the user role in the application.
      *
-     * @param roles The new user roles.
+     * @param role The new user role.
      */
-    public void setRoles(Set<UserRole> roles) {
-        this.roles = roles;
+    public void setRole(UserRole role) {
+        this.role = role;
     }
 
     /**
@@ -259,7 +258,7 @@ public class FlexUser extends GraphEntity {
      * @return {@code true} if is an administrator, {@code false} otherwise.
      */
     public boolean isAdmin() {
-        return roles.contains(new UserRole("Admin"));
+        return role != null && role.equals(new UserRole("Admin"));
     }
 
 }

@@ -23,10 +23,16 @@ public class UserRole extends GraphEntity {
      * Role's name.
      */
     @Index(primary = true, unique = true)
-    private final String roleName;
+    private String name;
+
+    /**
+     * Initializes an empty role
+     */
+    public UserRole() {
+    }
 
     public UserRole(String roleName) {
-        this.roleName = roleName;
+        this.name = roleName;
     }
 
     /**
@@ -34,8 +40,17 @@ public class UserRole extends GraphEntity {
      *
      * @return The role's name.
      */
-    public String getRoleName() {
-        return roleName;
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * Updates role's name.
+     *
+     * @param name The new role's name.
+     */
+    public void setName(String name) {
+        this.name = name;
     }
 
     /**
@@ -46,7 +61,7 @@ public class UserRole extends GraphEntity {
     @Override
     public int hashCode() {
         int hash = 5;
-        hash = 97 * hash + Objects.hashCode(this.roleName);
+        hash = 97 * hash + Objects.hashCode(this.name);
         return hash;
     }
 
@@ -68,7 +83,7 @@ public class UserRole extends GraphEntity {
             return false;
         }
         final UserRole other = (UserRole) obj;
-        if (!Objects.equals(this.roleName, other.roleName)) {
+        if (!Objects.equals(this.name, other.name)) {
             return false;
         }
         return true;
