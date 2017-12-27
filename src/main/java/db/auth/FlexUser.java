@@ -57,11 +57,12 @@ public class FlexUser extends GraphEntity {
      */
     @Relationship(type = "AUTHORIZED_AS")
     private AuthUserInfo userInfo;
-    
+
     /**
-     * Checks whether this user is an administrator.
+     * The roles this user can authenticate in.
      */
-    private boolean isAdmin;
+    @Relationship(type = "HAS_ROLE")
+    private Set<UserRole> roles;
 
     /**
      * Initialize an empty user.
@@ -70,6 +71,7 @@ public class FlexUser extends GraphEntity {
         read = new HashSet<>();
         favorite = new HashSet<>();
         fake = new HashSet<>();
+        roles = new HashSet<>();
     }
 
     /**
@@ -140,39 +142,85 @@ public class FlexUser extends GraphEntity {
         this.userInfo = userInfo;
     }
 
+    /**
+     * Returns the articles the user marked as read. These articles will not be
+     * presented to the user.
+     *
+     * @return
+     */
     public Set<NewsArticle> getRead() {
         return read;
     }
 
+    /**
+     * Updates the articles marked as <i>READ</i>.
+     *
+     * @param read
+     */
     public void setRead(Set<NewsArticle> read) {
         this.read = read;
     }
 
+    /**
+     * Returns the articles the user marked as favorite. These are the user's
+     * recommendations.
+     *
+     * @return
+     */
     public Set<NewsArticle> getFavorite() {
         return favorite;
     }
 
+    /**
+     * Updates user's recommended or favorite articles.
+     *
+     * @param favorite New favorite article set.
+     */
     public void setFavorite(Set<NewsArticle> favorite) {
         this.favorite = favorite;
     }
 
+    /**
+     * Returns the articles the user marked as abusive.
+     *
+     * @return The articles user finds abusive.
+     */
     public Set<NewsArticle> getFake() {
         return fake;
     }
 
+    /**
+     * Updates the articles the user finds abusive.
+     *
+     * @param fake The new set of abusive articles.
+     */
     public void setFake(Set<NewsArticle> fake) {
         this.fake = fake;
     }
 
-    public boolean isAdmin() {
-        return isAdmin;
+    /**
+     * The user's roles in the application.
+     *
+     * @return The user's roles.
+     */
+    public Set<UserRole> getRoles() {
+        return roles;
     }
 
-    public void setIsAdmin(boolean isAdmin) {
-        this.isAdmin = isAdmin;
+    /**
+     * Updates the user roles in the application.
+     *
+     * @param roles The new user roles.
+     */
+    public void setRoles(Set<UserRole> roles) {
+        this.roles = roles;
     }
 
-    
+    /**
+     * Return the object's hash code.
+     *
+     * @return The hash code.
+     */
     @Override
     public int hashCode() {
         int hash = 7;
@@ -180,6 +228,12 @@ public class FlexUser extends GraphEntity {
         return hash;
     }
 
+    /**
+     * Calculate whether two users are equal.
+     *
+     * @param obj The user object we are comparing with.
+     * @return True if the objects are equal, false otherwise.
+     */
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
@@ -197,4 +251,15 @@ public class FlexUser extends GraphEntity {
         }
         return true;
     }
+
+    /**
+     * Checks whether this user is an administrator. An administrator is a user
+     * in relation with user role named {@literal Admin}.
+     *
+     * @return {@code true} if is an administrator, {@code false} otherwise.
+     */
+    public boolean isAdmin() {
+        return roles.contains(new UserRole("Admin"));
+    }
+
 }
