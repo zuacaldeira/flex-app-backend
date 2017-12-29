@@ -12,9 +12,9 @@ import backend.utils.DatabaseUtils;
  * @author zua
  */
 public class ArticlesQueries {
-    
+
     private static int LIMIT = 25;
-    
+
     public static String findArticleWithTitle(String title) {
         String query = "MATCH (n:NewsArticle) ";
         query += "WHERE n.title=" + DatabaseUtils.getInstance().wrapUp(title) + " ";
@@ -22,7 +22,7 @@ public class ArticlesQueries {
         query += "ORDER BY n.publishedAt DESC LIMIT " + LIMIT;
         return query;
     }
-    
+
     public static String findArticleWithUrl(String url) {
         String query = "MATCH (n:NewsArticle) ";
         query += "WHERE n.url=" + DatabaseUtils.getInstance().wrapUp(url) + " ";
@@ -32,7 +32,7 @@ public class ArticlesQueries {
     }
 
     public static String findArticlesTaggedAs(String tag) {
-        String query = "MATCH (n:NewsArticle)--(a:NewsAuthor)--(s:NewsSource)--(t:Tag) ";
+        String query = "MATCH (n:NewsArticle)--(s:NewsSource)--(t:Tag) ";
         query += "WHERE t.tag=" + DatabaseUtils.getInstance().wrapUp(tag) + " ";
         query += "RETURN n ";
         query += "ORDER BY n.publishedAt DESC LIMIT " + LIMIT;
@@ -40,7 +40,7 @@ public class ArticlesQueries {
     }
 
     public static String findArticlesTaggedAs(String username, String tag) {
-        String query = "MATCH (u:FlexUser), (n:NewsArticle)--(a:NewsAuthor)--(s:NewsSource)--(t:Tag) ";
+        String query = "MATCH (u:FlexUser), (n:NewsArticle)--(s:NewsSource)--(t:Tag) ";
         query += "WHERE t.tag=" + DatabaseUtils.getInstance().wrapUp(tag) + " ";
         query += "AND NOT (u:FlexUser)-[:READ|FAVORITE|FAKE]-(n) ";
         query += "RETURN n ";
@@ -49,22 +49,22 @@ public class ArticlesQueries {
     }
 
     public static String findArticlesPublishedBy(String sourceId) {
-        String query = "MATCH (n:NewsArticle)--(:NewsAuthor)--(s:NewsSource) ";
-        query += "WHERE s.sourceId=" + DatabaseUtils.getInstance().wrapUp(sourceId) + " ";
+        String query = "MATCH (n:NewsArticle) ";
+        query += "WHERE n.sourceId=" + DatabaseUtils.getInstance().wrapUp(sourceId) + " ";
         query += "RETURN n ";
         query += "ORDER BY n.publishedAt DESC LIMIT " + LIMIT;
         return query;
     }
 
     public static String findArticlesPublishedBy(String username, String sourceId) {
-        String query = "MATCH (u:FlexUser), (n:NewsArticle)--(:NewsAuthor)--(s:NewsSource) ";
-        query += "WHERE s.sourceId=" + DatabaseUtils.getInstance().wrapUp(sourceId) + " ";
+        String query = "MATCH (u:FlexUser), (n:NewsArticle) ";
+        query += "WHERE n.sourceId=" + DatabaseUtils.getInstance().wrapUp(sourceId) + " ";
         query += "AND NOT (u:FlexUser)-[:READ|FAVORITE|FAKE]-(n) ";
         query += "RETURN n ";
         query += "ORDER BY n.publishedAt DESC LIMIT " + LIMIT;
         return query;
     }
-    
+
     public static String findArticlesWithLanguage(String username, String language, int LIMIT) {
         String query = "MATCH (u:FlexUser), (n:NewsArticle) ";
         query += "WHERE u.username=" + DatabaseUtils.getInstance().wrapUp(username) + " ";
@@ -74,7 +74,7 @@ public class ArticlesQueries {
         query += "  ORDER BY n.publishedAt DESC LIMIT " + LIMIT;
         return query;
     }
-    
+
     public static String findArticlesWithLanguage(String language, int LIMIT) {
         String query = "MATCH (n:NewsArticle) ";
         query += "WHERE n.language=" + DatabaseUtils.getInstance().wrapUp(language) + " ";
@@ -82,7 +82,7 @@ public class ArticlesQueries {
         query += "ORDER BY n.publishedAt DESC LIMIT " + LIMIT;
         return query;
     }
-    
+
     public static String findArticlesWithCountry(String country, int LIMIT) {
         String query = "MATCH (n:NewsArticle) ";
         query += "WHERE n.country=" + DatabaseUtils.getInstance().wrapUp(country) + " ";
@@ -92,7 +92,7 @@ public class ArticlesQueries {
     }
 
     public static String findArticlesWithCountry(String username, String country, int LIMIT) {
-        String query = "MATCH (u:FlexUser), (n:NewsArticle)--(a:NewsAuthor)--(s:NewsSource) ";
+        String query = "MATCH (u:FlexUser), (n:NewsArticle)--(s:NewsSource) ";
         query += "WHERE u.username=" + DatabaseUtils.getInstance().wrapUp(username) + " ";
         query += "AND n.country=" + DatabaseUtils.getInstance().wrapUp(country) + " ";
         query += "AND NOT ( (u)-[:READ|FAVORITE|FAKE]->(n)) ";
@@ -108,8 +108,7 @@ public class ArticlesQueries {
         query += "RETURN n LIMIT " + LIMIT;
         return query;
     }
-    
-    
+
     public static String findLatest(int LIMIT) {
         String query = "MATCH (n:NewsArticle) ";
         query += "RETURN n ";
@@ -165,6 +164,5 @@ public class ArticlesQueries {
         query += "ORDER BY n.publishedAt DESC LIMIT " + LIMIT;
         return query;
     }
-    
 
 }

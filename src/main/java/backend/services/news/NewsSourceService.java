@@ -26,7 +26,7 @@ import backend.utils.DatabaseUtils;
 public class NewsSourceService extends AbstractDBService<NewsSource> {
 
     public Collection<NewsSource> findAllSources() {
-        return getSession().loadAll(NewsSource.class, 2);
+        return getSession().loadAll(NewsSource.class);
     }
 
     public Collection<NewsSource> findSourcesWithCategory(String category) {

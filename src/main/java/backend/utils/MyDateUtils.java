@@ -47,7 +47,7 @@ public class MyDateUtils {
     public static String extractCountry(String localeString) {
         if (localeString != null && localeString.contains("_")) {
             String[] parts = localeString.split("_");
-            if(parts.length > 1) {
+            if (parts.length > 1) {
                 return parts[1];
             } else {
                 return parts[0].toUpperCase();
@@ -58,10 +58,9 @@ public class MyDateUtils {
 
     public static String getLanguageNameFromPattern(String localeString) {
         LanguageCode code = LanguageCode.getByCodeIgnoreCase(extractLanguage(localeString));
-        if(code != null) {
+        if (code != null) {
             return code.getName();
-        }
-        else {
+        } else {
             System.err.println("Could not get the language name for " + localeString);
             return Locale.forLanguageTag(extractLanguage(localeString)).getDisplayLanguage();
         }
@@ -69,34 +68,32 @@ public class MyDateUtils {
 
     public static String getCountryNameFromPattern(String localeString) {
         CountryCode code = CountryCode.getByCodeIgnoreCase(extractCountry(localeString));
-        if(code != null) {
+        if (code != null) {
             return code.getName();
-        }
-        else {
-            System.err.println("Could not get the language name for " + localeString);
+        } else {
+            System.err.println("Could not get the Country name for " + localeString);
             return Locale.forLanguageTag(extractLanguage(localeString)).getDisplayCountry();
         }
     }
 
     public static String getLanguageCode(String displayLanguage) {
         List<LanguageCode> codes = LanguageCode.findByName(displayLanguage);
-        
-        return codes.get(0).name();
+        return (!codes.isEmpty()) ? codes.get(0).name() : null;
     }
 
     public static String getCountryCode(String displayCountry) {
         List<CountryCode> codes = CountryCode.findByName(displayCountry);
-        return codes.get(0).name();
+        return (!codes.isEmpty()) ? codes.get(0).name() : null;
     }
-    
+
     public static String getLanguage(String languageCode) {
         LanguageCode code = LanguageCode.getByCodeIgnoreCase(languageCode);
-        return code.getName();
+        return (code != null) ? code.getName() : null;
     }
 
     public static String getCountry(String countryCode) {
         CountryCode code = CountryCode.getByCodeIgnoreCase(countryCode);
-        return code.getName();
+        return (code != null) ? code.getName() : null;
     }
 
     public static Date parseDate(String value, String language) throws ParseException {
@@ -111,7 +108,7 @@ public class MyDateUtils {
     private static String getTelaNonPattern() {
         return "dd MMM yyyy";
     }
-    
+
     private static String getANacaoCVPattern() {
         return "dd MMMM, yyyy";
     }
@@ -123,7 +120,7 @@ public class MyDateUtils {
     private static String getGlobalVoicesPattern() {
         return "yyyy-MM-dd HH:mm";
     }
-    
+
     private static String getMakaAngolaPattern() {
         return "dd MMMM yyyy";
     }
@@ -147,7 +144,7 @@ public class MyDateUtils {
     private static String getIOLNewsZAPattern() {
         return "yyyy-MM-dd'T'HH:mm";
     }
-    
+
     private static String getJornalDeAngolaPattern() {
         return "yyyy-MM-dd HH:mm:ss";
     }
@@ -155,6 +152,5 @@ public class MyDateUtils {
     private static String getTheBugleZAPattern() {
         return "yyyy-MM-dd";
     }
-    
 
 }

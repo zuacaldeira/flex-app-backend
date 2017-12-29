@@ -105,6 +105,7 @@ public class NewsArticleServiceNGTest extends NGTestIT {
         NewsArticle article = new NewsArticle();
         article.setTitle("a title");
         article.setUrl(url);
+        article.setSourceId("sourceId");
 
         NewsSource publisher = new NewsSource();
         publisher.setSourceId("sourceId");
@@ -132,6 +133,7 @@ public class NewsArticleServiceNGTest extends NGTestIT {
         NewsArticle article = new NewsArticle();
         article.setTitle("a title");
         article.setUrl(url);
+        article.setSourceId("sourceId");
 
         NewsSource publisher = new NewsSource();
         publisher.setSourceId("sourceId");
