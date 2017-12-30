@@ -1,6 +1,5 @@
 package db.news;
 
-import db.relationships.TaggedAs;
 import db.GraphEntity;
 import java.util.Date;
 import java.util.HashSet;
@@ -32,7 +31,7 @@ public class NewsArticle extends GraphEntity implements Comparable<NewsArticle> 
 
 
     @Relationship(type = "TAGGED_AS")
-    private Set<TaggedAs> taggedAs;
+    private Set<Tag> taggedAs;
     
     private String sourceId;
     
@@ -98,11 +97,11 @@ public class NewsArticle extends GraphEntity implements Comparable<NewsArticle> 
     }
 
 
-    public Set<TaggedAs> getTaggedAs() {
+    public Set<Tag> getTaggedAs() {
         return taggedAs;
     }
 
-    public void setTaggedAs(Set<TaggedAs> taggedAs) {
+    public void setTaggedAs(Set<Tag> taggedAs) {
         this.taggedAs = taggedAs;
     }
 

@@ -25,6 +25,7 @@ public class MyDateUtils {
             getANacaoCVPattern(),
             getAVerdadeOnlinePattern(),
             getGlobalVoicesPattern(),
+            getGlobalVoicesPattern2(),
             getMakaAngolaPattern(),
             getJornalDeAngolaPattern(),
             getIOLNewsZAPattern(),
@@ -97,11 +98,17 @@ public class MyDateUtils {
     }
 
     public static Date parseDate(String value, String language) throws ParseException {
+        if(value == null || language == null) {
+            throw new IllegalArgumentException();
+        }
         Locale locale = Locale.forLanguageTag(language);
         return DateUtils.parseDate(value.trim(), locale, getParsePatterns());
     }
 
     public static Date parseDate(String value) throws ParseException {
+        if(value == null || value.trim().isEmpty()) {
+            throw new IllegalArgumentException();
+        }
         return DateUtils.parseDate(value.trim(), getParsePatterns());
     }
 
@@ -119,6 +126,10 @@ public class MyDateUtils {
 
     private static String getGlobalVoicesPattern() {
         return "yyyy-MM-dd HH:mm";
+    }
+
+    private static String getGlobalVoicesPattern2() {
+        return "yyyy-MM-dd' 'HH:mm";
     }
 
     private static String getMakaAngolaPattern() {

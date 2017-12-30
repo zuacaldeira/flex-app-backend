@@ -27,6 +27,7 @@ public class TaggedSourceAs extends GraphEntity {
     @EndNode
     private Tag tag;
 
+
     public NewsSource getSource() {
         return source;
     }

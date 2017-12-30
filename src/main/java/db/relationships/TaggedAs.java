@@ -33,7 +33,6 @@ public class TaggedAs extends GraphEntity {
 
     public void setArticle(NewsArticle article) {
         this.article = article;
-        this.article.getTaggedAs().add(this);
     }
 
     public Tag getTag() {
