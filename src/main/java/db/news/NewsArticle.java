@@ -31,13 +31,13 @@ public class NewsArticle extends GraphEntity implements Comparable<NewsArticle> 
 
 
     @Relationship(type = "TAGGED_AS")
-    private Set<Tag> taggedAs;
+    private Set<Tag> tags;
     
     private String sourceId;
     
     
     public NewsArticle() {
-        taggedAs = new HashSet<>();
+        tags = new HashSet<>();
     }
 
     public String getTitle() {
@@ -97,12 +97,12 @@ public class NewsArticle extends GraphEntity implements Comparable<NewsArticle> 
     }
 
 
-    public Set<Tag> getTaggedAs() {
-        return taggedAs;
+    public Set<Tag> getTags() {
+        return tags;
     }
 
-    public void setTaggedAs(Set<Tag> taggedAs) {
-        this.taggedAs = taggedAs;
+    public void setTags(Set<Tag> tags) {
+        this.tags = tags;
     }
 
     public String getSourceId() {

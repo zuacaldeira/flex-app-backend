@@ -1,7 +1,6 @@
 package db.news;
 
 import db.GraphEntity;
-import db.relationships.TaggedSourceAs;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -27,7 +26,7 @@ public class NewsSource extends GraphEntity implements Comparable<NewsSource> {
     private String logoUrl;
     
     @Relationship(type = "TAGGED_AS")
-    private TaggedSourceAs category;
+    private Tag category;
 
     @Relationship(type = "PUBLISHED")
     private Set<NewsAuthor> authors;
@@ -92,11 +91,11 @@ public class NewsSource extends GraphEntity implements Comparable<NewsSource> {
         this.authors = authors;
     }
 
-    public TaggedSourceAs getCategory() {
+    public Tag getCategory() {
         return category;
     }
 
-    public void setCategory(TaggedSourceAs category) {
+    public void setCategory(Tag category) {
         this.category = category;
     }
 

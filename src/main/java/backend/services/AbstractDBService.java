@@ -32,7 +32,7 @@ public abstract class AbstractDBService<T extends GraphEntity> {
 
     public  void save(T object) {
         Session session = Neo4jSessionFactory.getInstance().getNeo4jSession();
-        session.save(object, 2);
+        session.save(object);
     }
 
     public  void delete(String id) {

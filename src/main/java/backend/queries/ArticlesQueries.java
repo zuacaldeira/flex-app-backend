@@ -32,7 +32,7 @@ public class ArticlesQueries {
     }
 
     public static String findArticlesTaggedAs(String tag) {
-        String query = "MATCH (n:NewsArticle)--(s:NewsSource)--(t:Tag) ";
+        String query = "MATCH (n:NewsArticle)--(t:Tag) ";
         query += "WHERE t.tag=" + DatabaseUtils.getInstance().wrapUp(tag) + " ";
         query += "RETURN n ";
         query += "ORDER BY n.publishedAt DESC LIMIT " + LIMIT;
@@ -40,7 +40,7 @@ public class ArticlesQueries {
     }
 
     public static String findArticlesTaggedAs(String username, String tag) {
-        String query = "MATCH (u:FlexUser), (n:NewsArticle)--(s:NewsSource)--(t:Tag) ";
+        String query = "MATCH (u:FlexUser), (n:NewsArticle)--(t:Tag) ";
         query += "WHERE t.tag=" + DatabaseUtils.getInstance().wrapUp(tag) + " ";
         query += "AND NOT (u:FlexUser)-[:READ|FAVORITE|FAKE]-(n) ";
         query += "RETURN n ";
@@ -88,16 +88,18 @@ public class ArticlesQueries {
         query += "WHERE n.country=" + DatabaseUtils.getInstance().wrapUp(country) + " ";
         query += "  RETURN n ";
         query += "  ORDER BY n.publishedAt DESC LIMIT " + LIMIT;
+        System.out.println("Country query = " + query);
         return query;
     }
 
     public static String findArticlesWithCountry(String username, String country, int LIMIT) {
-        String query = "MATCH (u:FlexUser), (n:NewsArticle)--(s:NewsSource) ";
+        String query = "MATCH (u:FlexUser), (n:NewsArticle) ";
         query += "WHERE u.username=" + DatabaseUtils.getInstance().wrapUp(username) + " ";
         query += "AND n.country=" + DatabaseUtils.getInstance().wrapUp(country) + " ";
         query += "AND NOT ( (u)-[:READ|FAVORITE|FAKE]->(n)) ";
         query += "RETURN n ";
         query += "ORDER BY n.publishedAt DESC LIMIT " + LIMIT;
+        System.out.println("Country query = " + query);
         return query;
     }
 

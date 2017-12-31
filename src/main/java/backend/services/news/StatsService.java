@@ -168,7 +168,7 @@ public class StatsService {
                 data.addPublisherInfo(sourceId, name, countArticlesPublishedBy(name));
             }
 
-            String tag = pub.getCategory().getTag().getTag();
+            String tag = pub.getCategory().getTag();
             String category = getCategoryCaption(tag);
             if (tag != null && category != null && !data.getCategoriesInfo().containsKey(category)) {
                 data.addCategoryInfo(tag, category, countArticlesTaggedAs(tag));

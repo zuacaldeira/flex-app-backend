@@ -83,7 +83,9 @@ public class MyDateUtils {
     }
 
     public static String getCountryCode(String displayCountry) {
+        System.out.println("Looking country code for " + displayCountry);
         List<CountryCode> codes = CountryCode.findByName(displayCountry);
+        System.out.println("Found " + codes.size());
         return (!codes.isEmpty()) ? codes.get(0).name() : null;
     }
 

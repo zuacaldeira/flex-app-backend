@@ -10,7 +10,6 @@ import db.news.NewsArticle;
 import db.news.NewsAuthor;
 import db.news.NewsSource;
 import db.news.Tag;
-import db.relationships.TaggedAs;
 import it.NGTestIT;
 import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertTrue;
@@ -63,11 +62,7 @@ public class NewsArticleServiceNGTest extends NGTestIT {
         article.setUrl(url);
 
         Tag tag = new Tag("TAG");
-
-        TaggedAs taggedAs = new TaggedAs();
-        taggedAs.setArticle(article);
-        taggedAs.setTag(tag);
-
+        article.getTags().add(tag);
         NewsArticleService service = new NewsArticleService();
         service.save(article);
         //assertTrue(service.findArticlesTaggedAs("TAG").iterator().hasNext());
@@ -85,12 +80,8 @@ public class NewsArticleServiceNGTest extends NGTestIT {
         NewsArticle article = new NewsArticle();
         article.setTitle("a title");
         article.setUrl("a url");
-
         Tag tag = new Tag("TAG");
-
-        TaggedAs taggedAs = new TaggedAs();
-        taggedAs.setArticle(article);
-        taggedAs.setTag(tag);
+        article.getTags().add(tag);
 
         NewsArticleService service = new NewsArticleService();
         service.save(article);
@@ -111,10 +102,10 @@ public class NewsArticleServiceNGTest extends NGTestIT {
         publisher.setSourceId("sourceId");
 
         NewsAuthor author = new NewsAuthor("Johny");
-        
+
         publisher.getAuthors().add(author);
         author.getAuthored().add(article);
-        
+
         NewsSourceService service = new NewsSourceService();
         service.save(publisher);
         assertTrue(new NewsArticleService().findArticlesPublishedBy("sourceId").iterator().hasNext());
@@ -142,7 +133,7 @@ public class NewsArticleServiceNGTest extends NGTestIT {
 
         publisher.getAuthors().add(author);
         author.getAuthored().add(article);
-        
+
         NewsSourceService service = new NewsSourceService();
         service.save(publisher);
         assertTrue(new NewsArticleService().findArticlesPublishedBy(username, "sourceId").iterator().hasNext());
@@ -153,7 +144,7 @@ public class NewsArticleServiceNGTest extends NGTestIT {
         System.out.println("-> findArticleWithLanguage()");
 
         String language = "en";
-        
+
         String title = "A title";
         NewsArticle article = new NewsArticle();
         article.setTitle(title);
