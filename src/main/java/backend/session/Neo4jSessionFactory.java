@@ -19,9 +19,13 @@ public class Neo4jSessionFactory {
     private final SessionFactory sessionFactory;
 
     private Neo4jSessionFactory() {
-        Configuration configuration = new Configuration("ogm.properties");
-        sessionFactory = new SessionFactory(configuration, "db");
-        System.out.println(configuration.driverConfiguration().getDriverClassName());
+        try {
+            Configuration configuration = new Configuration("ogm.properties");
+            sessionFactory = new SessionFactory(configuration, "db");
+            System.out.println(configuration.driverConfiguration().getDriverClassName());
+        } catch(Exception ex) {
+            throw new IllegalStateException(ex);
+        }
 
     }
 

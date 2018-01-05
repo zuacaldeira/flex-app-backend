@@ -13,6 +13,7 @@ import org.neo4j.ogm.cypher.query.Pagination;
 import org.neo4j.ogm.cypher.query.SortOrder;
 import backend.queries.ArticlesQueries;
 import backend.services.AbstractDBService;
+import io.reactivex.Observable;
 
 /**
  *
@@ -23,11 +24,13 @@ import backend.services.AbstractDBService;
 public class NewsArticleService extends AbstractDBService<NewsArticle>  {
 
     public NewsArticle findArticleWithTitle(String title) {
-        return find(title);
+        NewsArticle article = find(title);
+        return article;
     }
 
-    public Iterable<NewsArticle> findArticlesWithUrl(String url) {
-        return getSession().query(NewsArticle.class, ArticlesQueries.findArticleWithUrl(url), new HashMap<>());
+    public Observable<NewsArticle> findArticlesWithUrl(String url) {
+        String cypher = ArticlesQueries.findArticleWithUrl(url);
+        return Observable.fromIterable(getSession().query(NewsArticle.class, cypher, new HashMap<>()));
     }
 
     @Override
@@ -47,12 +50,12 @@ public class NewsArticleService extends AbstractDBService<NewsArticle>  {
 
 
     
-    public Iterable<NewsArticle> findArticlesWithoutShortUrl() {
-        String query = "MATCH (n:NewsArticle) ";
-        query += "WHERE n.shortUrl IS NULL RETURN n ";
-        query += "ORDER BY n.publishedAt DESC LIMIT " + LIMIT;
-        System.out.println(query);
-        return executeQuery(query);
+    public Observable<NewsArticle> findArticlesWithoutShortUrl() {
+        String cypher = "MATCH (n:NewsArticle) ";
+        cypher += "WHERE n.shortUrl IS NULL RETURN n ";
+        cypher += "ORDER BY n.publishedAt DESC LIMIT " + LIMIT;
+        System.out.println(cypher);
+        return Observable.fromIterable(getSession().query(NewsArticle.class, cypher, new HashMap<>()));
     }
     
     public Collection<NewsArticle> findAll(int page, int pageSize) {
@@ -60,82 +63,82 @@ public class NewsArticleService extends AbstractDBService<NewsArticle>  {
         return getSession().loadAll(NewsArticle.class, paging);
     }
 
-    public Iterable<NewsArticle> findArticlesTaggedAs(String tag) {
+    public Observable<NewsArticle> findArticlesTaggedAs(String tag) {
         String cypher = ArticlesQueries.findArticlesTaggedAs(tag);
-        return getSession().query(NewsArticle.class, cypher, new HashMap<>());
+        return Observable.fromIterable(getSession().query(NewsArticle.class, cypher, new HashMap<>()));
     }
 
-    public Iterable<NewsArticle> findArticlesTaggedAs(String username, String tag) {
+    public Observable<NewsArticle> findArticlesTaggedAs(String username, String tag) {
         String cypher = ArticlesQueries.findArticlesTaggedAs(username, tag);
-        return getSession().query(NewsArticle.class, cypher, new HashMap<>());
+        return Observable.fromIterable(getSession().query(NewsArticle.class, cypher, new HashMap<>()));
     }
 
-    public Iterable<NewsArticle> findArticlesPublishedBy(String sourceId) {
+    public Observable<NewsArticle> findArticlesPublishedBy(String sourceId) {
         String cypher = ArticlesQueries.findArticlesPublishedBy(sourceId);
-        return getSession().query(NewsArticle.class, cypher, new HashMap<>());
+        return Observable.fromIterable(getSession().query(NewsArticle.class, cypher, new HashMap<>()));
     }
 
-    public Iterable<NewsArticle> findArticlesPublishedBy(String username, String sourceId) {
+    public Observable<NewsArticle> findArticlesPublishedBy(String username, String sourceId) {
         String cypher = ArticlesQueries.findArticlesPublishedBy(username, sourceId);
-        return getSession().query(NewsArticle.class, cypher, new HashMap<>());
+        return Observable.fromIterable(getSession().query(NewsArticle.class, cypher, new HashMap<>()));
     }
 
-    public Iterable<NewsArticle> findArticlesWithLanguage(String language) {
+    public Observable<NewsArticle> findArticlesWithLanguage(String language) {
         String cypher = ArticlesQueries.findArticlesWithLanguage(language, LIMIT);
-        return getSession().query(NewsArticle.class, cypher, new HashMap<>());
+        return Observable.fromIterable(getSession().query(NewsArticle.class, cypher, new HashMap<>()));
     }
 
-    public Iterable<NewsArticle> findArticlesWithLanguage(String username, String language) {
+    public Observable<NewsArticle> findArticlesWithLanguage(String username, String language) {
         String cypher = ArticlesQueries.findArticlesWithLanguage(username, language, LIMIT);
-        return getSession().query(NewsArticle.class, cypher, new HashMap<>());
+        return Observable.fromIterable(getSession().query(NewsArticle.class, cypher, new HashMap<>()));
     }
 
-    public Iterable<NewsArticle> findArticlesWithCountry(String country) {
+    public Observable<NewsArticle> findArticlesWithCountry(String country) {
         String cypher = ArticlesQueries.findArticlesWithCountry(country, LIMIT);
-        return getSession().query(NewsArticle.class, cypher, new HashMap<>());
+        return Observable.fromIterable(getSession().query(NewsArticle.class, cypher, new HashMap<>()));
     }
 
-    public Iterable<NewsArticle> findArticlesWithCountry(String username, String country) {
+    public Observable<NewsArticle> findArticlesWithCountry(String username, String country) {
         String cypher = ArticlesQueries.findArticlesWithCountry(username, country, LIMIT);
-        return getSession().query(NewsArticle.class, cypher, new HashMap<>());
+        return Observable.fromIterable(getSession().query(NewsArticle.class, cypher, new HashMap<>()));
     }
 
-    public Iterable<NewsArticle> findArticlesWithText(String text) {
+    public Observable<NewsArticle> findArticlesWithText(String text) {
         String cypher = ArticlesQueries.findArticlesWithText(text, LIMIT);
-        return getSession().query(NewsArticle.class, cypher, new HashMap<>());
+        return Observable.fromIterable(getSession().query(NewsArticle.class, cypher, new HashMap<>()));
     }
     
-    public Iterable<NewsArticle> findLatest(String username) {
+    public Observable<NewsArticle> findLatest(String username) {
         String cypher = ArticlesQueries.findLatest(username, LIMIT);
-        return getSession().query(NewsArticle.class, cypher, new HashMap<>());
+        return Observable.fromIterable(getSession().query(NewsArticle.class, cypher, new HashMap<>()));
     }
     
-    public Iterable<NewsArticle> findLatest() {
+    public Observable<NewsArticle> findLatest() {
         String cypher = ArticlesQueries.findLatest(LIMIT);
-        return getSession().query(NewsArticle.class, cypher, new HashMap<>());
+        return Observable.fromIterable(getSession().query(NewsArticle.class, cypher, new HashMap<>()));
     }
 
-    public Iterable<NewsArticle> findOldest(String username) {
+    public Observable<NewsArticle> findOldest(String username) {
         String cypher = ArticlesQueries.findOldest(username, LIMIT);
-        return getSession().query(NewsArticle.class, cypher, new HashMap<>());
+        return Observable.fromIterable(getSession().query(NewsArticle.class, cypher, new HashMap<>()));
     }
     
-    public Iterable<NewsArticle> findOldest() {
+    public Observable<NewsArticle> findOldest() {
         String cypher = ArticlesQueries.findOldest(LIMIT);
-        return getSession().query(NewsArticle.class, cypher, new HashMap<>());
+        return Observable.fromIterable(getSession().query(NewsArticle.class, cypher, new HashMap<>()));
     }
 
-    public Iterable<NewsArticle> findRead(String username) {
+    public Observable<NewsArticle> findRead(String username) {
         String cypher = ArticlesQueries.findRead(username, LIMIT);
-        return getSession().query(NewsArticle.class, cypher, new HashMap<>());
+        return Observable.fromIterable(getSession().query(NewsArticle.class, cypher, new HashMap<>()));
     }
     
-    public Iterable<NewsArticle> findFavorite(String username) {
+    public Observable<NewsArticle> findFavorite(String username) {
         String cypher = ArticlesQueries.findFavorite(username, LIMIT);
-        return getSession().query(NewsArticle.class, cypher, new HashMap<>());
+        return Observable.fromIterable(getSession().query(NewsArticle.class, cypher, new HashMap<>()));
     }
-    public Iterable<NewsArticle> findFake(String username) {
+    public Observable<NewsArticle> findFake(String username) {
         String cypher = ArticlesQueries.findFake(username, LIMIT);
-        return getSession().query(NewsArticle.class, cypher, new HashMap<>());
+        return Observable.fromIterable(getSession().query(NewsArticle.class, cypher, new HashMap<>()));
     }
 }

@@ -19,7 +19,7 @@ import org.neo4j.ogm.session.Session;
  */
 public abstract class AbstractDBService<T extends GraphEntity> {
 
-    public final int LIMIT = 30;
+    public final int LIMIT = 20;
 
     public Collection<T> findAll() {
         return getSession().loadAll(getClassType(), getSortOrderDesc(), LIMIT);
@@ -27,7 +27,7 @@ public abstract class AbstractDBService<T extends GraphEntity> {
 
     public T find(String id) {
         Session session = Neo4jSessionFactory.getInstance().getNeo4jSession();
-        return session.load(getClassType(), id, 2);
+        return session.load(getClassType(), id);
     }
 
     public  void save(T object) {

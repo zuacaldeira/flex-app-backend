@@ -31,7 +31,7 @@ public class NewsSourceService extends AbstractDBService<NewsSource> {
 
     public Collection<NewsSource> findSourcesWithCategory(String category) {
         Filter fCategory = new Filter("category", ComparisonOperator.EQUALS, category);
-        return getSession().loadAll(NewsSource.class, fCategory, 2);
+        return getSession().loadAll(NewsSource.class, fCategory);
     }
 
     public Collection<NewsSource> findSourcesWithoutLogo() {
@@ -39,17 +39,17 @@ public class NewsSourceService extends AbstractDBService<NewsSource> {
         Filter emptyLogoFilter = new Filter("logoUrl", ComparisonOperator.EQUALS, "");
         emptyLogoFilter.setBooleanOperator(BooleanOperator.OR);
         Filters filters = new Filters(nullLogoFilter, emptyLogoFilter);
-        return getSession().loadAll(NewsSource.class, filters, 2);
+        return getSession().loadAll(NewsSource.class, filters);
     }
 
     public Collection<NewsSource> findSourcesWithLanguage(String language) {
         Filter fCategory = new Filter("language", ComparisonOperator.EQUALS, language);
-        return getSession().loadAll(NewsSource.class, fCategory, 2);
+        return getSession().loadAll(NewsSource.class, fCategory);
     }
 
     public Collection<NewsSource> findSourcesWithCountry(String country) {
         Filter fCategory = new Filter("country", ComparisonOperator.EQUALS, country);
-        return getSession().loadAll(NewsSource.class, fCategory, 2);
+        return getSession().loadAll(NewsSource.class, fCategory);
     }
 
     @Override

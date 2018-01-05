@@ -13,6 +13,7 @@ import javax.ejb.TransactionManagementType;
 import org.neo4j.ogm.cypher.query.SortOrder;
 import backend.services.AbstractDBService;
 import db.auth.UserRole;
+import db.news.NewsArticle;
 import java.util.HashMap;
 
 /**
@@ -32,13 +33,18 @@ public class FlexUserService extends AbstractDBService<FlexUser> implements Flex
     public FlexUser login(FlexUser user) {
         System.out.println("INSIDE FLEX USER SERVICE ");
         FlexUser dbUser = find(user.getUsername());
+        System.out.printf("(READ, FAVORITE, FAKE) = (%d, %d, %d)", 
+                user.getRead().size(), 
+                user.getRead().size(),
+                user.getRead().size());
         if (dbUser != null) {
-            UserRole role = findUserRole(user.getUsername());
-            System.out.println("FOUND ROLE " + role.getName());
-            dbUser.setRole(role);
+            if (dbUser.getRole() == null) {
+                UserRole role = findUserRole(user.getUsername());
+                dbUser.setRole(role);
+                System.out.println("SET ROLE " + role.getName());
+            }
             return dbUser;
-        }
-        else {
+        } else {
             return null;
         }
     }
@@ -64,12 +70,12 @@ public class FlexUserService extends AbstractDBService<FlexUser> implements Flex
 
     @Override
     public Collection<FlexUser> findAllUsers() {
-        return getSession().loadAll(getClassType(), getSortOrderDesc(), 2);
+        return getSession().loadAll(getClassType(), getSortOrderDesc());
     }
 
     @Override
     public FlexUser findUserNamed(String username) {
-        return getSession().load(getClassType(), username, 2);
+        return getSession().load(getClassType(), username);
     }
 
     @Override
@@ -79,6 +85,33 @@ public class FlexUserService extends AbstractDBService<FlexUser> implements Flex
 
     public UserRole findUserRole(String username) {
         return getSession().queryForObject(UserRole.class, UserRoleQueries.findUserRole(username), new HashMap<>());
+    }
+
+    public boolean hasFavorite(String username, String title) {
+        String query = "MATCH (u:FlexUser)-[f:FAVORITE]-(n:NewsArticle) ";
+        query += "WHERE u.username={0} AND n.title={1} RETURN n";
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("0", username);
+        map.put("1", title);
+        return getSession().query(NewsArticle.class, query, map).iterator().hasNext();
+    }
+
+    public boolean hasFake(String username, String title) {
+        String query = "MATCH (u:FlexUser)-[f:FAKE]-(n:NewsArticle) ";
+        query += "WHERE u.username={0} AND n.title={1} RETURN n";
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("0", username);
+        map.put("1", title);
+        return getSession().query(NewsArticle.class, query, map).iterator().hasNext();
+    }
+
+    public boolean hasRead(String username, String title) {
+        String query = "MATCH (u:FlexUser)-[f:READ]-(n:NewsArticle) ";
+        query += "WHERE u.username={0} AND n.title={1} RETURN n";
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("0", username);
+        map.put("1", title);
+        return getSession().query(NewsArticle.class, query, map).iterator().hasNext();
     }
 
 }
