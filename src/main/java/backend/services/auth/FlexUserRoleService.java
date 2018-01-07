@@ -11,7 +11,6 @@ import javax.ejb.TransactionManagementType;
 import org.neo4j.ogm.cypher.query.SortOrder;
 import backend.services.AbstractDBService;
 import db.auth.UserRole;
-import java.util.HashMap;
 
 /**
  *
