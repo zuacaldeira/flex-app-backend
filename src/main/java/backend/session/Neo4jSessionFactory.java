@@ -20,7 +20,9 @@ public class Neo4jSessionFactory {
 
     private Neo4jSessionFactory() {
         try {
-            Configuration configuration = new Configuration("ogm.properties");
+            Configuration configuration = new Configuration();
+            configuration.driverConfiguration().setURI(System.getenv("GRAPHENEDB_URL"));
+            configuration.autoIndexConfiguration().setAutoIndex("assert");
             sessionFactory = new SessionFactory(configuration, "db");
             System.out.println(configuration.driverConfiguration().getDriverClassName());
         } catch(Exception ex) {
