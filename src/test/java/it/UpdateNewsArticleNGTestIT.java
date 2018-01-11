@@ -33,6 +33,8 @@ public class UpdateNewsArticleNGTestIT extends NGTestIT {
         assertEquals(session.countEntitiesOfType(NewsArticle.class), 1);
         assertNotNull(session.load(NewsArticle.class, title));
         
+        assertEquals(session.countEntitiesOfType(NewsArticle.class), 1);
+
         // Performs a title updates
         article.setTitle("another title");
         article.setPublishedAt(new Date());
