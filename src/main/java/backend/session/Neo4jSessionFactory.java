@@ -19,19 +19,10 @@ public class Neo4jSessionFactory {
     private final SessionFactory sessionFactory;
 
     private Neo4jSessionFactory() {
-        sessionFactory = new SessionFactory(getConfiguration(), "db");
-    }
-
-    private Configuration getConfiguration() {
-        // if app isTest() && isLocal()
-        try {
-            return new Configuration("ogm.properties");
-        } catch (Exception ex) {
-            Configuration configuration = new Configuration();
-            configuration.driverConfiguration().setURI(System.getenv("GRAPHENEDB_URL"));
-            configuration.autoIndexConfiguration().setAutoIndex("assert");
-            return configuration;
-        }
+        Configuration configuration = new Configuration();
+        configuration.driverConfiguration().setURI(System.getenv("GRAPHENEDB_URL"));
+        configuration.autoIndexConfiguration().setAutoIndex("assert");
+        sessionFactory = new SessionFactory(configuration, "db");
     }
 
     public static Neo4jSessionFactory getInstance() {
