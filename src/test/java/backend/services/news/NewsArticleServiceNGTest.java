@@ -10,11 +10,8 @@ import db.news.NewsArticle;
 import db.news.NewsAuthor;
 import db.news.NewsSource;
 import db.news.Tag;
-import io.reactivex.disposables.Disposable;
 import it.NGTestIT;
 import static org.testng.Assert.assertNotNull;
-import static org.testng.Assert.assertTrue;
-import static org.testng.Assert.fail;
 import org.testng.annotations.Test;
 
 /**
@@ -110,11 +107,7 @@ public class NewsArticleServiceNGTest extends NGTestIT {
 
         NewsSourceService service = new NewsSourceService();
         service.save(publisher);
-        Disposable subscribe = new NewsArticleService().findArticlesPublishedBy("sourceId").subscribe(
-                a -> {assertNotNull(a);},
-                x -> {fail("Unexpected exception");}
-        );
-        assertTrue(true);
+        assertNotNull(new NewsArticleService().findArticlesPublishedBy("sourceId"));
     }
 
     @Test
@@ -142,11 +135,7 @@ public class NewsArticleServiceNGTest extends NGTestIT {
 
         NewsSourceService service = new NewsSourceService();
         service.save(publisher);
-        new NewsArticleService().findArticlesPublishedBy(username, "sourceId").subscribe(
-                a -> {assertNotNull(a);},
-                x -> {fail("Unexpected exception");}
-        );
-        assertTrue(true);
+        assertNotNull(new NewsArticleService().findArticlesPublishedBy(username, "sourceId"));
     }
 
     @Test

@@ -16,13 +16,18 @@ import org.neo4j.ogm.session.SessionFactory;
 public class Neo4jSessionFactory {
 
     private static Neo4jSessionFactory factory;
-    private final SessionFactory sessionFactory;
+    private SessionFactory sessionFactory;
 
     private Neo4jSessionFactory() {
-        Configuration configuration = new Configuration();
-        configuration.driverConfiguration().setURI(System.getenv("GRAPHENEDB_URL"));
-        configuration.autoIndexConfiguration().setAutoIndex("assert");
-        sessionFactory = new SessionFactory(configuration, "db");
+        try {
+            Configuration configuration = new Configuration();
+            sessionFactory = new SessionFactory(configuration, "db");
+        } catch (Exception ex) {
+            Configuration configuration = new Configuration();
+            configuration.driverConfiguration().setURI(System.getenv("GRAPHENEDB_URL"));
+            configuration.autoIndexConfiguration().setAutoIndex("assert");
+            sessionFactory = new SessionFactory(configuration, "db");
+        }
     }
 
     public static Neo4jSessionFactory getInstance() {
