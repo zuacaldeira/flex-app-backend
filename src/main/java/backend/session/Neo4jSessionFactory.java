@@ -20,7 +20,7 @@ public class Neo4jSessionFactory {
 
     private Neo4jSessionFactory() {
         try {
-            Configuration configuration = new Configuration();
+            Configuration configuration = new Configuration("ogm.properties");
             sessionFactory = new SessionFactory(configuration, "db");
         } catch (Exception ex) {
             Configuration configuration = new Configuration();
