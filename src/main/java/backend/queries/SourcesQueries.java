@@ -12,7 +12,7 @@ package backend.queries;
 public class SourcesQueries {
 
     public static String findAllCategoriesQuery() {
-        return "MATCH (s:NewsSource) RETURN DISTINCT s.category ORDER BY s.category ASC";
+        return "MATCH (s:NewsSource)--(t:Tag) RETURN DISTINCT t.tag ORDER BY t.tag ASC";
     }
 
     public static String findAllNamesQuery() {

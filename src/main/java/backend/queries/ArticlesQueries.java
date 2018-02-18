@@ -49,16 +49,18 @@ public class ArticlesQueries {
     }
 
     public static String findArticlesPublishedBy(String sourceId) {
-        String query = "MATCH (n:NewsArticle) ";
+        String query = "MATCH (n:NewsArticle)--(a:NewsAuthor)--(s:NewsSource) ";
         query += "WHERE n.sourceId=" + DatabaseUtils.getInstance().wrapUp(sourceId) + " ";
+        query += "OR s.name=" + DatabaseUtils.getInstance().wrapUp(sourceId) + " ";
         query += "RETURN n ";
         query += "ORDER BY n.publishedAt DESC LIMIT " + LIMIT;
         return query;
     }
 
     public static String findArticlesPublishedBy(String username, String sourceId) {
-        String query = "MATCH (u:FlexUser), (n:NewsArticle) ";
+        String query = "MATCH (u:FlexUser), (n:NewsArticle)--(a:NewsAuthor)--(s:NewsSource) ";
         query += "WHERE n.sourceId=" + DatabaseUtils.getInstance().wrapUp(sourceId) + " ";
+        query += "OR s.name=" + DatabaseUtils.getInstance().wrapUp(sourceId) + " ";
         query += "AND NOT (u:FlexUser)-[:READ|FAVORITE|FAKE]-(n) ";
         query += "RETURN n ";
         query += "ORDER BY n.publishedAt DESC LIMIT " + LIMIT;
