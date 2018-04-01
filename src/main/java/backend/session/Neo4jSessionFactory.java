@@ -25,8 +25,14 @@ public class Neo4jSessionFactory {
         } catch (Exception ex) {
             Configuration configuration = new Configuration();
             configuration.driverConfiguration().setURI(System.getenv("GRAPHENEDB_URL"));
-            configuration.autoIndexConfiguration().setAutoIndex("assert");
-            sessionFactory = new SessionFactory(configuration, "db");
+            configuration.autoIndexConfiguration().setAutoIndex("assert");  
+            try {
+                sessionFactory = new SessionFactory(configuration, "db");
+            } catch(Exception ex2) {
+                configuration.driverConfiguration().setURI("http://localhost:7474");
+                configuration.autoIndexConfiguration().setAutoIndex("assert");  
+                sessionFactory = new SessionFactory("db");
+            }
         }
     }
 

@@ -78,8 +78,13 @@ public class MyDateUtils {
     }
 
     public static String getLanguageCode(String displayLanguage) {
+        System.out.println("Looking language code for " + displayLanguage);
         List<LanguageCode> codes = LanguageCode.findByName(displayLanguage);
-        return (!codes.isEmpty()) ? codes.get(0).name() : null;
+        System.out.println("Found " + codes.size());
+        for(LanguageCode code: codes) {
+            System.out.println("\t" + code.getName());         
+        }
+       return (!codes.isEmpty()) ? codes.get(0).name() : null;
     }
 
     public static String getCountryCode(String displayCountry) {

@@ -56,7 +56,7 @@ public class NewsArticleService extends AbstractDBService<NewsArticle> {
 
     public Collection<NewsArticle> findAll(int page, int pageSize) {
         Pagination paging = new Pagination(page, pageSize);
-        return getSession().loadAll(NewsArticle.class, paging);
+        return getSession().loadAll (NewsArticle.class, new SortOrder().add(SortOrder.Direction.DESC, "publishedAt"),  paging);
     }
 
     public Iterable<NewsArticle> findArticlesTaggedAs(String tag) {
