@@ -21,6 +21,11 @@ import backend.services.AbstractDBService;
 @Stateless
 public class NewsArticleService extends AbstractDBService<NewsArticle> {
 
+    public NewsArticle findArticleWithId(long id) {
+        String cypher = ArticlesQueries.findArticleWithId(id);
+        return executeQueryForObject(cypher);
+    }
+
     public NewsArticle findArticleWithTitle(String title) {
         NewsArticle article = find(title);
         return article;

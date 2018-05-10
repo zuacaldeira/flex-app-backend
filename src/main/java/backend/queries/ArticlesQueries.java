@@ -15,6 +15,13 @@ public class ArticlesQueries {
 
     private static int LIMIT = 25;
 
+    public static String findArticleWithId(long id) {
+        String query = "MATCH (n:NewsArticle) ";
+        query += "WHERE n.id=" + id + " ";
+        query += "RETURN n ";
+        query += "ORDER BY n.publishedAt DESC LIMIT " + LIMIT;
+        return query;
+    }
     public static String findArticleWithTitle(String title) {
         String query = "MATCH (n:NewsArticle) ";
         query += "WHERE n.title=" + DatabaseUtils.getInstance().wrapUp(title) + " ";
