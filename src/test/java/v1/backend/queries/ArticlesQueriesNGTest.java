@@ -5,7 +5,6 @@
  */
 package v1.backend.queries;
 
-import v1.backend.queries.ArticlesQueries;
 import static org.testng.Assert.*;
 import org.testng.annotations.Test;
 

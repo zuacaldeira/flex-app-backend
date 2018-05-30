@@ -5,7 +5,6 @@
  */
 package v1.db.news;
 
-import v1.db.news.NewsArticle;
 import java.util.Date;
 import static org.testng.Assert.*;
 import org.testng.annotations.Test;

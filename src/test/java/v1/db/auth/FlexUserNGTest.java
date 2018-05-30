@@ -5,8 +5,6 @@
  */
 package v1.db.auth;
 
-import v1.db.auth.AuthUserInfo;
-import v1.db.auth.FlexUser;
 import static org.testng.Assert.*;
 import org.testng.annotations.Test;
 

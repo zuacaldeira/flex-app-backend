@@ -5,7 +5,6 @@
  */
 package v1.backend.validators;
 
-import v1.backend.validators.NewsArticleValidator;
 import v1.db.news.NewsArticle;
 import static org.testng.Assert.*;
 import org.testng.annotations.Test;
