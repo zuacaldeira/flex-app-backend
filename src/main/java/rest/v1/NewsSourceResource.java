@@ -5,8 +5,9 @@
  */
 package rest.v1;
 
-import com.sun.istack.internal.logging.Logger;
 import db.news.NewsSource;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -28,7 +29,7 @@ public class NewsSourceResource {
     /**
      * Private logger object.
      */
-    private static final Logger logger = Logger.getLogger(NewsSourceResource.class);
+    private static final Logger logger = Logger.getLogger(NewsSourceResource.class.getSimpleName());
 
     private final UriInfo uriInfo;
     private final Request request;
@@ -55,9 +56,9 @@ public class NewsSourceResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public NewsSource getNewsSource() {
-        logger.info(NewsSourceResource.class.getSimpleName() + "#getNewsSource()");
-        logger.info("NewsSourceService available? " + String.valueOf(newsSourceService != null));
-        logger.info("Source Id available? " + String.valueOf(sourceId != null));
+        logger.log(Level.INFO, "{0}#getNewsSource()", NewsSourceResource.class.getSimpleName());
+        logger.log(Level.INFO, "NewsSourceService available? {0}", String.valueOf(newsSourceService != null));
+        logger.log(Level.INFO, "Source Id available? {0}", String.valueOf(sourceId != null));
         return newsSourceService.findSourceWithSourceId(sourceId);
     }
 
