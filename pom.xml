@@ -5,7 +5,7 @@
     <groupId>com.github.zuacaldeira</groupId>
     <artifactId>flex-app-backend</artifactId>
     <version>1.1.41-SNAPSHOT</version>
-    <packaging>ejb</packaging>
+    <packaging>war</packaging>
     <name>flex-app-backend</name>
     <description>Flex App backend.</description>
 
@@ -88,25 +88,28 @@
             <version>1.22</version>
             <type>jar</type>
         </dependency>
-        <dependency>
+        <!--dependency>
             <groupId>javax</groupId>
             <artifactId>javaee-api</artifactId>
             <version>8.0</version>
             <scope>provided</scope>
-        </dependency>
-
-        <!--dependency>
-            <groupId>com.ECS.client.jax</groupId>
-            <artifactId>aws-java-client</artifactId>
-            <version>1.0</version>
-            <scope>system</scope>
-            <systemPath>${amazon.client.path}</systemPath>
-        </dependency>
+        </dependency-->
         <dependency>
-            <groupId>de.malkusch.amazon.product-advertising-api</groupId>
-            <artifactId>amazon-ecs-api</artifactId>
-            <version>1.1.2</version>
-        </dependency-->  
+            <groupId>javax</groupId>
+            <artifactId>javaee-web-api</artifactId>
+            <version>7.0</version>
+            <scope>provided</scope>
+        </dependency>  
+        <dependency>
+            <groupId>org.glassfish.jersey.media</groupId>
+            <artifactId>jersey-media-json-jackson</artifactId>
+            <version>2.27</version>
+        </dependency>   
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+            <version>1.7.25</version>
+        </dependency>
     </dependencies>
 
 
@@ -124,13 +127,13 @@
                 </configuration>
             </plugin>
 
-            <!-- MAVEN EJB PLUGIN -->
+            <!-- MAVEN WAR PLUGIN -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-ejb-plugin</artifactId>
-                <version>3.0.0</version>
+                <artifactId>maven-war-plugin</artifactId>
+                <version>3.2.1</version>
                 <configuration>
-                    <ejbVersion>3.1</ejbVersion>
+                    <failOnMissingWebXml>false</failOnMissingWebXml>
                 </configuration>
             </plugin>
             

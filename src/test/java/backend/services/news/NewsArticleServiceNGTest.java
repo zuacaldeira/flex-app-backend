@@ -5,7 +5,7 @@
  */
 package backend.services.news;
 
-import backend.services.news.NewsArticleService;
+import services.news.NewsArticleService;
 import db.news.NewsArticle;
 import db.news.Tag;
 import static org.testng.Assert.assertNotNull;
