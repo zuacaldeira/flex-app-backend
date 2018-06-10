@@ -6,10 +6,8 @@
 package services.news;
 
 import db.news.NewsArticle;
-import java.util.Collection;
 import java.util.HashMap;
 import javax.ejb.Stateless;
-import org.neo4j.ogm.cypher.query.Pagination;
 import org.neo4j.ogm.cypher.query.SortOrder;
 import queries.ArticlesQueries;
 import services.AbstractDBService;
@@ -60,10 +58,6 @@ public class NewsArticleService extends AbstractDBService<NewsArticle> {
         return getSession().query(NewsArticle.class, cypher, new HashMap<>());
     }
 
-    public Collection<NewsArticle> findAll(int page, int pageSize) {
-        Pagination paging = new Pagination(page, pageSize);
-        return getSession().loadAll (NewsArticle.class, new SortOrder().add(SortOrder.Direction.DESC, "publishedAt"),  paging);
-    }
 
     public Iterable<NewsArticle> findArticlesTaggedAs(String tag) {
         String cypher = ArticlesQueries.findArticlesTaggedAs(tag);

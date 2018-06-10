@@ -9,6 +9,7 @@ import session.Neo4jSessionFactory;
 import db.GraphEntity;
 import java.util.Collection;
 import java.util.HashMap;
+import org.neo4j.ogm.cypher.query.Pagination;
 import org.neo4j.ogm.cypher.query.SortOrder;
 import org.neo4j.ogm.session.Session;
 
@@ -24,6 +25,12 @@ public abstract class AbstractDBService<T extends GraphEntity> {
     public Collection<T> findAll() {
         return getSession().loadAll(getClassType(), getSortOrderDesc(), LIMIT);
     }
+    
+    public Collection<T> findAll(int page, int pageSize) {
+        Pagination paging = new Pagination(page, pageSize);
+        return getSession().loadAll (getClassType(), getSortOrderDesc(),  paging);
+    }
+    
 
     public T find(String id) {
         Session session = Neo4jSessionFactory.getInstance().getNeo4jSession();

@@ -1,12 +1,9 @@
 package db.news;
 
 import db.GraphEntity;
-import java.util.HashSet;
 import java.util.Objects;
-import java.util.Set;
 import org.neo4j.ogm.annotation.Index;
 import org.neo4j.ogm.annotation.NodeEntity;
-import org.neo4j.ogm.annotation.Relationship;
 
 /**
  * Created by zua on 15/04/17.
@@ -30,13 +27,7 @@ public class NewsAuthor extends GraphEntity implements Comparable<NewsAuthor> {
      */
     private String url;
 
-
-    @Relationship(type = "AUTHORED")
-    private Set<NewsArticle> authored;
-
     public NewsAuthor() {
-        name = "Unknown";
-        authored = new HashSet<>();
     }
 
     public NewsAuthor(String name) {
@@ -52,15 +43,13 @@ public class NewsAuthor extends GraphEntity implements Comparable<NewsAuthor> {
         this.name = name;
     }
 
-    public Set<NewsArticle> getAuthored() {
-        return authored;
+    public void setUrl(String url) {
+        this.url = url;
     }
 
-    public void setAuthored(Set<NewsArticle> authored) {
-        this.authored = authored;
+    public String getUrl() {
+        return url;
     }
-
-    
 
     @Override
     public int compareTo(NewsAuthor o) {
@@ -99,14 +88,6 @@ public class NewsAuthor extends GraphEntity implements Comparable<NewsAuthor> {
             builder.append(name);
         }
         return builder.toString();
-    }
-
-    public void setUrl(String url) {
-        this.url = url;
-    }
-
-    public String getUrl() {
-        return url;
     }
 
 }
