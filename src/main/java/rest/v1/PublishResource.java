@@ -5,8 +5,7 @@
  */
 package rest.v1;
 
-import db.news.Tag;
-import java.util.logging.Level;
+import db.news.Publish;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ws.rs.DELETE;
@@ -18,34 +17,34 @@ import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import javax.xml.bind.JAXBElement;
-import services.news.NewsTagService;
+import services.news.PublishService;
 
 /**
  *
  * @author zua
  */
-public class NewsTagResource {
+public class PublishResource {
     
     /**
      * Private logger object.
      */
-    private static final Logger logger = Logger.getLogger(NewsTagResource.class.getSimpleName());
+    private static final Logger LOGGER = Logger.getLogger(PublishResource.class.getSimpleName());
 
     private final UriInfo uriInfo;
     private final Request request;
-    private final String tagname;
+    private final String id;
 
     /**
      * News Source Service.
      */
     @EJB
-    private NewsTagService newsTagService;
+    private final PublishService publishesService;
 
-    public NewsTagResource(UriInfo uriInfo, Request request, String tagname) {
+    public PublishResource(UriInfo uriInfo, Request request, String id) {
         this.uriInfo = uriInfo;
         this.request = request;
-        this.tagname = tagname;
-        this.newsTagService = new NewsTagService();
+        this.id = id;
+        this.publishesService = new PublishService();
     }
 
     /**
@@ -55,15 +54,12 @@ public class NewsTagResource {
      */
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Tag getNewsTag() {
-        logger.log(Level.INFO, "{0}#getNewsSource()", NewsTagResource.class.getSimpleName());
-        logger.log(Level.INFO, "NewsSourceService available? {0}", String.valueOf(newsTagService != null));
-        logger.log(Level.INFO, "Source Id available? {0}", String.valueOf(tagname != null));
-        return newsTagService.findByIndex(tagname);
+    public Publish getPublishes() {
+        return publishesService.findByIndex(id);
     }
 
     /**
-     * Creates a new Tag object.
+     * Creates a new Publish object.
      *
      * @param tagElement an element with the representation of the data
      * needed to create a tag object.
@@ -71,15 +67,15 @@ public class NewsTagResource {
      */
     @PUT
     @Produces(MediaType.APPLICATION_XML)
-    public Response putTag(JAXBElement<Tag> tagElement) {
-        Tag aTag = tagElement.getValue();
+    public Response putPublishes(JAXBElement<Publish> tagElement) {
+        Publish aPublishes = tagElement.getValue();
         Response response = null;
 
-        if (newsTagService.findByIndex(aTag.getTag()) != null) {
+        if (publishesService.find(aPublishes.getId()) != null) {
             response = Response.noContent().build();
         } else {
             response = Response.created(uriInfo.getAbsolutePath()).build();
-            newsTagService.save(aTag);
+            publishesService.save(aPublishes);
         }
 
         return response;
@@ -89,8 +85,8 @@ public class NewsTagResource {
      * Deletes the tag object associated with this resource.
      */
     @DELETE
-    public void deleteTag() {
-        newsTagService.delete(tagname);
+    public void deletePublishes() {
+        publishesService.delete(id);
     }
 
 }

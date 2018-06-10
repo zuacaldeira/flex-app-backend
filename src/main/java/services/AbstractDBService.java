@@ -31,8 +31,12 @@ public abstract class AbstractDBService<T extends GraphEntity> {
         return getSession().loadAll (getClassType(), getSortOrderDesc(),  paging);
     }
     
+    public T find(long id) {
+        Session session = Neo4jSessionFactory.getInstance().getNeo4jSession();
+        return session.load(getClassType(), id);
+    }
 
-    public T find(String id) {
+    public T findByIndex(String id) {
         Session session = Neo4jSessionFactory.getInstance().getNeo4jSession();
         return session.load(getClassType(), id);
     }
@@ -44,7 +48,7 @@ public abstract class AbstractDBService<T extends GraphEntity> {
 
     public  void delete(String id) {
         Session session = Neo4jSessionFactory.getInstance().getNeo4jSession();
-        session.delete(find(id));
+        session.delete(findByIndex(id));
     }
 
     public  long count() {

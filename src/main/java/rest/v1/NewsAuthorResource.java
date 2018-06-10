@@ -55,7 +55,7 @@ public class NewsAuthorResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public NewsAuthor getNewsAuthor() {
-        return newsAuthorService.find(authorId);
+        return newsAuthorService.findByIndex(authorId);
     }
 
     /**
@@ -73,7 +73,7 @@ public class NewsAuthorResource {
         NewsAuthor author = newsAuthorElement.getValue();
         Response response = null;
 
-        if (newsAuthorService.find(authorId) != null) {
+        if (newsAuthorService.findByIndex(authorId) != null) {
             response = Response.noContent().build();
         } else {
             response = Response.created(uriInfo.getAbsolutePath()).build();

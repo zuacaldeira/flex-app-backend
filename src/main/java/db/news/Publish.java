@@ -15,7 +15,7 @@ import org.neo4j.ogm.annotation.StartNode;
  * @author zua
  */
 @RelationshipEntity(type = "PUBLISHES")
-public class Publishes extends GraphEntity {
+public class Publish extends GraphEntity {
 
     private static final long serialVersionUID = -6591042395668891203L;
     
@@ -25,9 +25,9 @@ public class Publishes extends GraphEntity {
     @EndNode
     private NewsAuthor newsAuthor;
     
-    public Publishes(){}
+    public Publish(){}
 
-    public Publishes(NewsSource newsSource, NewsAuthor newsAuthor) {
+    public Publish(NewsSource newsSource, NewsAuthor newsAuthor) {
         this.newsSource = newsSource;
         this.newsAuthor = newsAuthor;
     }

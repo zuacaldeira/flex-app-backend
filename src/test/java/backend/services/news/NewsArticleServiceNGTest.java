@@ -32,7 +32,7 @@ public class NewsArticleServiceNGTest {
         NewsArticleService service = new NewsArticleService();
         service.save(article);
         assertNotNull(service.findArticleWithTitle(title));
-        assertNotNull(service.find(title));
+        assertNotNull(service.findByIndex(title));
     }
 
     @Test

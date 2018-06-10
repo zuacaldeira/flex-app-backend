@@ -26,7 +26,7 @@ public class NewsArticleService extends AbstractDBService<NewsArticle> {
     }
 
     public NewsArticle findArticleWithTitle(String title) {
-        NewsArticle article = find(title);
+        NewsArticle article = findByIndex(title);
         return article;
     }
 

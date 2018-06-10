@@ -31,7 +31,7 @@ public class FlexUserService extends AbstractDBService<FlexUser> {
 
     public FlexUser login(FlexUser user) {
         System.out.println("INSIDE FLEX USER SERVICE ");
-        FlexUser dbUser = find(user.getUsername());
+        FlexUser dbUser = findByIndex(user.getUsername());
         System.out.printf("(READ, FAVORITE, FAKE) = (%d, %d, %d)",
                 user.getRead().size(),
                 user.getRead().size(),
@@ -49,7 +49,7 @@ public class FlexUserService extends AbstractDBService<FlexUser> {
     }
 
     public FlexUser register(FlexUser user) {
-        if (find(user.getUsername()) == null) {
+        if (findByIndex(user.getUsername()) == null) {
             user.setRole(new UserRole("User"));
             getSession().save(user);
         }

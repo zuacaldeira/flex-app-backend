@@ -56,7 +56,7 @@ public class NewsArticleResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public NewsArticle getNewsArticle() {
-        return newsArticleService.find(articleId);
+        return newsArticleService.findByIndex(articleId);
     }
 
     /**
@@ -74,7 +74,7 @@ public class NewsArticleResource {
         NewsArticle article = newsArticleElement.getValue();
         Response response = null;
 
-        if (newsArticleService.find(articleId) != null) {
+        if (newsArticleService.findByIndex(articleId) != null) {
             response = Response.noContent().build();
         } else {
             response = Response.created(uriInfo.getAbsolutePath()).build();
