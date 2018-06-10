@@ -49,15 +49,15 @@ public abstract class AbstractDBService<T extends GraphEntity> {
         return Neo4jSessionFactory.getInstance().getNeo4jSession();
     }
 
-    public Iterable<T> executeQuery(String query) {
+    protected Iterable<T> executeQuery(String query) {
         return getSession().query(getClassType(), query, new HashMap<>());
     }
     
-    public <T> Iterable<T> executeQuery(Class<T> aClass, String query) {
+    protected <T> Iterable<T> executeQuery(Class<T> aClass, String query) {
         return getSession().query(aClass, query, new HashMap<>());
     }
 
-    public T executeQueryForObject(String query) {
+    protected T executeQueryForObject(String query) {
         return getSession().queryForObject(getClassType(), query, new HashMap<>());
     }
     

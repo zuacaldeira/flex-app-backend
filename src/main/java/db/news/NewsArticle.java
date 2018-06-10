@@ -2,12 +2,9 @@ package db.news;
 
 import db.GraphEntity;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.Objects;
-import java.util.Set;
 import org.neo4j.ogm.annotation.Index;
 import org.neo4j.ogm.annotation.NodeEntity;
-import org.neo4j.ogm.annotation.Relationship;
 
 /**
  * Created by zua on 13/04/17.
@@ -29,15 +26,7 @@ public class NewsArticle extends GraphEntity implements Comparable<NewsArticle> 
     private String language;
     private String country;
 
-
-    @Relationship(type = "TAGGED_AS")
-    private Set<Tag> tags;
-    
-    private String sourceId;
-    
-    
     public NewsArticle() {
-        tags = new HashSet<>();
     }
 
     public String getTitle() {
@@ -96,26 +85,6 @@ public class NewsArticle extends GraphEntity implements Comparable<NewsArticle> 
         this.country = country.toUpperCase();
     }
 
-
-    public Set<Tag> getTags() {
-        return tags;
-    }
-
-    public void setTags(Set<Tag> tags) {
-        this.tags = tags;
-    }
-
-    public String getSourceId() {
-        return sourceId;
-    }
-
-    public void setSourceId(String sourceId) {
-        this.sourceId = sourceId;
-    }
-
-    
-    
-    
     @Override
     public int hashCode() {
         int hash = 5;

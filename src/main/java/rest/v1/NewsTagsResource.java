@@ -5,7 +5,7 @@
  */
 package rest.v1;
 
-import db.news.NewsSource;
+import db.news.Tag;
 import java.util.LinkedList;
 import java.util.List;
 import javax.ejb.EJB;
@@ -16,14 +16,14 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Request;
 import javax.ws.rs.core.UriInfo;
-import services.news.NewsSourceService;
+import services.news.NewsTagService;
 
 /**
  *
  * @author zua
  */
-@Path("sources")
-public class NewsSourcesResource {
+@Path("tags")
+public class NewsTagsResource {
 
     /**
      * UriInfo.
@@ -36,19 +36,19 @@ public class NewsSourcesResource {
     private Request request;
 
     /**
-     * News Source Service.
+     * News Tag Service.
      */
     @EJB
-    private NewsSourceService newsSourceService;
+    private NewsTagService newsTagService;
 
     /**
      * Instantiates a new instance of this resource type.
      */
-    public NewsSourcesResource() {
+    public NewsTagsResource() {
     }
 
     /**
-     * Count the number of news sources (publishers).
+     * Count the number of tags.
      *
      * @return the number of distinct publishers.
      */
@@ -56,7 +56,7 @@ public class NewsSourcesResource {
     @Path("count")
     @Produces(MediaType.TEXT_PLAIN)
     public String count() {
-        long size = newsSourceService.count();
+        long size = newsTagService.count();
         return String.valueOf(size);
     }
 
@@ -67,21 +67,22 @@ public class NewsSourcesResource {
      */
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public List<NewsSource> getAll() {
-        List<NewsSource> result = new LinkedList<>();
-        result.addAll(newsSourceService.findAllSources());
+    public List<Tag> getAll() {
+        List<Tag> result = new LinkedList<>();
+        result.addAll(newsTagService.findAllTags());
         return result;
     }
 
     /**
-     * Retrieves a single news source resource object.
+     * Retrieves a single tag resource object.
      *
-     * @param sourceId of the resource we are looking for.
-     * @return a new {@code NewsSourceResource}.
+     * @param tag of the resource we are looking for.
+     * @return a new {@code NewsTagResource}.
      */
     @GET
-    @Path("{sourceId}")
-    public NewsSourceResource getNewsSource(@PathParam("sourceId") String sourceId) {
-        return new NewsSourceResource(uriInfo, request, sourceId);
+    @Path("{tag}")
+    public NewsTagResource getNewsSource(@PathParam("tag") String tag) {
+        return new NewsTagResource(uriInfo, request, tag);
     }
+
 }

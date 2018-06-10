@@ -7,7 +7,6 @@ package backend.services.news;
 
 import services.news.NewsArticleService;
 import db.news.NewsArticle;
-import db.news.Tag;
 import static org.testng.Assert.assertNotNull;
 import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
@@ -49,22 +48,4 @@ public class NewsArticleServiceNGTest {
         service.save(article);
         assertNotNull(service.findArticlesWithUrl(url));
     }
-
-    @Test
-    public void findArticlesTaggedAs() {
-        System.out.println("-> findArticlesTaggedAs()");
-
-        String url = "a url";
-        NewsArticle article = new NewsArticle();
-        article.setTitle("a title");
-        article.setUrl(url);
-
-        Tag tag = new Tag("TAG");
-        article.getTags().add(tag);
-        NewsArticleService service = new NewsArticleService();
-        service.save(article);
-        //assertTrue(service.findArticlesTaggedAs("TAG").iterator().hasNext());
-    }
-
-
 }

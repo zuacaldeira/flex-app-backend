@@ -5,7 +5,7 @@
  */
 package rest.v1;
 
-import db.news.NewsSource;
+import db.news.NewsArticle;
 import java.util.LinkedList;
 import java.util.List;
 import javax.ejb.EJB;
@@ -16,14 +16,14 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Request;
 import javax.ws.rs.core.UriInfo;
-import services.news.NewsSourceService;
+import services.news.NewsArticleService;
 
 /**
  *
  * @author zua
  */
-@Path("sources")
-public class NewsSourcesResource {
+@Path("articles")
+public class NewsArticlesResource {
 
     /**
      * UriInfo.
@@ -39,16 +39,16 @@ public class NewsSourcesResource {
      * News Source Service.
      */
     @EJB
-    private NewsSourceService newsSourceService;
+    private NewsArticleService newsArticleService;
 
     /**
      * Instantiates a new instance of this resource type.
      */
-    public NewsSourcesResource() {
+    public NewsArticlesResource() {
     }
 
     /**
-     * Count the number of news sources (publishers).
+     * Count the number of new articles (publishers).
      *
      * @return the number of distinct publishers.
      */
@@ -56,32 +56,33 @@ public class NewsSourcesResource {
     @Path("count")
     @Produces(MediaType.TEXT_PLAIN)
     public String count() {
-        long size = newsSourceService.count();
+        long size = newsArticleService.count();
         return String.valueOf(size);
     }
 
     /**
-     * Retrieves all news sources (publishers) stored in our system.
+     * Retrieves all new articles (publishers) stored in our system.
      *
      * @return a full list of publishers.
      */
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public List<NewsSource> getAll() {
-        List<NewsSource> result = new LinkedList<>();
-        result.addAll(newsSourceService.findAllSources());
+    public List<NewsArticle> getAll() {
+        List<NewsArticle> result = new LinkedList<>();
+        result.addAll(newsArticleService.findAll(0, 50));
         return result;
     }
 
     /**
-     * Retrieves a single news source resource object.
+     * Retrieves a single new article resource object.
      *
-     * @param sourceId of the resource we are looking for.
-     * @return a new {@code NewsSourceResource}.
+     * @param articleId of the resource we are looking for.
+     * @return a new {@code NewsArticleResource}.
      */
     @GET
-    @Path("{sourceId}")
-    public NewsSourceResource getNewsSource(@PathParam("sourceId") String sourceId) {
-        return new NewsSourceResource(uriInfo, request, sourceId);
+    @Path("{articleId}")
+    public NewsArticleResource getNewsArticle(@PathParam("articleId") String articleId) {
+        return new NewsArticleResource(uriInfo, request, articleId);
     }
+    
 }
