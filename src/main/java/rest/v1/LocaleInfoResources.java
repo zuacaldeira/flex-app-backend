@@ -5,7 +5,7 @@
  */
 package rest.v1;
 
-import db.news.NewsSource;
+import db.news.LocaleInfo;
 import java.util.LinkedList;
 import java.util.List;
 import javax.ejb.EJB;
@@ -16,14 +16,14 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Request;
 import javax.ws.rs.core.UriInfo;
-import services.news.NewsSourceService;
+import services.news.LocaleInfoService;
 
 /**
  *
  * @author zua
  */
-@Path("sources")
-public class NewsSourcesResource {
+@Path("locales")
+public class LocaleInfoResources {
 
     /**
      * UriInfo.
@@ -36,19 +36,19 @@ public class NewsSourcesResource {
     private Request request;
 
     /**
-     * News Source Service.
+     * News Tag Service.
      */
     @EJB
-    private NewsSourceService newsSourceService;
+    private LocaleInfoService localeInfoResource;
 
     /**
      * Instantiates a new instance of this resource type.
      */
-    public NewsSourcesResource() {
+    public LocaleInfoResources() {
     }
 
     /**
-     * Count the number of news sources (publishers).
+     * Count the number of tags.
      *
      * @return the number of distinct publishers.
      */
@@ -56,32 +56,22 @@ public class NewsSourcesResource {
     @Path("count")
     @Produces(MediaType.TEXT_PLAIN)
     public String count() {
-        long size = newsSourceService.count();
+        long size = localeInfoResource.count();
         return String.valueOf(size);
     }
 
-    /**
-     * Retrieves all news sources (publishers) stored in our system.
-     *
-     * @return a full list of publishers.
-     */
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public List<NewsSource> getAll() {
-        List<NewsSource> result = new LinkedList<>();
-        result.addAll(newsSourceService.findAllSources());
+    public List<LocaleInfo> getAll() {
+        List<LocaleInfo> result = new LinkedList<>();
+        result.addAll(localeInfoResource.findAll());
         return result;
     }
 
-    /**
-     * Retrieves a single news source resource object.
-     *
-     * @param sourceId of the resource we are looking for.
-     * @return a new {@code NewsSourceResource}.
-     */
     @GET
-    @Path("{sourceId}")
-    public NewsSourceResource getNewsSource(@PathParam("sourceId") String sourceId) {
-        return new NewsSourceResource(uriInfo, request, sourceId);
+    @Path("{localeString}")
+    public LocaleInfoResource getLocaleInfo(@PathParam("localeString") String localeString) {
+        return new LocaleInfoResource(uriInfo, request, localeString);
     }
+
 }

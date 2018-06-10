@@ -5,7 +5,7 @@
  */
 package rest.v1;
 
-import db.news.LocaleInfo;
+import db.news.NewsArticle;
 import java.util.LinkedList;
 import java.util.List;
 import javax.ejb.EJB;
@@ -16,14 +16,14 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Request;
 import javax.ws.rs.core.UriInfo;
-import services.news.LocaleInfoService;
+import services.news.NewsArticleService;
 
 /**
  *
  * @author zua
  */
-@Path("locales")
-public class LocaleInfosResource {
+@Path("articles")
+public class NewsArticleResources {
 
     /**
      * UriInfo.
@@ -36,19 +36,19 @@ public class LocaleInfosResource {
     private Request request;
 
     /**
-     * News Tag Service.
+     * News Source Service.
      */
     @EJB
-    private LocaleInfoService localeInfoResource;
+    private NewsArticleService newsArticleService;
 
     /**
      * Instantiates a new instance of this resource type.
      */
-    public LocaleInfosResource() {
+    public NewsArticleResources() {
     }
 
     /**
-     * Count the number of tags.
+     * Count the number of new articles (publishers).
      *
      * @return the number of distinct publishers.
      */
@@ -56,22 +56,33 @@ public class LocaleInfosResource {
     @Path("count")
     @Produces(MediaType.TEXT_PLAIN)
     public String count() {
-        long size = localeInfoResource.count();
+        long size = newsArticleService.count();
         return String.valueOf(size);
     }
 
+    /**
+     * Retrieves all new articles (publishers) stored in our system.
+     *
+     * @return a full list of publishers.
+     */
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public List<LocaleInfo> getAll() {
-        List<LocaleInfo> result = new LinkedList<>();
-        result.addAll(localeInfoResource.findAll());
+    public List<NewsArticle> getAll() {
+        List<NewsArticle> result = new LinkedList<>();
+        result.addAll(newsArticleService.findAll(0, 50));
         return result;
     }
 
+    /**
+     * Retrieves a single new article resource object.
+     *
+     * @param articleId of the resource we are looking for.
+     * @return a new {@code NewsArticleResource}.
+     */
     @GET
-    @Path("{localeString}")
-    public LocaleInfoResource getLocaleInfo(@PathParam("localeString") String localeString) {
-        return new LocaleInfoResource(uriInfo, request, localeString);
+    @Path("{articleId}")
+    public NewsArticleResource getNewsArticle(@PathParam("articleId") String articleId) {
+        return new NewsArticleResource(uriInfo, request, articleId);
     }
-
+    
 }

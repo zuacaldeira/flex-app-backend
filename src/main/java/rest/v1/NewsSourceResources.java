@@ -5,7 +5,7 @@
  */
 package rest.v1;
 
-import db.news.Writes;
+import db.news.NewsSource;
 import java.util.LinkedList;
 import java.util.List;
 import javax.ejb.EJB;
@@ -16,14 +16,14 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Request;
 import javax.ws.rs.core.UriInfo;
-import services.news.WriteService;
+import services.news.NewsSourceService;
 
 /**
  *
  * @author zua
  */
-@Path("writes")
-public class WritesResource {
+@Path("sources")
+public class NewsSourceResources {
 
     /**
      * UriInfo.
@@ -36,19 +36,19 @@ public class WritesResource {
     private Request request;
 
     /**
-     * News Writes Service.
+     * News Source Service.
      */
     @EJB
-    private WriteService writesService;
+    private NewsSourceService newsSourceService;
 
     /**
      * Instantiates a new instance of this resource type.
      */
-    public WritesResource() {
+    public NewsSourceResources() {
     }
 
     /**
-     * Count the number of writess.
+     * Count the number of news sources (publishers).
      *
      * @return the number of distinct publishers.
      */
@@ -56,7 +56,7 @@ public class WritesResource {
     @Path("count")
     @Produces(MediaType.TEXT_PLAIN)
     public String count() {
-        long size = writesService.count();
+        long size = newsSourceService.count();
         return String.valueOf(size);
     }
 
@@ -67,22 +67,21 @@ public class WritesResource {
      */
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Writes> getAll() {
-        List<Writes> result = new LinkedList<>();
-        result.addAll(writesService.findAll(0, 100));
+    public List<NewsSource> getAll() {
+        List<NewsSource> result = new LinkedList<>();
+        result.addAll(newsSourceService.findAllSources());
         return result;
     }
 
     /**
-     * Retrieves a single writes resource object.
+     * Retrieves a single news source resource object.
      *
-     * @param writesId of the resource we are looking for.
-     * @return a new {@code NewsWritesResource}.
+     * @param sourceId of the resource we are looking for.
+     * @return a new {@code NewsSourceResource}.
      */
     @GET
-    @Path("{writesId}")
-    public WriteResource getNewsSource(@PathParam("writesId") String writesId) {
-        return new WriteResource(uriInfo, request, writesId);
+    @Path("{sourceId}")
+    public NewsSourceResource getNewsSource(@PathParam("sourceId") String sourceId) {
+        return new NewsSourceResource(uriInfo, request, sourceId);
     }
-
 }

@@ -5,7 +5,7 @@
  */
 package rest.v1;
 
-import db.news.Tag;
+import db.news.TaggedAs;
 import java.util.LinkedList;
 import java.util.List;
 import javax.ejb.EJB;
@@ -16,14 +16,14 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Request;
 import javax.ws.rs.core.UriInfo;
-import services.news.NewsTagService;
+import services.news.TaggedAsService;
 
 /**
  *
  * @author zua
  */
-@Path("tags")
-public class NewsTagsResource {
+@Path("taggedAs")
+public class TaggedAsResources {
 
     /**
      * UriInfo.
@@ -36,19 +36,19 @@ public class NewsTagsResource {
     private Request request;
 
     /**
-     * News Tag Service.
+     * News TaggedAs Service.
      */
     @EJB
-    private NewsTagService newsTagService;
+    private TaggedAsService taggedAsService;
 
     /**
      * Instantiates a new instance of this resource type.
      */
-    public NewsTagsResource() {
+    public TaggedAsResources() {
     }
 
     /**
-     * Count the number of tags.
+     * Count the number of taggedAs.
      *
      * @return the number of distinct publishers.
      */
@@ -56,33 +56,33 @@ public class NewsTagsResource {
     @Path("count")
     @Produces(MediaType.TEXT_PLAIN)
     public String count() {
-        long size = newsTagService.count();
+        long size = taggedAsService.count();
         return String.valueOf(size);
     }
 
     /**
-     * Retrieves all news sources (publishers) stored in our system.
+     * Retrieves all taggedAs objects stored in our system.
      *
      * @return a full list of publishers.
      */
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Tag> getAll() {
-        List<Tag> result = new LinkedList<>();
-        result.addAll(newsTagService.findAllTags());
+    public List<TaggedAs> getAll() {
+        List<TaggedAs> result = new LinkedList<>();
+        result.addAll(taggedAsService.findAll(0, 100));
         return result;
     }
 
     /**
-     * Retrieves a single tag resource object.
+     * Retrieves a single taggedAs resource object.
      *
-     * @param tag of the resource we are looking for.
-     * @return a new {@code NewsTagResource}.
+     * @param id of the resource we are looking for.
+     * @return a new {@code TaggedAsResource}.
      */
     @GET
-    @Path("{tag}")
-    public NewsTagResource getNewsSource(@PathParam("tag") String tag) {
-        return new NewsTagResource(uriInfo, request, tag);
+    @Path("{id}")
+    public TaggedAsResource getTaggedAs(@PathParam("id") String id) {
+        return new TaggedAsResource(uriInfo, request, id);
     }
 
 }

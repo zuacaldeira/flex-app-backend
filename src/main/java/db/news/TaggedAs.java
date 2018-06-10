@@ -16,6 +16,8 @@ import org.neo4j.ogm.annotation.StartNode;
  */
 @RelationshipEntity(type = "TAGGED_AS")
 public class TaggedAs extends GraphEntity {
+
+    private static final long serialVersionUID = 5105078603717694701L;
     
     @StartNode
     private NewsArticle article;

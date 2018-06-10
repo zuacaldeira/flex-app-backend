@@ -23,7 +23,7 @@ import services.news.NewsAuthorService;
  * @author zua
  */
 @Path("authors")
-public class NewsAuthorsResource {
+public class NewsAuthorResources {
 
     /**
      * UriInfo.
@@ -44,7 +44,7 @@ public class NewsAuthorsResource {
     /**
      * Instantiates a new instance of this resource type.
      */
-    public NewsAuthorsResource() {
+    public NewsAuthorResources() {
         newsAuthorService = new NewsAuthorService();
     }
 
